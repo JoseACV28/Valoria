@@ -1,0 +1,185 @@
+.panel {
+  padding: 28px 30px;
+  border-radius: 28px;
+  background: rgba(255, 248, 240, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 48px rgba(7, 3, 11, 0.24);
+}
+
+.drawerPanel {
+  padding: 24px 24px 22px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(54, 36, 72, 0.96), rgba(36, 23, 48, 0.96));
+  border: 1px solid rgba(202, 181, 230, 0.14);
+  box-shadow: 0 24px 60px rgba(4, 2, 9, 0.34);
+}
+
+.drawerPanel .header {
+  display: grid;
+  gap: 10px;
+  align-items: start;
+}
+
+.drawerPanel .header p {
+  max-width: none;
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.drawerPanel .googleButton {
+  margin-top: 18px;
+}
+
+.drawerPanel .divider span {
+  background: #2d1f39;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+}
+
+.header span {
+  color: #ffb38b;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+}
+
+.header h2,
+.header p {
+  margin: 8px 0 0;
+}
+
+.header p {
+  max-width: 36ch;
+  color: #d8cbc0;
+}
+
+.switcher {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.switcher button,
+.form button,
+.accountCard button,
+.googleButton {
+  padding: 12px 16px;
+  border-radius: 999px;
+}
+
+.switcher button {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff8f2;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.active {
+  background: #ff8a57 !important;
+  color: #2d1710 !important;
+}
+
+.googleButton {
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff8f2;
+  font-weight: 700;
+}
+
+.divider {
+  position: relative;
+  margin-top: 18px;
+  text-align: center;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 12px;
+  background: #2a1d35;
+  color: #d8cbc0;
+  font-size: 0.9rem;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.form label {
+  display: grid;
+  gap: 8px;
+}
+
+.form input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff8f2;
+}
+
+.form button,
+.accountCard button {
+  background: #fff2e8;
+  color: #23140f;
+  font-weight: 700;
+  border: none;
+}
+
+.message {
+  margin: 16px 0 0;
+  color: #ffd6bd;
+}
+
+.footer {
+  margin-top: 18px;
+  color: #ddd0eb;
+}
+
+.footer a,
+.footer button {
+  color: #fff8f2;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.accountCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.accountCard p,
+.accountCard strong {
+  margin: 0;
+}
+
+@media (max-width: 840px) {
+  .header,
+  .accountCard {
+    flex-direction: column;
+    align-items: start;
+  }
+}

@@ -1,0 +1,67 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #f6f1fb;
+  --bg-main: #17101f;
+  --bg-surface: rgba(255, 255, 255, 0.05);
+  --bg-surface-strong: rgba(255, 255, 255, 0.08);
+  --line-soft: rgba(255, 255, 255, 0.09);
+  --text-main: #f6f1fb;
+  --text-soft: #ddd0eb;
+  --brand-500: #7f5da8;
+  --brand-400: #9572c0;
+  --brand-300: #af8dd7;
+  --brand-200: #d8c3f1;
+  --brand-900: #271934;
+  background:
+    radial-gradient(circle at top, rgba(127, 93, 168, 0.34), transparent 24%),
+    radial-gradient(circle at 80% 18%, rgba(175, 141, 215, 0.12), transparent 20%),
+    linear-gradient(180deg, #140e1a 0%, #1f1628 46%, #120d17 100%);
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--text-main);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+select {
+  color-scheme: dark;
+}
+
+option {
+  background: #24182f;
+  color: #f6f1fb;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}

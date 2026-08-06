@@ -1,0 +1,54 @@
+.page {
+  width: 100%;
+  padding: 16px 0 72px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  gap: 24px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.intro {
+  padding: 34px 30px;
+  border: 1px solid var(--line-soft);
+  border-radius: 28px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at top left, rgba(216, 195, 241, 0.18), transparent 38%);
+}
+
+.intro span {
+  color: var(--brand-200);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+}
+
+.intro h1 {
+  margin: 12px 0 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 0.95;
+}
+
+.intro p {
+  max-width: 34ch;
+  margin: 18px 0 0;
+  color: var(--text-soft);
+}
+
+.inlineLink {
+  padding: 0;
+  background: transparent;
+  color: #fff8f2;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 840px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

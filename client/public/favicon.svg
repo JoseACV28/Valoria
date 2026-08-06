@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <g transform="translate(-3.5 -5.5) scale(1.2 1.2)">
+    <path
+      d="M19 17.5C19 15.567 20.567 14 22.5 14H31V40H22.5C20.567 40 19 38.433 19 36.5V17.5Z"
+    stroke="#D8A63A"
+    stroke-width="3.2"
+    stroke-linejoin="round"
+    />
+    <path
+      d="M45 17.5C45 15.567 43.433 14 41.5 14H33V40H41.5C43.433 40 45 38.433 45 36.5V17.5Z"
+    stroke="#D8A63A"
+    stroke-width="3.2"
+    stroke-linejoin="round"
+    />
+    <path
+      d="M31 44H25.5C23.567 44 22 42.433 22 40.5V38"
+    stroke="#D8A63A"
+    stroke-width="3.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    />
+    <path
+      d="M35.5 38L32 50L28.5 44.6L31 41.8L33.5 44.6L35.5 38Z"
+    fill="#D8A63A"
+    />
+  </g>
+</svg>

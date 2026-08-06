@@ -1,0 +1,33 @@
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  line-height: 1;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.filled {
+  color: #ffd36a;
+}
+
+.empty {
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.heart {
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sm {
+  font-size: 0.8rem;
+}
+
+.md {
+  font-size: 0.95rem;
+}
+
+.lg {
+  font-size: 1.1rem;
+}
