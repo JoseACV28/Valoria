@@ -1,4 +1,10 @@
 // Public beta uses production protections with only the isolated QA database.
+export function configureBetaOrigin(config = process.env) {
+  if (config.APP_ENV === 'beta' && config.RENDER === 'true' && config.RENDER_EXTERNAL_URL) {
+    config.PUBLIC_SITE_URL ||= config.RENDER_EXTERNAL_URL;
+    config.CORS_ORIGINS ||= config.RENDER_EXTERNAL_URL;
+  }
+}
 export function validateBetaEnvironment(config = process.env) {
   if (config.APP_ENV !== 'beta') return;
   if (config.NODE_ENV !== 'production') throw new Error('La beta pública requiere los controles de producción.');

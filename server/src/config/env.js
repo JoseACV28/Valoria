@@ -3,8 +3,9 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { validateProductionConfig } from './security.js';
 import {validateQaEnvironment} from './qaEnvironment.js';
-import {validateBetaEnvironment} from './betaEnvironment.js';
+import {configureBetaOrigin, validateBetaEnvironment} from './betaEnvironment.js';
 
+configureBetaOrigin();
 validateProductionConfig();
 validateQaEnvironment(process.env);
 validateBetaEnvironment(process.env);
