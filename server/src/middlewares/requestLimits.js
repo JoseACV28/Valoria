@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import {clientIp} from '../utils/clientIp.js';
 const buckets=new Map();
 const authBuckets = new Map();
 const accountBuckets = new Map();
@@ -28,11 +29,12 @@ export function accountLoginLimits(req,res,next) {
 export function requestLimits(req,res,next) {
   if(['GET','HEAD','OPTIONS'].includes(req.method))return next();
   const now=Date.now();
+  const ip=clientIp(req);
   const auth = /^\/api\/auth\/(login|register|change-password)\/?$/i.test(req.path);
-  if(auth && !take(authBuckets,req.ip,now,15*60000,20)){
+  if(auth && !take(authBuckets,ip,now,15*60000,20)){
     res.set('Retry-After','900');return res.status(429).json({message:'Demasiados intentos de acceso. Espera 15 minutos y reintenta.'});
   }
-  if(!take(buckets,req.ip,now,60000,120)){res.set('Retry-After','60');return res.status(429).json({message:'Demasiadas solicitudes. Espera un minuto y reintenta.'});}
+  if(!take(buckets,ip,now,60000,120)){res.set('Retry-After','60');return res.status(429).json({message:'Demasiadas solicitudes. Espera un minuto y reintenta.'});}
   next();
 }
 
