@@ -1,6 +1,12 @@
+import {newClientId} from '../../utils/clientId.js';
+import {PublicationPreview} from '../common/PublicationPreview';
+import { ui } from "../../i18n/runtime.js";
+import { STORY_LANGUAGES, languageLabel } from '../../data/languages';
+import { SaveStatus } from '../common/SaveStatus';
+import { saveWorkspace, listWorkspace, deleteWorkspace } from "../../api/workspaceApi";
 // Formulario editorial del panel de creador.
 // Permite crear historias, subir portada y agregar nuevos capitulos.
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   createChapter,
   createStory,
@@ -9,6 +15,11 @@ import {
   uploadChapterImage,
   uploadStoryCover
 } from "../../api/storyApi";
+import { readEditorialDraft, useEditorialDraft } from "../../hooks/useEditorialDraft";
+import { WriterPlanning } from "./WriterPlanning";
+import { contentToHtml, sanitizeHtml } from "../../utils/richContent";
+const LazyEditor = lazy(() => import("../common/RichTextEditor").then(module => ({default:module.RichTextEditor})));
+function RichTextEditor(props){return <Suspense fallback={<p>{ui('Cargando editor…')}</p>}><LazyEditor {...props}/></Suspense>;}
 import { ALL_CATEGORIES } from "../../data/categories";
 import styles from "../../styles/CreatorStudio.module.css";
 
@@ -19,7 +30,7 @@ const audienceOptions = [
   "Adulto"
 ];
 
-const languageOptions = ["Espanol", "English", "Portugues"];
+const languageOptions = STORY_LANGUAGES;
 
 const rightsOptions = [
   "Todos los derechos reservados",
@@ -52,7 +63,8 @@ const initialChapterForm = {
   excerpt: "",
   illustrationUrl: "",
   content: "",
-  status: "draft"
+  status: "draft",
+  scheduledAt: ""
 };
 
 export function CreatorStudio({
@@ -65,10 +77,14 @@ export function CreatorStudio({
   selectedStoryId = "",
   chapterDraft = null,
   existingChapters = [],
+  suggestedChapterNumber=1,
   mode = "all"
 }) {
-  const [storyForm, setStoryForm] = useState(initialStoryForm);
-  const [chapterForm, setChapterForm] = useState(initialChapterForm);
+  const editorSection=useRef(null);
+  const storyDraftKey = `${auth.user?.id}:new-story`;
+  const chapterDraftKey = `${auth.user?.id}:chapter:${selectedStoryId}:${chapterDraft?.id || "new"}`;
+  const [storyForm, setStoryForm] = useState(() => readEditorialDraft(storyDraftKey)?.data?.form || initialStoryForm);
+  const [chapterForm, setChapterForm] = useState(()=>readEditorialDraft(chapterDraftKey)?.data || {...initialChapterForm,storyId:selectedStoryId,category:stories.find(story=>story.id===selectedStoryId)?.category||ALL_CATEGORIES[0],title:chapterDraft?.title||`Capitulo ${Math.max(suggestedChapterNumber,existingChapters.length?Math.max(...existingChapters.map(chapter=>Number(chapter.chapter_number||0)))+1:1)}`,chapterNumber:String(chapterDraft?.chapter_number|| (Math.max(suggestedChapterNumber,existingChapters.length?Math.max(...existingChapters.map(chapter=>Number(chapter.chapter_number||0)))+1:1))),content:chapterDraft?.content||"",excerpt:chapterDraft?.excerpt||"",status:chapterDraft?.status||"draft"});
   const [storyCover, setStoryCover] = useState(null);
   const [chapterImage, setChapterImage] = useState(null);
   const [coverPreview, setCoverPreview] = useState("");
@@ -77,7 +93,25 @@ export function CreatorStudio({
   const [storyMessage, setStoryMessage] = useState("");
   const [chapterMessage, setChapterMessage] = useState("");
   const [loadingStory, setLoadingStory] = useState(false);
+  const storySubmissionPending = useRef(false);
+  const chapterSubmissionPending = useRef(false);
   const [loadingChapter, setLoadingChapter] = useState(false);
+  const storySubmissionId = useRef(readEditorialDraft(storyDraftKey)?.data?.submissionId || newClientId());
+  const storyDraftValue = useMemo(()=>({form:storyForm,characterInput,tagInput,submissionId:storySubmissionId.current}),[storyForm,characterInput,tagInput]);
+  const storySaveStatus = useEditorialDraft(storyDraftKey,storyDraftValue,(saved)=>{if(saved?.form){setStoryForm(saved.form);setCharacterInput(saved.characterInput||"");setTagInput(saved.tagInput||"");storySubmissionId.current=saved.submissionId||newClientId();}},auth.token,mode!=="chapter" && !loadingStory);
+  const chapterSaveStatus = useEditorialDraft(chapterDraftKey,chapterForm,setChapterForm,auth.token,mode!=="story" && !loadingChapter);
+  const [previewOpen,setPreviewOpen] = useState(false),[publicationTarget,setPublicationTarget]=useState('');
+  const [versionChoice,setVersionChoice] = useState("");
+  useEffect(()=>{const warn=(event)=>{if(storyCover||chapterImage||/No se pudo|pendiente|Guardando|Sin conexión|Sin sincronizar/.test(storySaveStatus)||/No se pudo|pendiente|Guardando|Sin conexión|Sin sincronizar/.test(chapterSaveStatus)){event.preventDefault();event.returnValue="";}};window.addEventListener("beforeunload",warn);return()=>window.removeEventListener("beforeunload",warn);},[storyCover,chapterImage,storySaveStatus,chapterSaveStatus]);
+  useEffect(()=>{
+    const warn=event=>{
+      if(!(storyCover||chapterImage||/No se pudo|pendiente|Guardando|Sin conexión|Sin sincronizar/.test(storySaveStatus)||/No se pudo|pendiente|Guardando|Sin conexión|Sin sincronizar/.test(chapterSaveStatus)))return;
+      const action=event.target.closest('button,a');
+      if(action?.closest('[data-publication-preview]'))return;
+      if(action && !editorSection.current?.contains(action) && !window.confirm('Hay archivos que todavía no se han subido o contenido sin guardar. ¿Quieres salir del editor?')){event.preventDefault();event.stopPropagation();}
+    };
+    document.addEventListener('click',warn,true);return()=>document.removeEventListener('click',warn,true);
+  },[storyCover,chapterImage,storySaveStatus,chapterSaveStatus]);
   const availableStories = useMemo(() => stories.length > 0, [stories]);
   const selectedStory = useMemo(
     () => stories.find((story) => story.id === (chapterForm.storyId || selectedStoryId)) || null,
@@ -87,17 +121,30 @@ export function CreatorStudio({
   const originalIllustrationUrl =
     chapterDraft?.chapter_images?.find((image) => image.image_role === "creator")
       ?.public_url || "";
+  useEffect(()=>{
+    if(!chapterDraft?.id || !auth.token || readEditorialDraft(chapterDraftKey)?.data)return;
+    let active=true;
+    listWorkspace('drafts',auth.token).then(({items})=>{
+      const schedule=items.find(item=>item.key===`schedule:${chapterDraft.id}`);
+      if(active && schedule && ['pending','processing'].includes(schedule.data.state)){
+        const date=new Date(schedule.data.date);
+        const local=new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,16);
+        setChapterForm(current=>({...current,scheduledAt:current.scheduledAt||local}));
+      }
+    }).catch(()=>{});
+    return()=>{active=false;};
+  },[chapterDraftKey,auth.token]);
   const nextChapterNumber = useMemo(() => {
     if (!existingChapters.length) {
-      return 1;
+      return suggestedChapterNumber;
     }
 
     return (
-      Math.max(
+      Math.max(suggestedChapterNumber-1,
         ...existingChapters.map((chapter) => Number(chapter.chapter_number || 0))
       ) + 1
     );
-  }, [existingChapters]);
+  }, [existingChapters,suggestedChapterNumber]);
 
   useEffect(() => {
     if (isEditingChapter && chapterDraft) {
@@ -115,7 +162,8 @@ export function CreatorStudio({
         excerpt: chapterDraft.excerpt || "",
         illustrationUrl: creatorIllustration?.public_url || "",
         content: chapterDraft.content || "",
-        status: chapterDraft.status || "draft"
+        status: chapterDraft.status || "draft",
+        ...(readEditorialDraft(chapterDraftKey)?.data || {})
       });
       setChapterImage(null);
       setChapterMessage("");
@@ -129,7 +177,8 @@ export function CreatorStudio({
         stories.find((story) => story.id === selectedStoryId)?.category ||
         ALL_CATEGORIES[0],
       chapterNumber: String(nextChapterNumber),
-      title: `Capitulo ${nextChapterNumber}`
+      title: `Capitulo ${nextChapterNumber}`,
+      ...(readEditorialDraft(chapterDraftKey)?.data || {})
     });
     setChapterImage(null);
   }, [chapterDraft, isEditingChapter, nextChapterNumber, selectedStoryId, stories]);
@@ -228,8 +277,15 @@ export function CreatorStudio({
     }));
   }
 
-  async function handleStorySubmit(event) {
-    event.preventDefault();
+  async function handleStorySubmit(event,confirmed=false) {
+    event?.preventDefault();
+    if ((!confirmed && event?.nativeEvent.submitter?.getAttribute("data-create-story") !== "true") || storySubmissionPending.current) return;
+    if (!storyForm.storyContent.trim()) {
+      setStoryMessage("Escribe el contenido del primer capitulo.");
+      return;
+    }
+    if(storyForm.status==='published'&&!confirmed){setPublicationTarget('story');return;}
+    storySubmissionPending.current = true;
     setLoadingStory(true);
     setStoryMessage("");
 
@@ -248,6 +304,9 @@ export function CreatorStudio({
       const result = await createStory(
         {
           ...storyForm,
+          submissionId: storySubmissionId.current,
+          characters: [...new Set([...storyForm.characters, characterInput.trim()].filter(Boolean))],
+          tags: [...new Set([...storyForm.tags, tagInput.trim()].filter(Boolean))],
           description: storyForm.synopsis,
           excerpt: storyForm.synopsis,
           coverUrl
@@ -255,25 +314,19 @@ export function CreatorStudio({
         auth.token
       );
 
-      let createdChapter = null;
+      const createdChapter = result.chapter || null;
+      // Attach the planning notebook to the created story, preserving it privately.
+      const notesKey=`valoria-notes:${auth.user?.id}:new`;
+      try{
+        const notes=JSON.parse(localStorage.getItem(notesKey)||'null');
+        if(notes){localStorage.setItem(`valoria-notes:${auth.user?.id}:${result.story.id}`,JSON.stringify({...notes,_pending:false}));await saveWorkspace('notes',result.story.id,{...notes,_pending:false},auth.token);localStorage.removeItem(notesKey);await deleteWorkspace('notes','new',auth.token);}
+      }catch{ /* The original local notebook remains available if synchronization fails. */ }
 
-      if (storyForm.storyContent.trim()) {
-        const chapterResult = await createChapter(
-          result.story.id,
-          {
-            title: "Capitulo 1",
-            chapterNumber: 1,
-            excerpt: storyForm.synopsis,
-            content: storyForm.storyContent,
-            status: storyForm.status,
-            images: []
-          },
-          auth.token
-        );
 
-        createdChapter = chapterResult.chapter;
-      }
-
+      storySubmissionId.current = newClientId();
+      const cleared={form:initialStoryForm,characterInput:'',tagInput:'',submissionId:storySubmissionId.current};
+      try{localStorage.setItem(`valoria-draft:${storyDraftKey}`,JSON.stringify({data:cleared,savedAt:Date.now(),versions:[]}));}catch{}
+      await saveWorkspace('drafts',storyDraftKey,{current:cleared,versions:[]},auth.token).catch(()=>{});
       setStoryForm(initialStoryForm);
       setStoryCover(null);
       setCharacterInput("");
@@ -283,19 +336,33 @@ export function CreatorStudio({
           ? `Historia creada: ${result.story.title}. Se guardo tambien el Capitulo 1.`
           : `Historia creada: ${result.story.title}`
       );
+      setPublicationTarget('');setPreviewOpen(false);
       onStoryCreated(result.story);
       if (createdChapter) {
         onChapterCreated?.(createdChapter);
       }
     } catch (error) {
-      setStoryMessage(error.message);
+      setStoryMessage(error.message);return false;
     } finally {
+      storySubmissionPending.current = false;
       setLoadingStory(false);
     }
   }
 
-  async function handleChapterSubmit(event) {
-    event.preventDefault();
+  async function clearChapterDraft(){
+    try{localStorage.removeItem(`valoria-draft:${chapterDraftKey}`);}catch{}
+    await deleteWorkspace('drafts',chapterDraftKey,auth.token).catch(()=>{});
+  }
+
+  async function handleChapterSubmit(event,confirmed=false) {
+    event?.preventDefault();
+    if((!confirmed&&event?.nativeEvent.submitter?.getAttribute("data-save-chapter")!=="true") || chapterSubmissionPending.current)return;
+    if (!chapterForm.content.trim()) {
+      setChapterMessage("Escribe el contenido del capitulo.");
+      return;
+    }
+    if(chapterForm.status==='published'&&!confirmed){setPublicationTarget('chapter');return;}
+    chapterSubmissionPending.current=true;
     setLoadingChapter(true);
     setChapterMessage("");
 
@@ -333,6 +400,7 @@ export function CreatorStudio({
         excerpt: chapterForm.excerpt,
         content: chapterForm.content,
         status: chapterForm.status,
+        scheduledAt: chapterForm.scheduledAt ? new Date(chapterForm.scheduledAt).toISOString() : "",
         images
       };
 
@@ -360,6 +428,8 @@ export function CreatorStudio({
         );
         setChapterMessage(`Capitulo actualizado: ${result.chapter.title}`);
         setChapterImage(null);
+        await clearChapterDraft();
+        setPublicationTarget('');setPreviewOpen(false);
         onChapterUpdated?.(result.chapter);
       } else {
         const result = await createChapter(
@@ -377,59 +447,78 @@ export function CreatorStudio({
         });
         setChapterImage(null);
         setChapterMessage(`Capitulo creado: ${result.chapter.title}`);
+        await clearChapterDraft();
+        setPublicationTarget('');setPreviewOpen(false);
         onChapterCreated?.(result.chapter);
       }
     } catch (error) {
-      setChapterMessage(error.message);
+      setChapterMessage(error.message);return false;
     } finally {
+      chapterSubmissionPending.current=false;
       setLoadingChapter(false);
     }
   }
 
   return (
-    <section className={styles.section}>
+    <section ref={editorSection} className={styles.section}>
+      <SaveStatus text={mode === 'chapter' ? chapterSaveStatus : storySaveStatus}/>
+      <p>{ui("Los archivos elegidos se suben al guardar. Si recargas antes, tendrás que seleccionarlos de nuevo.")}</p>
+      <div style={{display:'flex',gap:12,flexWrap:'wrap',marginBottom:16}}>
+        <button type="button" onClick={()=>setPreviewOpen(current=>!current)}>{ui("Vista previa")}</button>
+        <select aria-label={ui("Versiones del borrador")} value={versionChoice} onChange={event=>{setVersionChoice(event.target.value);const saved=readEditorialDraft(mode==='chapter'?chapterDraftKey:storyDraftKey);const version=saved?.versions?.[Number(event.target.value)];if(version){if(mode==='chapter')setChapterForm(version.data);else setStoryForm(version.data.form);}}}>
+          <option value="">{ui("Recuperar una versión anterior")}</option>
+          {(readEditorialDraft(mode==='chapter'?chapterDraftKey:storyDraftKey)?.versions||[]).map((version,index)=><option key={index} value={index}>{new Date(version.at).toLocaleString('es-CL')}</option>)}
+        </select>
+      </div>
+      {(previewOpen||publicationTarget)&&<PublicationPreview title={mode==='chapter'?selectedStory?.title:storyForm.title} description={mode==='chapter'?selectedStory?.description:storyForm.synopsis} cover={mode==='chapter'?selectedStory?.cover:coverPreview} chapterTitle={mode==='chapter'?chapterForm.title:'Capítulo 1'} content={mode==='chapter'?chapterForm.content:storyForm.storyContent} onClose={()=>{setPreviewOpen(false);setPublicationTarget('');}} onConfirm={publicationTarget?()=>publicationTarget==='story'?handleStorySubmit(null,true):handleChapterSubmit(null,true):undefined}/>}
+      <WriterPlanning content={mode==='story'?storyForm.storyContent:chapterForm.content} key={mode==='story'?"new":selectedStoryId||"new"} storyId={mode==='story'?"new":selectedStoryId||"new"} auth={auth} />
       <div className={styles.heading}>
         <div>
-          <span>Studio</span>
+          <span>{ui("Studio")}</span>
           <h2>
             {mode === "story"
-              ? "Crear una nueva historia"
+              ? ui("Crear una nueva historia")
               : mode === "chapter"
                 ? isEditingChapter
-                  ? "Modificar un capitulo existente"
-                  : "Agregar un nuevo capitulo"
-                : "Listo para Supabase y subida de imagenes"}
+                  ? ui("Modificar un capitulo existente")
+                  : ui("Agregar un nuevo capitulo")
+                : ui("Listo para Supabase y subida de imagenes")}
           </h2>
         </div>
         <p>
           {mode === "story"
-            ? "Abre el formulario solo cuando quieras empezar una nueva historia."
+            ? ui("Abre el formulario solo cuando quieras empezar una nueva historia.")
             : mode === "chapter"
               ? isEditingChapter
-                ? "Ajusta contenido, estado o numero del capitulo seleccionado."
-                : "Publica capitulos solo sobre la historia que tengas seleccionada."
-              : "Puedes probar la creacion ahora mismo. Sin credenciales usa respaldo local; con Supabase activo persiste en la nube."}
+                ? ui("Ajusta contenido, estado o numero del capitulo seleccionado.")
+                : ui("Publica capitulos solo sobre la historia que tengas seleccionada.")
+              : ui("Puedes probar la creacion ahora mismo. Sin credenciales usa respaldo local; con Supabase activo persiste en la nube.")}
         </p>
       </div>
 
       <div className={styles.grid}>
         {mode !== "chapter" ? (
-        <form className={styles.card} onSubmit={handleStorySubmit}>
+        <form className={styles.card} onSubmit={handleStorySubmit} onKeyDown={(event) => {
+          if (event.key !== "Enter" || event.nativeEvent.isComposing || event.target.tagName !== "INPUT" || ["submit", "button", "file"].includes(event.target.type)) return;
+          event.preventDefault();
+          if (event.target.dataset.storyList === "tag") addTag();
+          if (event.target.dataset.storyList === "character") addCharacter();
+        }}>
           <div className={styles.storyComposer}>
             <aside className={styles.coverPanel}>
               <div className={styles.coverPreview}>
                 {coverPreview ? (
-                  <img src={coverPreview} alt="Vista previa de portada" />
+                  <img src={coverPreview} alt={ui("Vista previa de portada")} />
                 ) : (
                   <div className={styles.coverPlaceholder}>
-                    <strong>Anadiras una portada</strong>
-                    <span>Recomendado: vertical y contrastada</span>
+                    <strong>{ui("Anadiras una portada")}</strong>
+                    <span>{ui("Recomendado: vertical y contrastada")}</span>
                   </div>
                 )}
               </div>
 
               <label className={styles.uploadLabel}>
-                <span>Portada</span>
+                <span>{ui("Portada")}</span>
                 <div className={styles.filePicker}>
                   <label className={styles.fileButton}>
                     <input
@@ -437,34 +526,27 @@ export function CreatorStudio({
                       type="file"
                       accept=".png,.gif,.jpg,.jpeg,image/png,image/gif,image/jpeg"
                       onChange={handleCoverChange}
-                    />
-                    Elegir portada
-                  </label>
+                    />{ui(" Elegir portada ")}</label>
                   <small className={styles.fileName}>
-                    {storyCover?.name || "Ningun archivo seleccionado"}
+                    {storyCover?.name || ui("Ningun archivo seleccionado")}
                   </small>
                 </div>
-                <small className={styles.uploadNote}>
-                  Debe estar en formato PNG, GIF, JPG, de menos de 2MB.
-                  Dimensiones recomendadas: 512X800 px.
-                </small>
+                <small className={styles.uploadNote}>{ui(" Debe estar en formato PNG, GIF, JPG, de menos de 2MB. Dimensiones recomendadas: 512X800 px. ")}</small>
               </label>
             </aside>
 
             <div className={styles.detailsPanel}>
               <div className={styles.panelTitle}>
-                <h3>Detalles de la historia</h3>
+                <h3>{ui("Detalles de la historia")}</h3>
                 {!auth.isAuthenticated ? (
-                  <p className={styles.message}>
-                    Inicia sesion para publicar historias e imagenes.
-                  </p>
+                  <p className={styles.message}>{ui(" Inicia sesion para publicar historias e imagenes. ")}</p>
                 ) : null}
               </div>
 
               <label className={styles.field}>
-                <span>Titulo</span>
+                <span>{ui("Titulo")}</span>
                 <input
-                  placeholder="Historia sin titulo"
+                  placeholder={ui("Historia sin titulo")}
                   value={storyForm.title}
                   onChange={(event) =>
                     setStoryForm((current) => ({
@@ -477,10 +559,10 @@ export function CreatorStudio({
               </label>
 
               <label className={styles.field}>
-                <span>Sinopsis o descripcion general</span>
+                <span>{ui("Sinopsis o descripcion general")}</span>
                 <textarea
                   rows="5"
-                  placeholder="Resume el corazon de la historia, el tono y lo que engancha."
+                  placeholder={ui("Resume el corazon de la historia, el tono y lo que engancha.")}
                   value={storyForm.synopsis}
                   onChange={(event) =>
                     setStoryForm((current) => ({
@@ -492,32 +574,22 @@ export function CreatorStudio({
                 />
               </label>
 
-              <label className={styles.field}>
-                <span>Historia</span>
-                <textarea
-                  rows="9"
-                  className={styles.storyTextarea}
-                  placeholder="Escribe aqui el inicio de tu historia. Este contenido se guardara como el Capitulo 1."
-                  value={storyForm.storyContent}
-                  onChange={(event) =>
-                    setStoryForm((current) => ({
-                      ...current,
-                      storyContent: event.target.value
-                    }))
-                  }
-                  required
-                />
-              </label>
+              <div className={styles.field}>
+                <span>{ui("Historia")}</span>
+                <RichTextEditor label="Historia" value={storyForm.storyContent} placeholder={ui("Escribe el primer capitulo de tu historia...")} onChange={(content) => setStoryForm((current) => ({ ...current, storyContent: content }))} />
+              </div>
 
               <div className={styles.field}>
-                <span>Personajes principales</span>
+                <span>{ui("Personajes principales")}</span>
                 <div className={styles.inlineBuilder}>
                   <input
-                    placeholder="Nombre"
+                    placeholder={ui("Nombre")}
+                    aria-label={ui("Nombre del personaje")}
+                    data-story-list="character"
                     value={characterInput}
                     onChange={(event) => setCharacterInput(event.target.value)}
                   />
-                  <button onClick={addCharacter} type="button">
+                  <button onClick={addCharacter} type="button" aria-label={ui("Agregar personaje")}>
                     +
                   </button>
                 </div>
@@ -530,8 +602,7 @@ export function CreatorStudio({
                         onClick={() => removeCharacter(index)}
                         type="button"
                       >
-                        {character} x
-                      </button>
+                        {character}{ui(" x ")}</button>
                     ))}
                   </div>
                 ) : null}
@@ -539,7 +610,7 @@ export function CreatorStudio({
 
               <div className={styles.twoCols}>
                 <label className={`${styles.field} ${styles.categoryField}`}>
-                  <span>Categoria</span>
+                  <span>{ui("Categoria")}</span>
                   <select
                     value={storyForm.category}
                     onChange={(event) =>
@@ -552,14 +623,14 @@ export function CreatorStudio({
                   >
                     {ALL_CATEGORIES.map((option) => (
                       <option key={option} value={option}>
-                        {option}
+                        {ui(option)}
                       </option>
                     ))}
                   </select>
                 </label>
 
                 <label className={styles.field}>
-                  <span>Estado</span>
+                  <span>{ui("Estado")}</span>
                   <select
                     value={storyForm.status}
                     onChange={(event) =>
@@ -569,21 +640,23 @@ export function CreatorStudio({
                       }))
                     }
                   >
-                    <option value="draft">Borrador</option>
-                    <option value="published">Publicado</option>
+                    <option value="draft">{ui("Borrador")}</option>
+                    <option value="published">{ui("Publicado")}</option>
                   </select>
                 </label>
               </div>
 
               <div className={styles.field}>
-                <span>Etiquetas</span>
+                <span>{ui("Etiquetas")}</span>
                 <div className={styles.inlineBuilder}>
                   <input
-                    placeholder="Agrega una etiqueta"
+                    placeholder={ui("Agrega una etiqueta")}
+                    aria-label={ui("Agregar etiqueta")}
+                    data-story-list="tag"
                     value={tagInput}
                     onChange={(event) => setTagInput(event.target.value)}
                   />
-                  <button onClick={addTag} type="button">
+                  <button onClick={addTag} type="button" aria-label={ui("Agregar etiqueta a la historia")}>
                     +
                   </button>
                 </div>
@@ -605,7 +678,7 @@ export function CreatorStudio({
 
               <div className={styles.metaGrid}>
                 <label className={styles.field}>
-                  <span>Audiencia principal</span>
+                  <span>{ui("Audiencia principal")}</span>
                   <select
                     value={storyForm.audience}
                     onChange={(event) =>
@@ -617,14 +690,14 @@ export function CreatorStudio({
                   >
                     {audienceOptions.map((option) => (
                       <option key={option} value={option}>
-                        {option}
+                        {ui(option)}
                       </option>
                     ))}
                   </select>
                 </label>
 
                 <label className={styles.field}>
-                  <span>Idioma</span>
+                  <span>{ui("Idioma")}</span>
                   <select
                     value={storyForm.language}
                     onChange={(event) =>
@@ -634,9 +707,9 @@ export function CreatorStudio({
                       }))
                     }
                   >
-                    {languageOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
+                    {languageOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {languageLabel(value)}
                       </option>
                     ))}
                   </select>
@@ -645,7 +718,7 @@ export function CreatorStudio({
 
               <div className={styles.metaGrid}>
                 <label className={styles.field}>
-                  <span>Derechos de autor</span>
+                  <span>{ui("Derechos de autor")}</span>
                   <select
                     value={storyForm.rights}
                     onChange={(event) =>
@@ -657,14 +730,14 @@ export function CreatorStudio({
                   >
                     {rightsOptions.map((option) => (
                       <option key={option} value={option}>
-                        {option}
+                        {ui(option)}
                       </option>
                     ))}
                   </select>
                 </label>
 
                 <label className={styles.toggleField}>
-                  <span>Clasificacion</span>
+                  <span>{ui("Clasificacion")}</span>
                   <button
                     className={`${styles.toggle} ${
                       storyForm.mature ? styles.toggleActive : ""
@@ -677,41 +750,36 @@ export function CreatorStudio({
                     }
                     type="button"
                   >
-                    {storyForm.mature ? "Madura" : "General"}
+                    {storyForm.mature ? ui("Madura") : ui("General")}
                   </button>
                 </label>
               </div>
 
               <div className={styles.footerNote}>
-                <p>
-                  Tu historia se vera mejor con una portada vertical, etiquetas
-                  claras y una descripcion que explique el conflicto principal.
-                </p>
+                <p>{ui(" Tu historia se vera mejor con una portada vertical, etiquetas claras y una descripcion que explique el conflicto principal. ")}</p>
               </div>
             </div>
           </div>
 
-          <button disabled={loadingStory || !auth.isAuthenticated} type="submit">
-            {loadingStory ? "Guardando..." : "Crear historia"}
+          <button data-create-story="true" disabled={loadingStory || !auth.isAuthenticated} type="submit">
+            {loadingStory ? ui("Guardando...") : ui("Crear historia")}
           </button>
           {storyMessage ? <p className={styles.message}>{storyMessage}</p> : null}
         </form>
         ) : null}
 
         {mode !== "story" ? (
-        <form className={styles.card} onSubmit={handleChapterSubmit}>
+        <form className={styles.card} onSubmit={handleChapterSubmit} onKeyDown={event=>{if(event.key==="Enter" && event.target.tagName==="INPUT")event.preventDefault();}}>
           <div className={styles.panelTitle}>
-            <h3>{isEditingChapter ? "Editar capitulo" : "Agregar capitulo"}</h3>
+            <h3>{isEditingChapter ? ui("Editar capitulo") : ui("Agregar capitulo")}</h3>
             {!auth.isAuthenticated ? (
-              <p className={styles.message}>
-                Inicia sesion para crear capitulos.
-              </p>
+              <p className={styles.message}>{ui(" Inicia sesion para crear capitulos. ")}</p>
             ) : null}
           </div>
 
           <div className={styles.twoCols}>
             <label className={styles.field}>
-              <span>Historia</span>
+              <span>{ui("Historia")}</span>
               <select
                 value={chapterForm.storyId}
                 onChange={(event) =>
@@ -723,7 +791,7 @@ export function CreatorStudio({
                 required
                 disabled={!availableStories}
               >
-                <option value="">Selecciona una historia</option>
+                <option value="">{ui("Selecciona una historia")}</option>
                 {stories.map((story) => (
                   <option key={story.id} value={story.id}>
                     {story.title}
@@ -733,7 +801,7 @@ export function CreatorStudio({
             </label>
 
             <label className={styles.field}>
-              <span>Categoria</span>
+              <span>{ui("Categoria")}</span>
               <select
                 value={chapterForm.category}
                 onChange={(event) =>
@@ -745,7 +813,7 @@ export function CreatorStudio({
               >
                 {ALL_CATEGORIES.map((option) => (
                   <option key={option} value={option}>
-                    {option}
+                    {ui(option)}
                   </option>
                 ))}
               </select>
@@ -753,7 +821,7 @@ export function CreatorStudio({
           </div>
 
           <label className={styles.field}>
-            <span>Numero</span>
+            <span>{ui("Numero")}</span>
             <input
               type="number"
               min="1"
@@ -769,9 +837,9 @@ export function CreatorStudio({
           </label>
 
           <label className={styles.field}>
-            <span>Titulo del capitulo</span>
+            <span>{ui("Titulo del capitulo")}</span>
             <input
-              placeholder="Capitulo 1"
+              placeholder={ui("Capitulo 1")}
               value={chapterForm.title}
               onChange={(event) =>
                 setChapterForm((current) => ({
@@ -784,10 +852,10 @@ export function CreatorStudio({
           </label>
 
           <label className={styles.field}>
-            <span>Resumen</span>
+            <span>{ui("Resumen")}</span>
             <textarea
               rows="3"
-              placeholder="Que se lleva el lector de este capitulo"
+              placeholder={ui("Que se lleva el lector de este capitulo")}
               value={chapterForm.excerpt}
               onChange={(event) =>
                 setChapterForm((current) => ({
@@ -798,27 +866,19 @@ export function CreatorStudio({
             />
           </label>
 
-          <label className={styles.field}>
-            <span>Contenido</span>
-            <textarea
-              rows="8"
-              placeholder="Escribe aqui el texto del capitulo"
-              value={chapterForm.content}
-              onChange={(event) =>
-                setChapterForm((current) => ({
-                  ...current,
-                  content: event.target.value
-                }))
-              }
-            />
-          </label>
+          <div className={styles.field}>
+            <span>{ui("Contenido")}</span>
+            <label>{ui("Programar publicación (")}{Intl.DateTimeFormat().resolvedOptions().timeZone})<input type="datetime-local" value={chapterForm.scheduledAt||""} onChange={event=>setChapterForm(current=>({...current,scheduledAt:event.target.value,status:"draft"}))}/></label>
+            <p>{ui("Deja la fecha vacía para guardar sin programación. Si eliges publicar ahora, borra la fecha.")}</p>
+            <RichTextEditor label="Contenido del capitulo" value={chapterForm.content} onChange={(content) => setChapterForm((current) => ({ ...current, content }))} />
+          </div>
 
           <div className={styles.twoCols}>
             <label className={styles.field}>
-              <span>Link de ilustracion</span>
+              <span>{ui("Link de ilustracion")}</span>
               <input
                 type="url"
-                placeholder="https://..."
+                placeholder={ui("https://...")}
                 value={chapterForm.illustrationUrl}
                 onChange={(event) =>
                   setChapterForm((current) => ({
@@ -830,7 +890,7 @@ export function CreatorStudio({
             </label>
 
             <label className={styles.field}>
-              <span>Imagen del capitulo</span>
+              <span>{ui("Imagen del capitulo")}</span>
               <div className={styles.filePicker}>
                 <label className={styles.fileButton}>
                   <input
@@ -840,11 +900,9 @@ export function CreatorStudio({
                     onChange={(event) =>
                       setChapterImage(event.target.files?.[0] || null)
                     }
-                  />
-                  Elegir imagen
-                </label>
+                  />{ui(" Elegir imagen ")}</label>
                 <small className={styles.fileName}>
-                  {chapterImage?.name || "Ningun archivo seleccionado"}
+                  {chapterImage?.name || ui("Ningun archivo seleccionado")}
                 </small>
               </div>
             </label>
@@ -853,7 +911,7 @@ export function CreatorStudio({
           <div className={styles.twoCols}>
 
             <label className={styles.field}>
-              <span>Estado</span>
+              <span>{ui("Estado")}</span>
               <select
                 value={chapterForm.status}
                 onChange={(event) =>
@@ -863,8 +921,8 @@ export function CreatorStudio({
                   }))
                 }
               >
-                <option value="draft">Borrador</option>
-                <option value="published">Publicado</option>
+                <option value="draft">{ui("Borrador")}</option>
+                <option value="published">{ui("Publicado")}</option>
               </select>
             </label>
           </div>
@@ -873,13 +931,13 @@ export function CreatorStudio({
             disabled={
               loadingChapter || !availableStories || !auth.isAuthenticated
             }
-            type="submit"
+            data-save-chapter="true" type="submit"
           >
             {loadingChapter
-              ? "Guardando..."
+              ? ui("Guardando...")
               : isEditingChapter
-                ? "Guardar cambios"
-                : "Crear capitulo"}
+                ? ui("Guardar cambios")
+                : ui("Crear capitulo")}
           </button>
           {chapterMessage ? (
             <p className={styles.message}>{chapterMessage}</p>

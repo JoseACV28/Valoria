@@ -15,6 +15,7 @@ export async function attachAuthUser(request, response, next) {
   // Resuelve el usuario autenticado y lo deja disponible en request.authUser.
   try {
     const token = getBearerToken(request.headers.authorization);
+    request.authToken = token;
 
     if (!token) {
       request.authUser = null;

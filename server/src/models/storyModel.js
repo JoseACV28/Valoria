@@ -15,6 +15,8 @@ function mapStory(story) {
   // Adapta el registro crudo de historia al formato usado por la interfaz.
   return {
     ...story,
+    characters: Array.isArray(story.characters) ? story.characters : [],
+    tags: Array.isArray(story.tags) ? story.tags : [],
     authorId: story.author_id,
     authorAvatarUrl: story.author_avatar_url || "",
     reads: story.reads_count
@@ -40,6 +42,13 @@ function isUuid(value) {
 function normalizeAuthorKey(value = "") {
   // Normaliza nombres de autor para comparar identidades antiguas por texto.
   return String(value).trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function writeError(error) {
+  if (["PGRST204", "42703"].includes(error.code) && /characters|tags/.test(error.message || "")) {
+    return new Error("Falta aplicar en Supabase la migración 20261002_story_search_metadata.sql para guardar personajes y etiquetas.");
+  }
+  return new Error(error.message);
 }
 
 async function attachAuthorProfiles(stories) {
@@ -78,13 +87,13 @@ export class StoryModel {
       const source = featuredOnly
         ? demoStories.filter((story) => story.is_featured && story.status === "published")
         : demoStories.filter((story) => story.status === "published");
-      return source.map(mapStory);
+      return source.filter(story=>!story.deleted_at && !story.moderation_hidden_at).map(mapStory);
     }
 
     let query = supabaseAdmin
       .from("stories")
-      .select("*")
-      .eq("status", "published")
+      .select("*").is("deleted_at", null)
+      .eq("status", "published").is("moderation_hidden_at", null)
       .order("created_at", { ascending: false });
 
     if (featuredOnly) {
@@ -104,13 +113,13 @@ export class StoryModel {
     // Devuelve todas las historias asociadas a un autor por id.
     if (!isSupabaseEnabled()) {
       return demoStories
-        .filter((story) => story.author_id === authorId)
+        .filter((story) => story.author_id === authorId && !story.deleted_at)
         .map(mapStory);
     }
 
     const { data, error } = await supabaseAdmin
       .from("stories")
-      .select("*")
+      .select("*").is("deleted_at", null)
       .eq("author_id", authorId)
       .order("created_at", { ascending: false });
 
@@ -133,7 +142,7 @@ export class StoryModel {
       return demoStories
         .filter(
           (story) =>
-            String(story.author_name || "").toLowerCase() ===
+            !story.deleted_at && String(story.author_name || "").toLowerCase() ===
             String(authorName).toLowerCase()
         )
         .map(mapStory);
@@ -141,7 +150,7 @@ export class StoryModel {
 
     const { data, error } = await supabaseAdmin
       .from("stories")
-      .select("*")
+      .select("*").is("deleted_at", null)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -159,7 +168,7 @@ export class StoryModel {
     // Recupera una historia puntual usando UUID o slug publico.
     if (!isSupabaseEnabled()) {
       const story = demoStories.find(
-        (item) => item.id === identifier || item.slug === identifier
+        (item) => !item.deleted_at && (item.id === identifier || item.slug === identifier)
       );
       return story ? mapStory(story) : null;
     }
@@ -167,7 +176,7 @@ export class StoryModel {
     if (isUuid(identifier)) {
       const byId = await supabaseAdmin
         .from("stories")
-        .select("*")
+        .select("*").is("deleted_at", null)
         .eq("id", identifier)
         .maybeSingle();
 
@@ -182,7 +191,7 @@ export class StoryModel {
 
     const bySlug = await supabaseAdmin
       .from("stories")
-      .select("*")
+      .select("*").is("deleted_at", null)
       .eq("slug", identifier)
       .maybeSingle();
 
@@ -198,15 +207,23 @@ export class StoryModel {
     const payload = {
       author_id: input.authorId,
       title: input.title,
-      slug: slugify(input.slug || input.title),
+      slug: input.slug ? slugify(input.slug) : `${slugify(input.title)}-${randomUUID().slice(0,8)}`,
       description: input.description,
       excerpt: input.excerpt || input.description,
       category: input.category,
       author_name: input.authorName,
       cover_url: input.coverUrl || "",
       status: input.status || "draft",
-      is_featured: Boolean(input.isFeatured)
+      is_featured: Boolean(input.isFeatured),
+      audience: input.audience || "General",
+      language: input.language || "Espanol",
+      rights: input.rights || "Todos los derechos reservados",
+      mature: Boolean(input.mature)
     };
+    for (const key of ["characters", "tags"]) {
+      const values = [...new Set((Array.isArray(input[key]) ? input[key] : []).filter((value) => typeof value === "string").map((value) => value.trim()).filter(Boolean))];
+      if (values.length) payload[key] = values;
+    }
 
     if (!isSupabaseEnabled()) {
       const story = {
@@ -228,7 +245,7 @@ export class StoryModel {
       .single();
 
     if (error) {
-      throw new Error(error.message);
+      throw writeError(error);
     }
 
     return mapStory((await attachAuthorProfiles([data]))[0]);
@@ -247,26 +264,7 @@ export class StoryModel {
       return mapStory(story);
     }
 
-    const current = await supabaseAdmin
-      .from("stories")
-      .select("reads_count")
-      .eq("id", storyId)
-      .single();
-
-    if (current.error) {
-      throw new Error(current.error.message);
-    }
-
-    const nextReads = Number(current.data.reads_count || 0) + 1;
-
-    const { data, error } = await supabaseAdmin
-      .from("stories")
-      .update({
-        reads_count: nextReads
-      })
-      .eq("id", storyId)
-      .select("*")
-      .single();
+    const { data, error } = await supabaseAdmin.rpc("increment_story_read", { story: storyId });
 
     if (error) {
       throw new Error(error.message);
@@ -284,6 +282,9 @@ export class StoryModel {
         throw new Error("Historia no encontrada");
       }
 
+      for (const key of ["audience", "language", "rights", "mature"]) if(input[key] !== undefined) story[key] = input[key];
+      if(input.coverUrl !== undefined) story.cover_url = input.coverUrl;
+      if(input.isComplete !== undefined)story.is_complete=Boolean(input.isComplete);
       if (input.title !== undefined) {
         story.title = input.title;
       }
@@ -300,10 +301,21 @@ export class StoryModel {
         story.status = input.status;
       }
 
+      for (const key of ["characters", "tags"]) {
+        if (input[key] !== undefined) story[key] = [...new Set((Array.isArray(input[key]) ? input[key] : []).filter((value) => typeof value === "string").map((value) => value.trim()).filter(Boolean))];
+      }
+
       return mapStory(story);
     }
 
     const payload = {};
+    if(input.isComplete !== undefined)payload.is_complete=Boolean(input.isComplete);
+    for (const key of ["audience", "language", "rights", "mature"]) if(input[key] !== undefined) payload[key] = input[key];
+    if(input.coverUrl !== undefined) payload.cover_url = input.coverUrl;
+
+    for (const key of ["characters", "tags"]) {
+      if (input[key] !== undefined) payload[key] = [...new Set((Array.isArray(input[key]) ? input[key] : []).filter((value) => typeof value === "string").map((value) => value.trim()).filter(Boolean))];
+    }
 
     if (input.title !== undefined) {
       payload.title = input.title;
@@ -329,7 +341,7 @@ export class StoryModel {
       .single();
 
     if (error) {
-      throw new Error(error.message);
+      throw writeError(error);
     }
 
     return mapStory((await attachAuthorProfiles([data]))[0]);

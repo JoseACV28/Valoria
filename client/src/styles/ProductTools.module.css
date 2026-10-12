@@ -1,0 +1,17 @@
+.panel { padding: 20px; margin: 16px 0; border-radius: var(--radius-panel); border: 1px solid var(--line-soft); background: var(--bg-surface); min-width: 0; }
+:global(html[data-theme="light"]) .panel { background:var(--light-panel);box-shadow:var(--shadow-soft); }
+.panel h3,.panel h4 { margin: 8px 0 16px; overflow-wrap: anywhere; }
+.panel p { color: var(--text-soft); line-height: 1.6; overflow-wrap: anywhere; }
+.panel label,.stack { display: grid; gap: 10px; min-width: 0; }
+.panel label { margin: 14px 0; }
+.panel :is(select,input:not([type="checkbox"]),textarea) { width: 100%; padding: 12px 14px; min-height: 44px; }
+.panel textarea { min-height: 100px; }
+.panel button { padding: 10px 16px; border-radius: var(--radius-control); border: 1px solid var(--line-soft); background: var(--brand-900); color: var(--text-main); }
+.panel button[type="submit"] { background: var(--brand-400); color: var(--accent-ink); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.manuscript { padding: 18px 0; line-height: 1.9; overflow-wrap: anywhere; }
+.manuscript pre { white-space: pre-wrap; }
+.offlineList { display: grid; gap: 16px; }
+.offlineList article { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+@media(max-width:600px) { .panel { padding: 16px; } }
+.passwordField{display:grid;gap:10px;margin:14px 0;min-width:0}.passwordField label{margin:0}.passwordInputRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;min-width:0}.passwordInputRow button{background:var(--brand-900);min-height:44px;font-size:.85rem}

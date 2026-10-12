@@ -1,11 +1,16 @@
+import { LanguageSwitcher } from './LanguageSwitcher';
+import {ThemeSwitcher} from './ThemeSwitcher';
+import { ui, getLocale } from "../../i18n/runtime.js";
 // Barra superior comun de la app.
-// Contiene logo, categorias, buscador y el menu de usuario autenticado.
-import { useEffect, useState } from "react";
-import valoriaLogo from "../../assets/valoria-logo.png";
-import { ALL_CATEGORIES } from "../../data/categories";
+// Contiene logo, buscador y el menu de usuario autenticado.
+import { useEffect, useState, useRef } from "react";
+import valoriaLogo from "../../assets/valoria-logo.webp";
+import { userNavigationGroups } from '../../data/navigation';
+import { usePopoverSpace } from '../../hooks/usePopoverSpace';
 import styles from "../../styles/Navbar.module.css";
 
 export function Navbar({
+  variant = 'editorial',
   auth,
   currentView,
   onNavigate,
@@ -13,135 +18,97 @@ export function Navbar({
   unreadNotifications = 0,
   onOpenNotification,
   onMarkAllNotificationsRead,
-  categoryOptions = ALL_CATEGORIES,
-  selectedCategory = "",
-  onSelectCategory,
-  storySearchQuery = "",
-  onStorySearchChange,
-  writerSearchQuery = "",
-  onWriterSearchChange
+  searchQuery = "",
+  searchScope = "all",
+  onSearchChange,
+  onSearchSubmit
 }) {
+  const userMenuButtonRef = useRef(null);
+  const profileGroups = userNavigationGroups(auth.user);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [logoutBusy, setLogoutBusy] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
+  const [userDropdownRef,menuAvailableHeight] = usePopoverSpace(menuOpen,84);
+  const [notificationsRef,notificationsHeight] = usePopoverSpace(notificationsOpen);
+
+  const [suggestions,setSuggestions]=useState([]);
+  useEffect(()=>{
+    let active=true;const controller=new AbortController();
+    if(searchQuery.trim().length<2){setSuggestions([]);return;}
+    const timer=setTimeout(()=>{
+      fetch(`${import.meta.env.VITE_API_URL||'http://localhost:4000/api'}/search?suggest=true&q=${encodeURIComponent(searchQuery)}`,{signal:controller.signal,headers:auth.token?{Authorization:`Bearer ${auth.token}`}:{}}).then(response=>response.ok?response.json():null).then(data=>{if(active&&data)setSuggestions(data.suggestions||[]);}).catch(()=>{});
+    },300);
+    return()=>{active=false;clearTimeout(timer);controller.abort();};
+  },[searchQuery,auth.token]);
 
   useEffect(() => {
     function closeMenus() {
-      setCategoriesOpen(false);
       setMenuOpen(false);
       setNotificationsOpen(false);
     }
 
     window.addEventListener("click", closeMenus);
-    window.addEventListener("scroll", closeMenus);
+    function escapeMenus(event){if(event.key==='Escape'){const userMenu=document.getElementById('valoria-user-navigation');if(userMenu)userMenuButtonRef.current?.focus();closeMenus();}}
+    window.addEventListener('keydown',escapeMenus);
 
     return () => {
       window.removeEventListener("click", closeMenus);
-      window.removeEventListener("scroll", closeMenus);
+      window.removeEventListener('keydown',escapeMenus);
     };
   }, []);
 
   function formatNotificationDate(value) {
     if (!value) {
-      return "Ahora";
+      return ui("Ahora");
     }
 
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) {
-      return "Ahora";
+      return ui("Ahora");
     }
 
-    return date.toLocaleString("es-CL", {
+    return date.toLocaleString(getLocale(), {
       dateStyle: "short",
       timeStyle: "short"
     });
   }
 
   return (
-    <header className={styles.navbar}>
+    <header className={`${styles.navbar} ${variant === 'editorial' ? styles.editorial : ''}`}>
       <div className={styles.brand}>
         <a
           className={styles.logo}
-          href="#/"
-          onClick={() => onNavigate("home")}
+          href="/#/"
+          onClick={(event) => {
+            if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            onNavigate("home");
+          }}
         >
-          <img src={valoriaLogo} alt="Valoria" />
+          <img src={valoriaLogo} alt={ui("Valoria")} />
         </a>
       </div>
 
-      <nav className={styles.links}>
-        <div className={styles.categoriesMenu}>
-          <button
-            className={styles.linkButton}
-            onClick={(event) => {
-              event.stopPropagation();
-              setCategoriesOpen((current) => !current);
-            }}
-            type="button"
-          >
-            Categorias
-          </button>
 
-          {categoriesOpen ? (
-            <div className={styles.categoriesDropdown}>
-              <button
-                className={!selectedCategory ? styles.categoryActive : ""}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onSelectCategory?.("");
-                  setCategoriesOpen(false);
-                }}
-                type="button"
-              >
-                Todas
-              </button>
-              {categoryOptions.map((category) => (
-                <button
-                  key={category}
-                  className={selectedCategory === category ? styles.categoryActive : ""}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onSelectCategory?.(category);
-                    setCategoriesOpen(false);
-                  }}
-                  type="button"
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </nav>
-
-      <div className={styles.searchWrap}>
-        {typeof onStorySearchChange === "function" ? (
-          <>
-            <input
-              className={styles.search}
-              onChange={(event) => onStorySearchChange(event.target.value)}
-              placeholder="Buscar historia o etiqueta"
-              type="text"
-              value={storySearchQuery}
-            />
-            <input
-              className={styles.search}
-              onChange={(event) => onWriterSearchChange?.(event.target.value)}
-              placeholder="Filtrar por escritor"
-              type="text"
-              value={writerSearchQuery}
-            />
-          </>
-        ) : (
-          <input className={styles.search} placeholder="Buscar" type="text" />
-        )}
-      </div>
+      <form className={styles.searchWrap} role="search" onSubmit={(event) => {
+        event.preventDefault();
+        onSearchSubmit?.(searchQuery, currentView === "writers" ? "writers" : currentView === "illustrators" ? "illustrators" : currentView === "search" ? searchScope : "all");
+      }}>
+        <datalist id="valoria-search-suggestions">{suggestions.map(value=><option key={value} value={value}/>)}</datalist>
+        <input list="valoria-search-suggestions" className={styles.search} aria-label={ui("Buscar en Valoria")} placeholder={ui("Buscar en Valoria")} type="search" value={searchQuery} onChange={(event) => onSearchChange?.(event.target.value)} />
+        <button className={styles.searchSubmit} type="submit" aria-label={ui("Buscar")}><span className={styles.searchLabel}>{ui("Buscar")}</span><svg className={styles.searchIcon} aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
+      </form>
 
       {auth?.isAuthenticated ? (
         <div className={styles.session}>
+          <ThemeSwitcher/>
+          <LanguageSwitcher onOpen={()=>{setMenuOpen(false);setNotificationsOpen(false);}}/>
           <div className={styles.notificationWrap}>
             <button
               className={styles.notificationButton}
+              aria-label={ui('Notificaciones')}
+              aria-expanded={notificationsOpen}
               onClick={(event) => {
                 event.stopPropagation();
                 setMenuOpen(false);
@@ -149,7 +116,7 @@ export function Navbar({
               }}
               type="button"
             >
-              <span className={styles.notificationIcon}>🔔</span>
+              <span className={styles.notificationIcon} aria-hidden="true">🔔</span>
               {unreadNotifications > 0 ? (
                 <span className={styles.notificationBadge}>{unreadNotifications}</span>
               ) : null}
@@ -158,14 +125,14 @@ export function Navbar({
             {notificationsOpen ? (
               <div
                 className={styles.notificationDropdown}
+                ref={notificationsRef}
+                style={{maxHeight:notificationsHeight}}
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className={styles.notificationHeader}>
-                  <strong>Notificaciones</strong>
+                  <strong>{ui("Notificaciones")}</strong>
                   {unreadNotifications > 0 ? (
-                    <button onClick={() => onMarkAllNotificationsRead?.()} type="button">
-                      Marcar todo
-                    </button>
+                    <button onClick={() => onMarkAllNotificationsRead?.()} type="button">{ui(" Marcar todo ")}</button>
                   ) : null}
                 </div>
 
@@ -190,7 +157,7 @@ export function Navbar({
                               src={notification.actorAvatarUrl}
                             />
                           ) : (
-                            notification.actorName?.slice(0, 1).toUpperCase() || "V"
+                            notification.actorName?.slice(0, 1).toUpperCase() || ui("V")
                           )}
                         </div>
                         <div className={styles.notificationBody}>
@@ -203,7 +170,7 @@ export function Navbar({
                   </div>
                 ) : (
                   <div className={styles.notificationEmpty}>
-                    <p>Aun no tienes interacciones nuevas.</p>
+                    <p>{ui("Aun no tienes interacciones nuevas.")}</p>
                   </div>
                 )}
               </div>
@@ -212,6 +179,10 @@ export function Navbar({
 
           <button
             className={styles.userButton}
+            ref={userMenuButtonRef}
+            aria-label={ui("Menú de usuario")}
+            aria-controls="valoria-user-navigation"
+            aria-expanded={menuOpen}
             onClick={(event) => {
               event.stopPropagation();
               setNotificationsOpen(false);
@@ -221,9 +192,9 @@ export function Navbar({
           >
             <span className={styles.userBadge}>
               {auth.user?.avatarUrl ? (
-                <img src={auth.user.avatarUrl} alt={auth.user?.displayName || "Usuario"} />
+                <img src={auth.user.avatarUrl} alt={auth.user?.displayName || ui("Usuario")} />
               ) : (
-                auth.user?.displayName?.slice(0, 1) || "U"
+                auth.user?.displayName?.slice(0, 1) || ui("U")
               )}
             </span>
             <span>{auth.user?.displayName}</span>
@@ -232,79 +203,61 @@ export function Navbar({
           {menuOpen ? (
             <div
               className={styles.dropdown}
+              ref={userDropdownRef}
+              style={{ '--user-menu-height': `${menuAvailableHeight}px` }}
               onClick={(event) => event.stopPropagation()}
             >
+              <nav id="valoria-user-navigation" className={styles.dropdownScroll} aria-label={ui("Menú de usuario")}>
+                {profileGroups.map(group => (
+                  <section className={styles.dropdownGroup} key={group.label} aria-label={ui(group.label)}>
+                    <p className={styles.dropdownHeading}>{ui(group.label)}</p>
+                    {group.items.map(item => (
+                      <button key={item.id} type="button"
+                        aria-current={!item.options && currentView === item.view ? 'page' : undefined}
+                        onClick={() => { onNavigate(item.view, item.options); setMenuOpen(false); }}>
+                        <span className={styles.dropdownIcon} aria-hidden="true">{item.icon}</span>
+                        <span>{ui(item.label)}</span>
+                      </button>
+                    ))}
+                  </section>
+                ))}
+              </nav>
               <button
-                disabled={currentView === "profile"}
-                onClick={() => {
-                  onNavigate("profile");
-                  setMenuOpen(false);
+                className={styles.logoutButton}
+                disabled={logoutBusy}
+                onClick={async () => {
+                  setLogoutBusy(true); setLogoutError('');
+                  try {
+                    await auth.logout();
+                    onNavigate("home"); setMenuOpen(false);
+                  } catch (error) { setLogoutError(error.message); }
+                  finally { setLogoutBusy(false); }
                 }}
                 type="button"
               >
-                Mi perfil
+                {logoutBusy ? ui("Cerrando sesión…") : ui("Cerrar sesion")}
               </button>
-              <button
-                disabled={currentView === "creator"}
-                onClick={() => {
-                  onNavigate("creator");
-                  setMenuOpen(false);
-                }}
-                type="button"
-              >
-                Pantalla de creador
-              </button>
-              <button
-                disabled={currentView === "languages"}
-                onClick={() => {
-                  onNavigate("languages");
-                  setMenuOpen(false);
-                }}
-                type="button"
-              >
-                Idiomas
-              </button>
-              <button
-                disabled={currentView === "help"}
-                onClick={() => {
-                  onNavigate("help");
-                  setMenuOpen(false);
-                }}
-                type="button"
-              >
-                Ayuda
-              </button>
-              <button
-                onClick={() => {
-                  auth.logout();
-                  onNavigate("home");
-                  setMenuOpen(false);
-                }}
-                type="button"
-              >
-                Cerrar sesion
-              </button>
+              {logoutError && <p role="alert">{ui(logoutError)}</p>}
             </div>
           ) : null}
         </div>
       ) : (
         <div className={styles.guestActions}>
+          <ThemeSwitcher/>
+          <LanguageSwitcher onOpen={()=>{setMenuOpen(false);setNotificationsOpen(false);}}/>
           <button
             className={styles.ghostCta}
             onClick={() => onNavigate("login")}
             type="button"
-          >
-            Login
-          </button>
+          >{ui(" Login ")}</button>
           <button
             className={styles.cta}
             onClick={() => onNavigate("register")}
             type="button"
-          >
-            Registro
-          </button>
+          >{ui(" Registro ")}</button>
         </div>
       )}
     </header>
   );
 }
+

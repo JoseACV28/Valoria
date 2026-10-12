@@ -1,3 +1,6 @@
+import { ui } from "../i18n/runtime.js";
+import { saveWorkspace } from "../api/workspaceApi";
+import { ReportDialog } from "../components/common/ReportDialog";
 // Vista publica de un creador visitado desde lectura.
 // Muestra informacion del autor, seguimiento y su muro.
 import { useEffect, useMemo, useState } from "react";
@@ -172,7 +175,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
     () =>
       buildProfileShareLinks({
         title: `Descubre el perfil de ${visibleDisplayName} en Valoria`,
-        url: `${window.location.origin}${window.location.pathname}#/creator-profile/${profileId}`
+        url: `${window.location.origin}/#/creator-profile/${profileId}`
       }),
     [profileId, visibleDisplayName]
   );
@@ -387,31 +390,33 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
     }
   }
 
+  const [reportTarget,setReportTarget] = useState(null);
+
   async function handleWallAction(action, target) {
     setWallMenu(null);
 
     if (action === "report-user") {
-      setWallMessage("Perfil marcado para revision.");
+      setReportTarget({targetType:"profile",targetId:profileId});
       return;
     }
 
     if (action === "mute-user") {
-      setWallMessage("Usuario silenciado en esta experiencia local.");
+      try{await saveWorkspace('preferences',`mute-user:${profileId}`,{enabled:true,name:profile?.displayName||'Creador'},auth.token);setWallMessage('No recibirás nuevas notificaciones de esta cuenta. Puedes cambiarlo en tu biblioteca.');}catch(error){setWallMessage(error.message);}
       return;
     }
 
     if (action === "block-user") {
-      setWallMessage("Usuario bloqueado en esta experiencia local.");
+      try {await saveWorkspace("blocks",profileId,{blocked:true,name:profile?.displayName||"Cuenta bloqueada"},auth.token);setWallMessage("Cuenta bloqueada. Puedes gestionar el bloqueo en tu biblioteca.");}catch(error){setWallMessage(error.message);}
       return;
     }
 
     if (action === "mute") {
-      setWallMessage("Notificaciones silenciadas para este hilo.");
+      try{await saveWorkspace('preferences',`mute-thread:${target.postId}`,{enabled:true},auth.token);setWallMessage('No recibirás nuevas notificaciones de este hilo. Puedes cambiarlo en tu biblioteca.');}catch(error){setWallMessage(error.message);}
       return;
     }
 
     if (action === "report") {
-      setWallMessage("Comentario marcado para revision.");
+      setReportTarget({targetType:"comment",targetId:target.commentId||target.postId});
       return;
     }
 
@@ -533,12 +538,12 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
           <div className={styles.replyAvatar}>
             {comment.authorAvatarUrl ? (
               <img
-                alt={comment.authorName || "Autor"}
+                alt={comment.authorName || ui("Autor")}
                 className={styles.wallAvatarImage}
                 src={comment.authorAvatarUrl}
               />
             ) : (
-              comment.authorName?.slice(0, 1).toUpperCase() || "L"
+              comment.authorName?.slice(0, 1).toUpperCase() || ui("L")
             )}
           </div>
           <div className={styles.replyBody}>
@@ -551,7 +556,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                 />
                 <div className={styles.inlineEditorActions}>
                   <button onClick={() => handleSaveCommentEdit(comment.id)} type="button">
-                    {savingCommentId === comment.id ? "Guardando..." : "Guardar"}
+                    {savingCommentId === comment.id ? ui("Guardando...") : ui("Guardar")}
                   </button>
                   <button
                     className={styles.composerGhost}
@@ -560,9 +565,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                       setEditingCommentDraft("");
                     }}
                     type="button"
-                  >
-                    Cancelar
-                  </button>
+                  >{ui(" Cancelar ")}</button>
                 </div>
               </div>
             ) : (
@@ -589,9 +592,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                       }));
                     }}
                     type="button"
-                  >
-                    Responder
-                  </button>
+                  >{ui(" Responder ")}</button>
                   <button
                     className={styles.wallActionButton}
                     onClick={() => handleLikeComment(comment.id)}
@@ -599,10 +600,10 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                     type="button"
                   >
                     {(likingCommentId === comment.id
-                      ? "Actualizando"
+                      ? ui("Actualizando")
                       : comment.likedByCurrentUser
-                        ? "Te gusta"
-                        : "Me gusta")}{" "}
+                        ? ui("Te gusta")
+                        : ui("Me gusta"))}{" "}
                     · {comment.likesCount || 0}
                   </button>
                 </div>
@@ -631,22 +632,22 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
           <div className={styles.wallMenuReply} onClick={(event) => event.stopPropagation()}>
             <button onClick={() => handleWallAction("mute", { postId, commentId: comment.id })} type="button">
               <span className={styles.menuIcon}>🔇</span>
-              <span>Silenciar notificacion</span>
+              <span>{ui("Silenciar notificacion")}</span>
             </button>
             <button onClick={() => handleWallAction("report", { postId, commentId: comment.id })} type="button">
               <span className={styles.menuIcon}>⚑</span>
-              <span>Reportar comentario</span>
+              <span>{ui("Reportar comentario")}</span>
             </button>
             {comment.isEditableByCurrentUser ? (
               <button onClick={() => handleWallAction("edit-comment", { postId, commentId: comment.id })} type="button">
                 <span className={styles.menuIcon}>✎</span>
-                <span>Editar comentario</span>
+                <span>{ui("Editar comentario")}</span>
               </button>
             ) : null}
             {comment.isDeletableByCurrentUser ? (
               <button className={styles.wallMenuDanger} onClick={() => handleWallAction("delete-comment", { postId, commentId: comment.id })} type="button">
                 <span className={styles.menuIcon}>✕</span>
-                <span>Eliminar comentario</span>
+                <span>{ui("Eliminar comentario")}</span>
               </button>
             ) : null}
           </div>
@@ -671,7 +672,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
         style={
           visibleCoverUrl
             ? {
-                backgroundImage: `linear-gradient(180deg, rgba(39, 25, 52, 0.18), rgba(39, 25, 52, 0.82)), url("${visibleCoverUrl}")`
+                backgroundImage: `linear-gradient(180deg, rgba(24, 26, 32, 0.18), rgba(24, 26, 32, 0.82)), url("${visibleCoverUrl}")`
               }
             : undefined
         }
@@ -691,44 +692,34 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
           <div className={styles.metrics}>
             <div>
               <strong>{visibleWorksCount}</strong>
-              <span>Obras</span>
+              <span>{ui("Obras")}</span>
             </div>
             <div>
               <strong>{followingProfiles.length}</strong>
-              <span>Siguiendo</span>
+              <span>{ui("Siguiendo")}</span>
             </div>
             <div>
               <strong>{visibleFollowerCount}</strong>
-              <span>Seguidores</span>
+              <span>{ui("Seguidores")}</span>
             </div>
           </div>
         </div>
       </section>
 
       <section className={styles.tabs}>
-        <button className={activeTab === "info" ? styles.activeTab : ""} onClick={() => setActiveTab("info")} type="button">
-          Info
-        </button>
+        <button className={activeTab === "info" ? styles.activeTab : ""} onClick={() => setActiveTab("info")} type="button">{ui(" Info ")}</button>
         <button
           className={activeTab === "stories" ? styles.activeTab : ""}
           onClick={() => setActiveTab("stories")}
           type="button"
-        >
-          Historias
-        </button>
+        >{ui(" Historias ")}</button>
         <button
           className={activeTab === "illustrations" ? styles.activeTab : ""}
           onClick={() => setActiveTab("illustrations")}
           type="button"
-        >
-          Ilustraciones
-        </button>
-        <button className={activeTab === "wall" ? styles.activeTab : ""} onClick={() => setActiveTab("wall")} type="button">
-          Muro de creador
-        </button>
-        <button className={activeTab === "following" ? styles.activeTab : ""} onClick={() => setActiveTab("following")} type="button">
-          Siguiendo
-        </button>
+        >{ui(" Ilustraciones ")}</button>
+        <button className={activeTab === "wall" ? styles.activeTab : ""} onClick={() => setActiveTab("wall")} type="button">{ui(" Muro de creador ")}</button>
+        <button className={activeTab === "following" ? styles.activeTab : ""} onClick={() => setActiveTab("following")} type="button">{ui(" Siguiendo ")}</button>
         <div className={styles.headerActions}>
           <button
             className={`${styles.followButton} ${profile?.isFollowing ? styles.followingButton : ""}`}
@@ -737,10 +728,10 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
             disabled={isTogglingFollow}
           >
             {isTogglingFollow
-              ? "Actualizando..."
+              ? ui("Actualizando...")
               : profile?.isFollowing
-                ? "Siguiendo"
-                : "Seguir"}
+                ? ui("Siguiendo")
+                : ui("Seguir")}
           </button>
           <div className={styles.profileMenuWrap}>
             <button
@@ -757,15 +748,15 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
               <div className={styles.wallMenu} onClick={(event) => event.stopPropagation()}>
                 <button onClick={() => handleWallAction("report-user")} type="button">
                   <span className={styles.menuIcon}>⚑</span>
-                  <span>Reportar usuario</span>
+                  <span>{ui("Reportar usuario")}</span>
                 </button>
                 <button onClick={() => handleWallAction("mute-user")} type="button">
                   <span className={styles.menuIcon}>🔇</span>
-                  <span>Silenciar usuario</span>
+                  <span>{ui("Silenciar usuario")}</span>
                 </button>
                 <button onClick={() => handleWallAction("block-user")} type="button">
                   <span className={styles.menuIcon}>⛔</span>
-                  <span>Bloquear usuario</span>
+                  <span>{ui("Bloquear usuario")}</span>
                 </button>
               </div>
             ) : null}
@@ -773,60 +764,59 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
         </div>
       </section>
 
-      {wallMessage ? <p className={styles.wallMessage}>{wallMessage}</p> : null}
+      {wallMessage ? <p className={styles.wallMessage}>{ui(wallMessage)}</p> : null}
 
       {activeTab === "info" ? (
         <section className={styles.placeholderSection}>
           <article className={`${styles.infoCard} ${styles.infoCardFullWidth}`}>
-            <h2>Sobre {visibleDisplayName}</h2>
+            <h2>{ui("Sobre ")}{visibleDisplayName}</h2>
             {visibleRealName ? (
-              <p className={styles.realNameInfo}>Nombre real: {visibleRealName}</p>
+              <p className={styles.realNameInfo}>{ui("Nombre real: ")}{visibleRealName}</p>
             ) : null}
             <p>
-              {visibleDisplayName} ha publicado {visibleWorksCount} historias y cuenta con{" "}
-              {visibleFollowerCount} seguidores dentro de Valoria.
-            </p>
+              {visibleDisplayName}{ui(" ha publicado ")}{visibleWorksCount}{ui(" historias y cuenta con")}{" "}
+              {visibleFollowerCount}{ui(" seguidores dentro de Valoria. ")}</p>
 
             <div className={styles.shareBlock}>
-              <span>Compartir perfil</span>
+              <span>{ui("Compartir perfil")}</span>
               <div className={styles.shareRow}>
                   <button
-                    aria-label="Compartir en Facebook"
+                    aria-label={ui("Compartir en Facebook")}
                     onClick={() => window.open(shareLinks.facebook, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={facebookIcon} />
                   </button>
                   <button
-                    aria-label="Compartir en X"
+                    aria-label={ui("Compartir en X")}
                     onClick={() => window.open(shareLinks.x, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={xIcon} />
                   </button>
                   <button
-                    aria-label="Compartir en Pinterest"
+                    aria-label={ui("Compartir en Pinterest")}
                     onClick={() => window.open(shareLinks.pinterest, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={pinterestIcon} />
                   </button>
                   <button
-                    aria-label="Abrir Instagram"
+                    aria-label={ui("Abrir Instagram")}
                     onClick={() => window.open(shareLinks.instagram, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={instagramIcon} />
                   </button>
                   <button
-                    aria-label="Compartir por correo"
+                    aria-label={ui("Compartir por correo")}
                     onClick={() => window.open(shareLinks.mail, "_self")}
                     type="button"
                   >
                     <img alt="" src={mailIcon} />
                   </button>
                   <button
-                    aria-label="Abrir TikTok"
+                    aria-label={ui("Abrir TikTok")}
                     onClick={() => window.open(shareLinks.tiktok, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
@@ -843,8 +833,8 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
           <article className={styles.libraryCard}>
             <div className={styles.libraryHeader}>
               <div>
-                <span>Historias del creador</span>
-                <h2>{visibleStories.length} historias publicadas por {visibleDisplayName}</h2>
+                <span>{ui("Historias del creador")}</span>
+                <h2>{visibleStories.length}{ui(" historias publicadas por ")}{visibleDisplayName}</h2>
               </div>
             </div>
 
@@ -874,7 +864,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                 />
               ) : (
                 <div className={styles.emptyShelf}>
-                  <p>Este perfil aun no tiene historias publicadas.</p>
+                  <p>{ui("Este perfil aun no tiene historias publicadas.")}</p>
                 </div>
               )}
             </div>
@@ -885,9 +875,9 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
       {activeTab === "wall" ? (
         <section className={styles.wallLayout}>
           <div className={styles.wallFeed}>
-            {wallMessage ? <p className={styles.wallMessage}>{wallMessage}</p> : null}
+            {wallMessage ? <p className={styles.wallMessage}>{ui(wallMessage)}</p> : null}
             {wallStatus === "loading" ? (
-              <p className={styles.wallMessage}>Cargando muro del creador...</p>
+              <p className={styles.wallMessage}>{ui("Cargando muro del creador...")}</p>
             ) : null}
 
             {wallPosts.map((post) => (
@@ -897,12 +887,12 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                     <div className={styles.wallAvatarMuted}>
                       {post.authorAvatarUrl ? (
                         <img
-                          alt={post.authorName || "Autor"}
+                          alt={post.authorName || ui("Autor")}
                           className={styles.wallAvatarImage}
                           src={post.authorAvatarUrl}
                         />
                       ) : (
-                        post.authorName?.slice(0, 1).toUpperCase() || "V"
+                        post.authorName?.slice(0, 1).toUpperCase() || ui("V")
                       )}
                     </div>
                     <div>
@@ -940,10 +930,8 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                       setReplyTargets((current) => ({ ...current, [post.id]: null }));
                     }}
                     type="button"
-                  >
-                    Responder
-                  </button>
-                  <span>{(post.comments || []).length} comentarios</span>
+                  >{ui(" Responder ")}</button>
+                  <span>{(post.comments || []).length}{ui(" comentarios")}</span>
                 </div>
 
                 <div className={styles.wallReplies}>
@@ -955,7 +943,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                     <div className={styles.wallAvatar}>
                       {auth.user?.avatarUrl ? (
                         <img
-                          alt={auth.user?.displayName || "Usuario"}
+                          alt={auth.user?.displayName || ui("Usuario")}
                           className={styles.wallAvatarImage}
                           src={auth.user.avatarUrl}
                         />
@@ -965,8 +953,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                     </div>
                     <div className={styles.wallComposerBody}>
                       {replyTargets[post.id] ? (
-                        <div className={styles.replyTargetPill}>
-                          Respondiendo a {replyTargets[post.id].authorName}
+                        <div className={styles.replyTargetPill}>{ui(" Respondiendo a ")}{replyTargets[post.id].authorName}
                           <button
                             onClick={() =>
                               setReplyTargets((current) => ({
@@ -975,13 +962,11 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                               }))
                             }
                             type="button"
-                          >
-                            ×
-                          </button>
+                          >{ui(" × ")}</button>
                         </div>
                       ) : null}
                       <textarea
-                        placeholder="Escribe una respuesta..."
+                        placeholder={ui("Escribe una respuesta...")}
                         rows="2"
                         value={commentDrafts[post.id] || ""}
                         onChange={(event) =>
@@ -994,8 +979,8 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                       <div className={styles.wallComposerActions}>
                         <button onClick={() => handleSubmitComment(post.id)} type="button">
                           {submittingCommentPostId === post.id
-                            ? "Publicando..."
-                            : "Publicar comentario"}
+                            ? ui("Publicando...")
+                            : ui("Publicar comentario")}
                         </button>
                       </div>
                     </div>
@@ -1012,8 +997,8 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
           <article className={styles.libraryCard}>
             <div className={styles.libraryHeader}>
               <div>
-                <span>Siguiendo</span>
-                <h2>{followingProfiles.length} perfiles en su circulo creativo</h2>
+                <span>{ui("Siguiendo")}</span>
+                <h2>{followingProfiles.length}{ui(" perfiles en su circulo creativo")}</h2>
               </div>
             </div>
             <div className={styles.shelf}>
@@ -1045,25 +1030,25 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                           src={creator.avatarUrl}
                         />
                       ) : (
-                        creator.displayName?.slice(0, 1).toUpperCase() || "C"
+                        creator.displayName?.slice(0, 1).toUpperCase() || ui("C")
                       )}
                     </div>
                     <div className={styles.followCardBody}>
                       <strong>{creator.displayName}</strong>
                       <small>{creator.handle || buildHandle(creator.displayName)}</small>
-                      <div className={styles.followCardButton}>Perfil creativo</div>
+                      <div className={styles.followCardButton}>{ui("Perfil creativo")}</div>
                       <div className={styles.followCardStats}>
                         <div>
                           <strong>{creator.worksCount || 0}</strong>
-                          <span>Obras</span>
+                          <span>{ui("Obras")}</span>
                         </div>
                         <div>
                           <strong>{creator.followingCount || 0}</strong>
-                          <span>Siguiendo</span>
+                          <span>{ui("Siguiendo")}</span>
                         </div>
                         <div>
                           <strong>{creator.followerCount || 0}</strong>
-                          <span>Seguidores</span>
+                          <span>{ui("Seguidores")}</span>
                         </div>
                       </div>
                     </div>
@@ -1071,7 +1056,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                 ))
               ) : (
                 <div className={styles.emptyShelf}>
-                  <p>Este creador aun no sigue a otros perfiles.</p>
+                  <p>{ui("Este creador aun no sigue a otros perfiles.")}</p>
                 </div>
               )}
             </div>
@@ -1084,15 +1069,15 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
           <article className={styles.libraryCard}>
             <div className={styles.libraryHeader}>
               <div>
-                <span>Ilustraciones del creador</span>
-                <h2>{visibleIllustrations.length} piezas visuales publicadas por {visibleDisplayName}</h2>
+                <span>{ui("Ilustraciones del creador")}</span>
+                <h2>{visibleIllustrations.length}{ui(" piezas visuales publicadas por ")}{visibleDisplayName}</h2>
               </div>
             </div>
 
             <div className={styles.illustrationShelf}>
               {illustrationStatus === "loading" ? (
                 <div className={styles.emptyShelf}>
-                  <p>Cargando ilustraciones del creador...</p>
+                  <p>{ui("Cargando ilustraciones del creador...")}</p>
                 </div>
               ) : null}
 
@@ -1124,10 +1109,10 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
                         </div>
                       </div>
                       <div className={styles.illustrationProfileVisualBody}>
-                        <small>{illustration.categories?.slice(0, 2).join(" · ") || "Ilustracion"}</small>
+                        <small>{illustration.categories?.slice(0, 2).join(" · ") || ui("Ilustracion")}</small>
                         <div className={styles.illustrationProfileVisualStats}>
-                          <span>{illustration.likesCount || 0} me gusta</span>
-                          <span>{illustration.commentsCount || 0} comentarios</span>
+                          <span>{illustration.likesCount || 0}{ui(" me gusta")}</span>
+                          <span>{illustration.commentsCount || 0}{ui(" comentarios")}</span>
                         </div>
                       </div>
                     </article>
@@ -1136,7 +1121,7 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
 
               {illustrationStatus !== "loading" && visibleIllustrations.length === 0 ? (
                 <div className={styles.emptyShelf}>
-                  <p>Este creador aun no tiene ilustraciones publicadas.</p>
+                  <p>{ui("Este creador aun no tiene ilustraciones publicadas.")}</p>
                 </div>
               ) : null}
             </div>
@@ -1144,6 +1129,8 @@ export function CreatorProfilePage({ auth, navFilters, onNavigate, profileId }) 
         </section>
       ) : null}
       </main>
+      {reportTarget && <ReportDialog target={reportTarget} auth={auth} onClose={()=>setReportTarget(null)} onSent={setWallMessage} />}
     </AppShell>
   );
 }
+

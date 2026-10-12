@@ -14,14 +14,13 @@
 .intro {
   padding: 34px 30px;
   border: 1px solid var(--line-soft);
-  border-radius: 28px;
+  border-radius: var(--radius-panel);
   background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
-    radial-gradient(circle at top left, rgba(216, 195, 241, 0.18), transparent 38%);
+    var(--bg-surface);
 }
 
 .intro span {
-  color: var(--brand-200);
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.78rem;
@@ -42,7 +41,7 @@
 .inlineLink {
   padding: 0;
   background: transparent;
-  color: #fff8f2;
+  color: var(--text-main);
   text-decoration: underline;
   text-underline-offset: 4px;
 }

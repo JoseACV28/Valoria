@@ -11,7 +11,7 @@
 }
 
 .empty {
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--text-soft);
 }
 
 .heart {

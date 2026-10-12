@@ -1,0 +1,1 @@
+export const CONTENT_WARNINGS=[['violence','Violencia'],['grief','Duelo o muerte'],['abuse','Abuso o maltrato'],['sexual','Contenido sexual'],['selfharm','Autolesiones'],['discrimination','Discriminación'],['substances','Consumo de sustancias'],['disturbing','Escenas perturbadoras']];

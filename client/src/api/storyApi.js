@@ -2,9 +2,9 @@
 // Reune lecturas, creacion, capitulos, reseñas y subida de imagenes.
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
-export async function fetchStories() {
+export async function fetchStories(token="") {
   // Lista historias publicas visibles en home, directorios y sugerencias.
-  const response = await fetch(`${API_URL}/stories`);
+  const response = await fetch(`${API_URL}/stories`,{headers:buildAuthHeaders(token)});
 
   if (!response.ok) {
     throw new Error("No se pudieron cargar las historias");
@@ -18,7 +18,9 @@ async function handleJson(response) {
   const payload = await response.json();
 
   if (!response.ok) {
-    throw new Error(payload.message || "Ocurrio un error en la solicitud");
+    throw Object.assign(new Error(payload.message || "Ocurrio un error en la solicitud"), {
+      status: response.status
+    });
   }
 
   return payload;
@@ -184,16 +186,20 @@ export async function fetchMyStories(token = "") {
   return handleJson(response);
 }
 
-export async function fetchStoryChapters(storyId) {
+export async function fetchStoryChapters(storyId, token = "") {
   // Carga la lista de capitulos para lectura o gestion editorial.
-  const response = await fetch(`${API_URL}/stories/${storyId}/chapters`);
+  const response = await fetch(`${API_URL}/stories/${storyId}/chapters`, {
+    headers: buildAuthHeaders(token)
+  });
 
   return handleJson(response);
 }
 
-export async function fetchStory(identifier) {
+export async function fetchStory(identifier, token = "") {
   // Recupera una historia por id o slug publico.
-  const response = await fetch(`${API_URL}/stories/${identifier}`);
+  const response = await fetch(`${API_URL}/stories/${identifier}`, {
+    headers: buildAuthHeaders(token)
+  });
 
   return handleJson(response);
 }
@@ -248,10 +254,11 @@ export async function replyToStoryReview(storyId, reviewId, payload, token = "")
   return handleJson(response);
 }
 
-export async function registerStoryRead(storyId) {
+export async function registerStoryRead(storyId, token = "") {
   // Registra una lectura para alimentar la metrica publica de vistas.
   const response = await fetch(`${API_URL}/stories/${storyId}/read`, {
-    method: "POST"
+    method: "POST",
+    headers: buildAuthHeaders(token)
   });
 
   return handleJson(response);

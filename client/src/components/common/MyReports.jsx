@@ -1,0 +1,9 @@
+import {useEffect,useState} from 'react';
+import {ui} from '../../i18n/runtime';
+import {workspaceRequest} from '../../api/workspaceApi';
+import styles from '../../styles/Experience.module.css';
+export function MyReports({auth}){
+  const [reports,setReports]=useState([]),[message,setMessage]=useState(''),[reasons,setReasons]=useState({}),[busy,setBusy]=useState(false);
+  useEffect(()=>{let active=true;if(auth.token)workspaceRequest('reports/mine',auth.token).then(x=>{if(active)setReports(x.reports);}).catch(e=>{if(active)setMessage(e.message);});return()=>{active=false;};},[auth.token]);
+  return <section className={styles.card}><h2>{ui('Mis denuncias')}</h2><p role="status">{ui(message)}</p>{!reports.length&&!message&&<p>{ui('No has enviado denuncias.')}</p>}{reports.map(x=><article key={x.id} className={styles.inset}><strong>{ui(({pending:'Recibida',reviewing:'En revisión',resolved:'Resuelta',dismissed:'Descartada'})[x.status])}</strong><p>{x.reason}</p><p>{x.reporter_message||ui('La explicación estará disponible cuando moderación responda.')}</p>{x.appeal&&<p>{ui('Solicitud de revisión')}: {x.appeal}</p>}{['resolved','dismissed'].includes(x.status)&&!x.appealed_at&&<form onSubmit={async e=>{e.preventDefault();if(busy)return;setBusy(true);try{await workspaceRequest(`reports/${x.id}/appeal`,auth.token,'POST',{reason:reasons[x.id]||''});setReports(current=>current.map(r=>r.id===x.id?{...r,status:'reviewing',appeal:reasons[x.id],appealed_at:new Date().toISOString()}:r));}catch(e){setMessage(e.message);}finally{setBusy(false);}}}><label>{ui('Motivo de revisión')}<textarea required minLength={10} maxLength={2000} value={reasons[x.id]||''} onChange={e=>setReasons({...reasons,[x.id]:e.target.value})}/></label><button type="submit" disabled={busy}>{ui('Solicitar revisión')}</button></form>}</article>)}</section>;
+}

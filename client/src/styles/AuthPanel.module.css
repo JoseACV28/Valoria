@@ -1,18 +1,18 @@
 .panel {
   padding: 28px 30px;
-  border-radius: 28px;
-  background: rgba(255, 248, 240, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 22px 48px rgba(7, 3, 11, 0.24);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-soft);
 }
 
 .drawerPanel {
   padding: 24px 24px 22px;
-  border-radius: 24px;
+  border-radius: var(--radius-panel);
   background:
-    linear-gradient(180deg, rgba(54, 36, 72, 0.96), rgba(36, 23, 48, 0.96));
+    var(--bg-surface);
   border: 1px solid rgba(202, 181, 230, 0.14);
-  box-shadow: 0 24px 60px rgba(4, 2, 9, 0.34);
+  box-shadow: var(--shadow-soft);
 }
 
 .drawerPanel .header {
@@ -32,18 +32,17 @@
 }
 
 .drawerPanel .divider span {
-  background: #2d1f39;
+  background: var(--panel-dark);
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  align-items: end;
+  display: grid;
+  gap: 12px;
+  align-items: start;
 }
 
 .header span {
-  color: #ffb38b;
+  color: var(--text-main);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.8rem;
@@ -56,7 +55,7 @@
 
 .header p {
   max-width: 36ch;
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .switcher {
@@ -70,26 +69,26 @@
 .accountCard button,
 .googleButton {
   padding: 12px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-control);
 }
 
 .switcher button {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff8f2;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--line-soft);
 }
 
 .active {
-  background: #ff8a57 !important;
-  color: #2d1710 !important;
+  background: var(--active-bg) !important;
+  color: var(--text-main) !important;
 }
 
 .googleButton {
   width: 100%;
   margin-top: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff8f2;
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
+  color: var(--text-main);
   font-weight: 700;
 }
 
@@ -103,15 +102,15 @@
   content: "";
   position: absolute;
   inset: 50% 0 auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--line-soft);
 }
 
 .divider span {
   position: relative;
   display: inline-block;
   padding: 0 12px;
-  background: #2a1d35;
-  color: #d8cbc0;
+  background: var(--panel-dark);
+  color: var(--text-main);
   font-size: 0.9rem;
 }
 
@@ -129,33 +128,33 @@
 .form input {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff8f2;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
+  color: var(--text-main);
 }
 
 .form button,
 .accountCard button {
-  background: #fff2e8;
-  color: #23140f;
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
   border: none;
 }
 
 .message {
   margin: 16px 0 0;
-  color: #ffd6bd;
+  color: var(--text-main);
 }
 
 .footer {
   margin-top: 18px;
-  color: #ddd0eb;
+  color: var(--text-main);
 }
 
 .footer a,
 .footer button {
-  color: #fff8f2;
+  color: var(--text-main);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -167,8 +166,8 @@
   align-items: center;
   margin-top: 20px;
   padding: 18px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
 }
 
 .accountCard p,
@@ -183,3 +182,9 @@
     align-items: start;
   }
 }
+
+.qaAccess{margin-top:18px;padding:14px;border:1px solid var(--line-soft);border-radius:var(--radius-panel);background:rgba(175,141,215,.1)}
+.qaAccess p{margin:0 0 10px;color:var(--text-soft);line-height:1.5}
+.qaAccess button{padding:10px 14px;background:var(--brand-500);color:var(--accent-ink);border-radius:var(--radius-control)}
+.message{padding:12px 14px;border:1px solid var(--line-soft);border-radius:var(--radius-panel);background:var(--bg-surface);overflow-wrap:anywhere}
+

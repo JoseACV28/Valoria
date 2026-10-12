@@ -1,0 +1,56 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { randomUUID } from 'node:crypto';
+process.env.SUPABASE_URL = ''; process.env.SUPABASE_ANON_KEY = ''; process.env.SUPABASE_SERVICE_ROLE_KEY = '';
+process.env.SITE_OWNER_ID = '10000000-0000-4000-8000-000000000001';
+const { default: app } = await import('../src/app.js');
+const { demoUsers } = await import('../src/data/authStore.js');
+
+test('administración: propietario, delegación limitada, revocación y protección de acciones críticas', async t => {
+  const server = app.listen(0, '127.0.0.1'); await once(server, 'listening');
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}/api`;
+  async function request(path, token = '', method = 'GET', body) {
+    const response = await fetch(base + path, { method, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+    return { status: response.status, data: await response.json() };
+  }
+  const email = `${randomUUID()}@example.invalid`;
+  await request('/auth/register', '', 'POST', { email, password: 'Testing-QA-2026-strong!', displayName: 'Propietario QA' });
+  demoUsers.find(x => x.email === email).id = process.env.SITE_OWNER_ID;
+  const owner = (await request('/auth/login', '', 'POST', { email, password: 'Testing-QA-2026-strong!' })).data;
+  const other = (await request('/auth/register', '', 'POST', { email: `${randomUUID()}@example.invalid`, password: 'Testing-QA-2026-strong!', displayName: 'Delegado QA' })).data;
+  const token = owner.accessToken, delegated = other.accessToken, id = other.user.id;
+  assert.equal((await request('/admin/users')).status, 401);
+  assert.equal((await request('/admin/users', delegated)).status, 403);
+  assert.equal((await request('/admin/roles/' + id, delegated, 'PUT', { permissions: ['users'] })).status, 403);
+  assert.equal((await request('/admin/roles/' + id, token, 'PUT', { permissions: ['owner'] })).status, 400);
+  assert.equal((await request('/admin/roles/' + owner.user.id, token, 'PUT', { permissions: [] })).status, 403);
+  assert.equal((await request('/admin/roles/' + id, token, 'PUT', { permissions: ['users'] })).status, 200);
+  assert.equal((await request('/auth/me', delegated)).data.user.isAdmin, true);
+  const users = await request('/admin/users', delegated);
+  assert.equal(users.status, 200); assert.ok(users.data.users.every(x => !('email' in x)));
+  assert.equal((await request('/admin/settings', delegated)).status, 403);
+  assert.equal((await request('/admin/audit', delegated)).status, 403);
+  assert.equal((await request('/admin/roles', delegated)).status, 403);
+  assert.equal((await request('/admin/roles/' + id, delegated, 'PUT', { permissions: ['settings'] })).status, 403);
+  assert.equal((await request('/admin/users/' + owner.user.id, delegated, 'PATCH', { display_name: 'Alterado', bio: '' })).status, 403);
+  assert.equal((await request('/admin/users/' + id, delegated, 'PATCH', { display_name: 'Delegado QA', bio: '', isAdmin: true })).status, 400);
+  assert.equal((await request('/workspace/administration/roles', delegated, 'PUT', { permissions: ['owner'] })).status, 400);
+  assert.equal((await request('/admin/users/' + id, delegated, 'PATCH', { display_name: 'Nombre corregido', bio: 'Biografía moderada' })).status, 200);
+  assert.equal((await request('/admin/roles/' + id, token, 'PUT', { permissions: ['settings', 'reports'] })).status, 200);
+  assert.equal((await request('/admin/users', delegated)).status, 403);
+  assert.equal((await request('/admin/settings', delegated, 'PUT', { announcement: 'Aviso QA', communityGuidelines: 'Respeta a otros lectores.' })).status, 200);
+  assert.equal((await request('/admin/public-settings')).data.settings.announcement, 'Aviso QA');
+  assert.equal((await request('/admin/settings', delegated, 'PUT', { announcement: '', communityGuidelines: '', ownerId: id })).status, 400);
+  const report = await request('/reports', delegated, 'POST', { targetType: 'profile', targetId: owner.user.id, reason: 'Denuncia ficticia de prueba' });
+  assert.equal((await request('/reports', delegated)).status, 200);
+  assert.equal((await request('/reports/' + report.data.id, delegated, 'PATCH', { status: 'resolved', resolution: 'Prueba local' })).status, 200);
+  assert.equal((await request('/admin/roles/' + id, token, 'PUT', { permissions: [] })).status, 200);
+  assert.equal((await request('/admin/settings', delegated)).status, 403);
+  assert.equal((await request('/reports', delegated)).status, 403);
+  assert.equal((await request('/admin/access', token)).data.isOwner, true);
+  const audit = (await request('/admin/audit', token)).data.entries;
+  assert.ok(audit.some(x => x.action === 'permissions.update.requested'));
+  assert.ok(audit.some(x => x.action === 'report.update.requested'));
+});

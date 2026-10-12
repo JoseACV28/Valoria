@@ -1,8 +1,10 @@
 // Hook de autenticacion del cliente.
 // Guarda la sesion en localStorage y expone login, registro y logout.
 import { useEffect, useState } from "react";
-import { fetchCurrentUser, loginUser, registerUser } from "../api/authApi";
+import { fetchCurrentUser, loginUser, registerUser, logoutUser } from "../api/authApi";
+import { syncApiSession, closeAuthSession } from '../utils/authSession';
 import { getSupabaseBrowserClient } from "../lib/supabaseClient";
+import {rememberRecovery,hasRecovery,clearRecovery,readCallbackSession} from '../utils/passwordRecovery.js';
 
 const STORAGE_KEY = "valoria-auth";
 const AUTH_PROFILE_UPDATED_EVENT = "valoria-auth-profile-updated";
@@ -56,12 +58,14 @@ export function useAuth() {
   // Orquesta login, registro, logout y sincronizacion de perfil a nivel de aplicacion.
   const [auth, setAuth] = useState(() => readStoredAuth());
   const [status, setStatus] = useState("loading");
+  const [recoveryRequired,setRecoveryRequired]=useState(false);
 
   useEffect(() => {
     let active = true;
     const supabase = getSupabaseBrowserClient();
 
     async function hydrateFromSession(session) {
+      if(active)setRecoveryRequired(hasRecovery(session));
       const fallbackAuth = normalizeSessionPayload(session);
 
       try {
@@ -73,7 +77,11 @@ export function useAuth() {
           persistAuth(nextAuth);
           setStatus("authenticated");
         }
-      } catch {
+      } catch (error) {
+        if ([401,403].includes(error.status)) {
+          if(active){clearPersistedAuth();setAuth(null);setStatus('guest');}
+          return;
+        }
         if (active) {
           setAuth(fallbackAuth);
           persistAuth(fallbackAuth);
@@ -88,13 +96,9 @@ export function useAuth() {
       const code = url.searchParams.get("code");
 
       if (supabase && code) {
-        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-        url.searchParams.delete("code");
-        url.searchParams.delete("state");
-        window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
-
-        if (!error && data.session) {
-          await hydrateFromSession(data.session);
+        const session=await readCallbackSession(supabase,window.location,window.history);
+        if (session) {
+          await hydrateFromSession(session);
           return;
         }
       }
@@ -108,12 +112,14 @@ export function useAuth() {
           };
 
           if (active) {
+            setRecoveryRequired(hasRecovery({access_token:stored.accessToken,user}));
             setAuth(nextAuth);
             persistAuth(nextAuth);
             setStatus("authenticated");
           }
           return;
-        } catch {
+        } catch (error) {
+          if(![401,403].includes(error.status)){if(active){setAuth(stored);setStatus("authenticated");}return;}
           clearPersistedAuth();
           if (active) {
             setAuth(null);
@@ -143,6 +149,7 @@ export function useAuth() {
       }
 
       if (event === "SIGNED_OUT") {
+        clearRecovery();setRecoveryRequired(false);
         clearPersistedAuth();
         setAuth(null);
         setStatus("guest");
@@ -150,6 +157,8 @@ export function useAuth() {
       }
 
       if (session) {
+        if(event==='PASSWORD_RECOVERY'){rememberRecovery(session);setRecoveryRequired(true);window.location.hash='/reset-password';}
+        else if(event==='SIGNED_IN'&&!hasRecovery(session)){clearRecovery();setRecoveryRequired(false);}
         await hydrateFromSession(session);
       }
     });
@@ -198,6 +207,7 @@ export function useAuth() {
   async function register(payload) {
     // Registra un usuario, persiste la sesion y actualiza el estado global.
     const result = await registerUser(payload);
+    await syncApiSession(getSupabaseBrowserClient(), result);
     persistAuth(result);
     setAuth(result);
     setStatus("authenticated");
@@ -207,6 +217,7 @@ export function useAuth() {
   async function login(payload) {
     // Inicia sesion local con correo y contrasena.
     const result = await loginUser(payload);
+    await syncApiSession(getSupabaseBrowserClient(), result);
     persistAuth(result);
     setAuth(result);
     setStatus("authenticated");
@@ -240,13 +251,23 @@ export function useAuth() {
     // Cierra la sesion remota y limpia toda persistencia local.
     const supabase = getSupabaseBrowserClient();
 
-    try {
-      await supabase?.auth.signOut();
-    } catch {}
+    await closeAuthSession(supabase, auth?.accessToken, logoutUser);
 
     clearPersistedAuth();
     setAuth(null);
     setStatus("guest");
+    clearRecovery();setRecoveryRequired(false);
+  }
+
+  async function refreshCurrentUser() {
+    const client=getSupabaseBrowserClient();
+    const session=client?(await client.auth.getSession()).data.session:null;
+    const token=session?.access_token||auth?.accessToken;
+    if(!token)throw new Error('Inicia sesión de nuevo.');
+    const {user}=await fetchCurrentUser(token);
+    const next=session?normalizeSessionPayload(session,user):{...auth,user};
+    persistAuth(next);setAuth(next);setStatus('authenticated');
+    return user;
   }
 
   return {
@@ -259,6 +280,13 @@ export function useAuth() {
     login,
     loginWithGoogle,
     logout,
+    refreshCurrentUser,
+    recoveryRequired,
+    async clearAfterPasswordChange(){
+      const client=getSupabaseBrowserClient();
+      await client?.auth.signOut({scope:'local'}).catch(()=>{});
+      clearPersistedAuth();clearRecovery();setRecoveryRequired(false);setAuth(null);setStatus('guest');
+    },
     updateCurrentUserProfile(profile) {
       window.dispatchEvent(
         new CustomEvent(AUTH_PROFILE_UPDATED_EVENT, {

@@ -3,6 +3,33 @@
   padding: 16px 0 64px;
 }
 
+.reportButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  gap: 9px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  color: var(--text-soft);
+  font-size: .9rem;
+  line-height: 1.4;
+}
+.reportButton svg { width: 18px; height: 18px; flex-shrink: 0; }
+.reportButton:hover { background: var(--field-bg-focus); color: var(--text-main); border-color: var(--field-border); }
+.reportButton:focus-visible { outline: 2px solid var(--brand-300); outline-offset: 3px; }
+.reportMessage { margin: 10px 0 0; color: var(--text-soft); }
+.publicationTools { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; min-width: 0; margin: 4px 0; }
+.publicationTools > div { margin: 0; }
+@media (max-width: 640px) {
+  .publicationTools { align-items: flex-start; flex-direction: column; }
+  .publicationTools > div { width: 100%; }
+}
+
 .layout {
   display: grid;
   justify-items: center;
@@ -12,9 +39,9 @@
 .mediaColumn,
 .infoCard,
 .emptyState {
-  border-radius: 24px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
 }
 
 .mediaColumn {
@@ -33,7 +60,7 @@
   width: 100%;
   padding: 0;
   background: transparent;
-  border-radius: 18px;
+  border-radius: var(--radius-control);
   overflow: hidden;
 }
 
@@ -43,7 +70,7 @@
   max-height: 900px;
   object-fit: cover;
   display: block;
-  border-radius: 18px;
+  border-radius: var(--radius-panel);
 }
 
 .thumbRail {
@@ -54,10 +81,10 @@
 
 .thumbButton {
   padding: 0;
-  border-radius: 16px;
+  border-radius: var(--radius-control);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .thumbButton img {
@@ -68,7 +95,7 @@
 
 .thumbButtonActive {
   border-color: rgba(173, 137, 232, 0.44);
-  box-shadow: 0 0 0 2px rgba(173, 137, 232, 0.12);
+  box-shadow: var(--shadow-soft);
 }
 
 .mediaArrow,
@@ -80,18 +107,18 @@
   height: 52px;
   display: grid;
   place-items: center;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(20, 11, 31, 0.72);
-  color: #fff8ff;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: rgba(var(--panel-rgb), 0.72);
+  color: var(--text-main);
   font-size: 2rem;
   line-height: 1;
-  box-shadow: 0 16px 24px rgba(8, 5, 14, 0.3);
+  box-shadow: var(--shadow-soft);
 }
 
 .mediaArrow:hover,
 .lightboxArrow:hover {
-  background: rgba(31, 19, 47, 0.9);
+  background: rgba(var(--panel-rgb), 0.9);
 }
 
 .mediaArrowLeft,
@@ -121,8 +148,8 @@
   gap: 18px;
 }
 
-.infoCard span:first-child {
-  color: var(--brand-200);
+.infoCard > span:first-child {
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.76rem;
@@ -137,7 +164,7 @@
   width: fit-content;
   padding: 0;
   background: transparent;
-  color: #fff9ff;
+  color: var(--text-main);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -156,8 +183,8 @@
 
 .metaGrid div {
   padding: 14px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
   text-align: left;
 }
 
@@ -183,11 +210,11 @@
   height: 52px;
   display: grid;
   place-items: center;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff9ff;
-  box-shadow: 0 12px 24px rgba(8, 5, 14, 0.14);
+  border-radius: var(--radius-control);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: var(--shadow-soft);
   transition:
     transform 160ms ease,
     background 160ms ease,
@@ -196,7 +223,7 @@
 
 .actionIconButton:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-surface);
   border-color: rgba(173, 137, 232, 0.3);
 }
 
@@ -218,7 +245,7 @@
 .actionIconButtonActive {
   background: rgba(173, 137, 232, 0.18);
   border-color: rgba(173, 137, 232, 0.26);
-  color: #f5eaff;
+  color: var(--text-main);
 }
 
 .actionIconButtonActive svg {
@@ -233,17 +260,17 @@
 
 .tagBlock span {
   padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff8ff;
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  color: var(--text-main);
   font-size: 0.84rem;
 }
 
 .backButton {
   padding: 12px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
-  color: white;
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -255,12 +282,12 @@
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 400;
   display: grid;
   place-items: center;
   padding: 30px;
-  background: rgba(10, 6, 15, 0.88);
-  backdrop-filter: blur(8px);
+  background: rgba(var(--panel-rgb), 0.88);
+  backdrop-filter: none;
 }
 
 .lightboxFrame {
@@ -268,10 +295,10 @@
   width: min(100%, 1220px);
   max-height: calc(100vh - 60px);
   padding: 18px;
-  border-radius: 24px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(33, 20, 48, 0.92);
-  box-shadow: 0 24px 48px rgba(6, 4, 12, 0.4);
+  background: rgba(var(--panel-rgb), 0.92);
+  box-shadow: var(--shadow-soft);
 }
 
 .lightboxClose {
@@ -280,9 +307,9 @@
   right: 18px;
   z-index: 2;
   padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff8ff;
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  color: var(--text-main);
   font-weight: 700;
 }
 
@@ -291,7 +318,7 @@
   max-height: calc(100vh - 120px);
   object-fit: contain;
   display: block;
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
 }
 
 .lightboxArrow {
@@ -308,9 +335,9 @@
   gap: 18px;
   margin-top: 24px;
   padding: 24px;
-  border-radius: 24px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
 }
 
 .communityGallerySection {
@@ -318,15 +345,15 @@
   gap: 18px;
   margin-top: 24px;
   padding: 24px;
-  border-radius: 24px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
 }
 
 .communityGalleryHeader span,
 .fanartField span,
 .fanartFormHeader strong {
-  color: var(--brand-200);
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.76rem;
@@ -346,9 +373,9 @@
   display: grid;
   gap: 12px;
   padding: 12px;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .communityFanartCard img {
@@ -356,7 +383,7 @@
   aspect-ratio: 4 / 5;
   display: block;
   object-fit: cover;
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
 }
 
 .communityFanartMeta {
@@ -377,9 +404,9 @@
   display: grid;
   gap: 18px;
   padding: 18px;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .fanartFormHeader p {
@@ -402,9 +429,9 @@
 .fanartPlaceholder {
   width: 100%;
   aspect-ratio: 4 / 5;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .fanartPreview {
@@ -422,7 +449,7 @@
 }
 
 .fanartPlaceholder strong {
-  color: #fff8ff;
+  color: var(--text-main);
 }
 
 .fanartFileInput {
@@ -444,9 +471,9 @@
   justify-content: center;
   width: fit-content;
   padding: 11px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
-  color: white;
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
   cursor: pointer;
 }
@@ -465,28 +492,28 @@
 .fanartField input {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
   color: var(--text-main);
 }
 
 .fanartFields button {
   justify-self: start;
   padding: 12px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
-  color: white;
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
 .fanartMessage {
   margin: 0;
-  color: var(--brand-200);
+  color: var(--text-accent);
 }
 
 .commentsHeader span {
-  color: var(--brand-200);
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.76rem;
@@ -498,7 +525,7 @@
 
 .commentMessage {
   margin: 0;
-  color: var(--brand-200);
+  color: var(--text-accent);
 }
 
 .commentList {
@@ -510,9 +537,9 @@
 .emptyComments,
 .loginHint {
   padding: 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .commentTop {
@@ -535,7 +562,7 @@
 .commentAuthorLink {
   padding: 0;
   background: transparent;
-  color: #fff8ff;
+  color: var(--text-main);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -549,7 +576,7 @@
   overflow: hidden;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
-  color: #fff8ff;
+  color: var(--text-main);
   font-weight: 700;
 }
 
@@ -577,7 +604,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--brand-200);
+  color: var(--text-accent);
 }
 
 .commentLikeButton:hover {
@@ -603,9 +630,9 @@
 .commentForm textarea {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
   color: var(--text-main);
 }
 
@@ -613,9 +640,9 @@
 .loginHint button {
   justify-self: start;
   padding: 12px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
-  color: white;
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -673,3 +700,7 @@
     grid-template-columns: 1fr;
   }
 }
+
+.layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
+.infoStack { width: 100%; margin-top: clamp(20px, 2vw, 28px); }
+.mediaColumn img { object-fit: contain; max-height: 70vh; }

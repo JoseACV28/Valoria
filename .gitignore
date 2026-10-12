@@ -7,4 +7,16 @@ client/.env
 server/.env
 .DS_Store
 npm-debug.log*
+client/runtime.log
+server/runtime.log
 .codex-logs/
+server/uploads/
+
+# Temporary isolated visual verification environment
+.codex-qa/
+client/.env.qa-improvements
+
+# Private content and media backups
+server/backups/
+client/.env.staging
+server/.env.staging

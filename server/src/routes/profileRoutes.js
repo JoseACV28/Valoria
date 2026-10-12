@@ -1,3 +1,4 @@
+import { profileBlocks } from "../middlewares/profileBlocks.js";
 // Router del perfil y muro del creador.
 import { Router } from "express";
 import {
@@ -23,6 +24,7 @@ import { requireAuth } from "../middlewares/authMiddleware.js";
 const router = Router();
 
 router.get("/community/feed", getCommunityFeed);
+router.use("/:profileId",profileBlocks);
 router.get("/:profileId", getProfile);
 router.patch("/:profileId", requireAuth, updateProfile);
 router.get("/:profileId/following", getFollowingProfiles);

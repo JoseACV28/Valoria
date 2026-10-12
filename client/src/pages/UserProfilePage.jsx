@@ -1,3 +1,7 @@
+import { ui } from "../i18n/runtime.js";
+import {PasswordForm} from '../components/common/PasswordForm';
+import { LibraryCount } from "../components/common/LibraryCount";
+import { ReportDialog } from "../components/common/ReportDialog";
 // Perfil personal del usuario autenticado.
 // Es independiente de la vista publica del creador.
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -112,6 +116,8 @@ function buildHandle(user) {
 }
 
 export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "info" }) {
+  const [passwordNotice,setPasswordNotice]=useState('');
+  const [reportTarget, setReportTarget] = useState(null);
   const [stories, setStories] = useState([]);
   const [illustrations, setIllustrations] = useState([]);
   const [illustrationStatus, setIllustrationStatus] = useState("loading");
@@ -167,7 +173,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
     () =>
       buildProfileShareLinks({
         title: `Descubre el perfil de ${visibleDisplayName} en Valoria`,
-        url: `${window.location.origin}${window.location.pathname}#/profile`
+        url: `${window.location.origin}/#/creator-profile/${encodeURIComponent(auth.user?.id || "")}`
       }),
     [visibleDisplayName]
   );
@@ -521,7 +527,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
     setWallMenu(null);
 
     if (action === "report") {
-      setWallMessage("Comentario marcado para revision.");
+      setReportTarget({targetType:"comment",targetId:target.commentId||target.postId});
       return;
     }
 
@@ -626,12 +632,12 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           <div className={styles.replyAvatar}>
             {comment.authorAvatarUrl ? (
               <img
-                alt={comment.authorName || "Autor"}
+                alt={comment.authorName || ui("Autor")}
                 className={styles.wallAvatarImage}
                 src={comment.authorAvatarUrl}
               />
             ) : (
-              comment.authorName?.slice(0, 1).toUpperCase() || "L"
+              comment.authorName?.slice(0, 1).toUpperCase() || ui("L")
             )}
           </div>
           <div className={styles.replyBody}>
@@ -644,7 +650,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                 />
                 <div className={styles.inlineEditorActions}>
                   <button onClick={() => handleSaveCommentEdit(comment.id)} type="button">
-                    {savingCommentId === comment.id ? "Guardando..." : "Guardar"}
+                    {savingCommentId === comment.id ? ui("Guardando...") : ui("Guardar")}
                   </button>
                   <button
                     className={styles.composerGhost}
@@ -653,9 +659,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                       setEditingCommentDraft("");
                     }}
                     type="button"
-                  >
-                    Cancelar
-                  </button>
+                  >{ui(" Cancelar ")}</button>
                 </div>
               </div>
             ) : (
@@ -676,9 +680,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                       }))
                     }
                     type="button"
-                  >
-                    Responder
-                  </button>
+                  >{ui(" Responder ")}</button>
                   <button
                     className={styles.wallActionButton}
                     onClick={() => handleLikeComment(comment.id)}
@@ -686,10 +688,10 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                     type="button"
                   >
                     {(likingCommentId === comment.id
-                      ? "Actualizando"
+                      ? ui("Actualizando")
                       : comment.likedByCurrentUser
-                        ? "Te gusta"
-                        : "Me gusta")}{" "}
+                        ? ui("Te gusta")
+                        : ui("Me gusta"))}{" "}
                     · {comment.likesCount || 0}
                   </button>
                 </div>
@@ -717,18 +719,18 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           <div className={styles.wallMenuReply} onClick={(event) => event.stopPropagation()}>
             <button onClick={() => handleWallAction("report", { postId, commentId: comment.id })} type="button">
               <span className={styles.menuIcon}>⚑</span>
-              <span>Reportar comentario</span>
+              <span>{ui("Reportar comentario")}</span>
             </button>
             {comment.isEditableByCurrentUser ? (
               <button onClick={() => handleWallAction("edit-comment", { postId, commentId: comment.id })} type="button">
                 <span className={styles.menuIcon}>✎</span>
-                <span>Editar comentario</span>
+                <span>{ui("Editar comentario")}</span>
               </button>
             ) : null}
             {comment.isDeletableByCurrentUser ? (
               <button className={styles.wallMenuDanger} onClick={() => handleWallAction("delete-comment", { postId, commentId: comment.id })} type="button">
                 <span className={styles.menuIcon}>✕</span>
-                <span>Eliminar comentario</span>
+                <span>{ui("Eliminar comentario")}</span>
               </button>
             ) : null}
           </div>
@@ -748,12 +750,11 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
         <main className={styles.page}>
           <Navbar auth={auth} currentView="profile" {...navFilters} onNavigate={onNavigate} />
         <section className={styles.emptyState}>
-          <span>Perfil</span>
-          <h1>Inicia sesion para ver tu perfil</h1>
-          <p>Tu perfil personal vive aqui, separado del home y del panel de creador.</p>
-          <button onClick={() => onNavigate("login")} type="button">
-            Iniciar sesion
-          </button>
+          <span>{ui("Perfil")}</span>
+          <h1>{ui("Inicia sesion para ver tu perfil")}</h1>
+          {passwordNotice&&<p role="status">{ui(passwordNotice)}</p>}
+          <p>{ui("Tu perfil personal vive aqui, separado del home y del panel de creador.")}</p>
+          <button onClick={() => onNavigate("login")} type="button">{ui(" Iniciar sesion ")}</button>
         </section>
         </main>
       </AppShell>
@@ -770,7 +771,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
         style={
           visibleCoverUrl
             ? {
-                backgroundImage: `linear-gradient(180deg, rgba(39, 25, 52, 0.18), rgba(39, 25, 52, 0.82)), url("${visibleCoverUrl}")`
+                backgroundImage: `linear-gradient(180deg, rgba(24, 26, 32, 0.18), rgba(24, 26, 32, 0.82)), url("${visibleCoverUrl}")`
               }
             : undefined
         }
@@ -780,7 +781,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
             {visibleAvatarUrl ? (
               <img alt={visibleDisplayName} className={styles.avatarImage} src={visibleAvatarUrl} />
             ) : (
-              <span>{visibleDisplayName.slice(0, 1).toUpperCase() || "V"}</span>
+              <span>{visibleDisplayName.slice(0, 1).toUpperCase() || ui("V")}</span>
             )}
           </div>
           <h1>{visibleDisplayName}</h1>
@@ -789,15 +790,15 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           <div className={styles.metrics}>
             <div>
               <strong>{publishedStories.length}</strong>
-              <span>Obras</span>
+              <span>{ui("Obras")}</span>
             </div>
             <div>
-              <strong>1</strong>
-              <span>Lista de lectura</span>
+              <strong>{<LibraryCount auth={auth}/>}</strong>
+              <span>{ui("Obras en biblioteca")}</span>
             </div>
             <div>
               <strong>{personalProfile?.followerCount ?? 0}</strong>
-              <span>Seguidores</span>
+              <span>{ui("Seguidores")}</span>
             </div>
           </div>
         </div>
@@ -808,37 +809,27 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           className={activeTab === "info" ? styles.activeTab : ""}
           onClick={() => setActiveTab("info")}
           type="button"
-        >
-          Info
-        </button>
+        >{ui(" Info ")}</button>
         <button
           className={activeTab === "stories" ? styles.activeTab : ""}
           onClick={() => setActiveTab("stories")}
           type="button"
-        >
-          Historias
-        </button>
+        >{ui(" Historias ")}</button>
         <button
           className={activeTab === "illustrations" ? styles.activeTab : ""}
           onClick={() => setActiveTab("illustrations")}
           type="button"
-        >
-          Ilustraciones
-        </button>
+        >{ui(" Ilustraciones ")}</button>
         <button
           className={activeTab === "wall" ? styles.activeTab : ""}
           onClick={() => setActiveTab("wall")}
           type="button"
-        >
-          Muro de creador
-        </button>
+        >{ui(" Muro de creador ")}</button>
         <button
           className={activeTab === "following" ? styles.activeTab : ""}
           onClick={() => setActiveTab("following")}
           type="button"
-        >
-          Siguiendo
-        </button>
+        >{ui(" Siguiendo ")}</button>
         <div className={styles.headerActions}>
           <button
             className={styles.editButton}
@@ -854,24 +845,22 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
             }}
             type="button"
           >
-            <span className={styles.editIcon}>⚙</span>
-            Edita tu perfil
-          </button>
+            <span className={styles.editIcon}>⚙</span>{ui(" Edita tu perfil ")}</button>
         </div>
       </section>
 
-      {wallMessage ? <p className={styles.wallMessage}>{wallMessage}</p> : null}
+      {wallMessage ? <p className={styles.wallMessage}>{ui(wallMessage)}</p> : null}
 
       {isEditingProfile ? (
         <section className={styles.profileEditorCard}>
           <div className={styles.profileEditorHeader}>
             <div>
-              <span>Editor de perfil</span>
-              <h2>Personaliza tu presencia en Valoria</h2>
+              <span>{ui("Editor de perfil")}</span>
+              <h2>{ui("Personaliza tu presencia en Valoria")}</h2>
             </div>
             <div className={styles.profileEditorActions}>
               <button onClick={handleSaveProfile} type="button">
-                {isSavingBio ? "Guardando..." : "Guardar cambios"}
+                {isSavingBio ? ui("Guardando...") : ui("Guardar cambios")}
               </button>
               <button
                 className={styles.composerGhost}
@@ -880,27 +869,23 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                   setIsEditingProfile(false);
                 }}
                 type="button"
-              >
-                Cancelar
-              </button>
+              >{ui(" Cancelar ")}</button>
             </div>
           </div>
 
           <div className={styles.profileEditorGrid}>
             <div className={styles.profileEditorMediaStack}>
               <div className={styles.profileEditorField}>
-                <span>Imagen de fondo</span>
+                <span>{ui("Imagen de fondo")}</span>
                 <div className={styles.profileEditorUploadRow}>
                   <button
                     className={styles.profileUploadButton}
                     onClick={() => coverInputRef.current?.click()}
                     type="button"
                   >
-                    {isUploadingCover ? "Subiendo fondo..." : "▣ Cambiar imagen de fondo"}
+                    {isUploadingCover ? ui("Subiendo fondo...") : ui("▣ Cambiar imagen de fondo")}
                   </button>
-                  <small>
-                    Usa una imagen amplia para que la cabecera mantenga buena presencia visual.
-                  </small>
+                  <small>{ui(" Usa una imagen amplia para que la cabecera mantenga buena presencia visual. ")}</small>
                   <input
                     ref={coverInputRef}
                     accept="image/*"
@@ -914,16 +899,16 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
               </div>
 
               <div className={styles.profileEditorField}>
-                <span>Imagen de usuario</span>
+                <span>{ui("Imagen de usuario")}</span>
                 <div className={styles.profileEditorUploadRow}>
                   <button
                     className={styles.profileUploadButton}
                     onClick={() => avatarInputRef.current?.click()}
                     type="button"
                   >
-                    {isUploadingAvatar ? "Subiendo avatar..." : "◉ Cambiar imagen de usuario"}
+                    {isUploadingAvatar ? ui("Subiendo avatar...") : ui("◉ Cambiar imagen de usuario")}
                   </button>
-                  <small>Ideal para retrato o simbolo del creador.</small>
+                  <small>{ui("Ideal para retrato o simbolo del creador.")}</small>
                   <input
                     ref={avatarInputRef}
                     accept="image/*"
@@ -940,7 +925,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
             <div className={styles.profileEditorIdentityStack}>
               <div className={styles.profileEditorIdentityGrid}>
                 <label className={styles.profileEditorField}>
-                  <span>Seudonimo publico</span>
+                  <span>{ui("Seudonimo publico")}</span>
                   <input
                     type="text"
                     value={profileDraft.displayName}
@@ -950,12 +935,12 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                         displayName: event.target.value
                       }))
                     }
-                    placeholder="Como quieres aparecer en Valoria"
+                    placeholder={ui("Como quieres aparecer en Valoria")}
                   />
                 </label>
 
                 <label className={styles.profileEditorField}>
-                  <span>Nombre real</span>
+                  <span>{ui("Nombre real")}</span>
                   <input
                     type="text"
                     value={profileDraft.realName}
@@ -965,13 +950,13 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                         realName: event.target.value
                       }))
                     }
-                    placeholder="Visible solo dentro del perfil del creador"
+                    placeholder={ui("Visible solo dentro del perfil del creador")}
                   />
                 </label>
               </div>
 
               <label className={styles.profileEditorField}>
-                <span>Descripcion personal</span>
+                <span>{ui("Descripcion personal")}</span>
                 <textarea
                   rows="6"
                   value={profileDraft.bio}
@@ -981,7 +966,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                       bio: event.target.value
                     }))
                   }
-                  placeholder="Describe tu universo creativo, tus gustos o la forma en que quieres presentarte."
+                  placeholder={ui("Describe tu universo creativo, tus gustos o la forma en que quieres presentarte.")}
                 />
               </label>
             </div>
@@ -991,66 +976,65 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
 
       {activeTab === "info" ? (
         <>
+          <details className={`${styles.infoCard} ${styles.passwordCard}`}><summary>{ui('Cambiar contraseña')}</summary><PasswordForm auth={auth} onComplete={setPasswordNotice}/></details>
           <section className={styles.placeholderSection}>
             <article className={`${styles.infoCard} ${styles.infoCardFullWidth}`}>
               <div className={styles.libraryHeader}>
                 <div>
-                  <h2>Tu espacio personal</h2>
+                  <h2>{ui("Tu espacio personal")}</h2>
                 </div>
                 <button
                   className={styles.creatorShortcut}
                   onClick={() => onNavigate("creator")}
                   type="button"
-                >
-                  Ir al panel de creador
-                </button>
+                >{ui(" Ir al panel de creador ")}</button>
               </div>
 
               <p>
                 {personalBio ||
-                  "Este perfil resume tu actividad como lector y creador dentro de Valoria."}
+                  ui("Este perfil resume tu actividad como lector y creador dentro de Valoria.")}
               </p>
 
               <div className={styles.shareBlock}>
-                <span>Compartir</span>
+                <span>{ui("Compartir")}</span>
                 <div className={styles.shareRow}>
                   <button
-                    aria-label="Compartir en Facebook"
+                    aria-label={ui("Compartir en Facebook")}
                     onClick={() => window.open(shareLinks.facebook, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={facebookIcon} />
                   </button>
                   <button
-                    aria-label="Compartir en X"
+                    aria-label={ui("Compartir en X")}
                     onClick={() => window.open(shareLinks.x, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={xIcon} />
                   </button>
                   <button
-                    aria-label="Compartir en Pinterest"
+                    aria-label={ui("Compartir en Pinterest")}
                     onClick={() => window.open(shareLinks.pinterest, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={pinterestIcon} />
                   </button>
                   <button
-                    aria-label="Abrir Instagram"
+                    aria-label={ui("Abrir Instagram")}
                     onClick={() => window.open(shareLinks.instagram, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
                     <img alt="" src={instagramIcon} />
                   </button>
                   <button
-                    aria-label="Compartir por correo"
+                    aria-label={ui("Compartir por correo")}
                     onClick={() => window.open(shareLinks.mail, "_self")}
                     type="button"
                   >
                     <img alt="" src={mailIcon} />
                   </button>
                   <button
-                    aria-label="Abrir TikTok"
+                    aria-label={ui("Abrir TikTok")}
                     onClick={() => window.open(shareLinks.tiktok, "_blank", "noopener,noreferrer")}
                     type="button"
                   >
@@ -1069,24 +1053,24 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
             <div className={styles.wallAvatar}>
               {auth.user?.avatarUrl ? (
                 <img
-                  alt={auth.user?.displayName || "Usuario"}
+                  alt={auth.user?.displayName || ui("Usuario")}
                   className={styles.wallAvatarImage}
                   src={auth.user.avatarUrl}
                 />
               ) : (
-                auth.user?.displayName?.slice(0, 1).toUpperCase() || "V"
+                auth.user?.displayName?.slice(0, 1).toUpperCase() || ui("V")
               )}
             </div>
             <div className={styles.wallComposerBody}>
               <textarea
-                placeholder="Comparte un estado con tus lectores..."
+                placeholder={ui("Comparte un estado con tus lectores...")}
                 rows="3"
                 value={wallDraft}
                 onChange={(event) => setWallDraft(event.target.value)}
               />
               <div className={styles.wallComposerActions}>
                 <button onClick={handleCreateWallPost} type="button">
-                  {isPublishingWallPost ? "Publicando..." : "Publicar estado"}
+                  {isPublishingWallPost ? ui("Publicando...") : ui("Publicar estado")}
                 </button>
               </div>
             </div>
@@ -1094,7 +1078,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
 
           <div className={styles.wallFeed}>
             {wallStatus === "loading" ? (
-              <p className={styles.wallMessage}>Cargando tus conversaciones...</p>
+              <p className={styles.wallMessage}>{ui("Cargando tus conversaciones...")}</p>
             ) : null}
 
             {wallPosts.map((post) => (
@@ -1104,12 +1088,12 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                     <div className={styles.wallAvatarMuted}>
                       {post.authorAvatarUrl ? (
                         <img
-                          alt={post.authorName || "Autor"}
+                          alt={post.authorName || ui("Autor")}
                           className={styles.wallAvatarImage}
                           src={post.authorAvatarUrl}
                         />
                       ) : (
-                        post.authorName?.slice(0, 1).toUpperCase() || "V"
+                        post.authorName?.slice(0, 1).toUpperCase() || ui("V")
                       )}
                     </div>
                     <div>
@@ -1137,7 +1121,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                     />
                     <div className={styles.inlineEditorActions}>
                       <button onClick={() => handleSavePostEdit(post.id)} type="button">
-                        {savingPostId === post.id ? "Guardando..." : "Guardar"}
+                        {savingPostId === post.id ? ui("Guardando...") : ui("Guardar")}
                       </button>
                       <button
                         className={styles.composerGhost}
@@ -1146,9 +1130,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                           setEditingPostDraft("");
                         }}
                         type="button"
-                      >
-                        Cancelar
-                      </button>
+                      >{ui(" Cancelar ")}</button>
                     </div>
                   </div>
                 ) : (
@@ -1163,18 +1145,18 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                   <div className={styles.wallMenu} onClick={(event) => event.stopPropagation()}>
                     <button onClick={() => handleWallAction("report", { postId: post.id })} type="button">
                       <span className={styles.menuIcon}>⚑</span>
-                      <span>Reportar comentario</span>
+                      <span>{ui("Reportar comentario")}</span>
                     </button>
                     {post.isEditableByCurrentUser ? (
                       <button onClick={() => handleWallAction("edit-post", { postId: post.id })} type="button">
                         <span className={styles.menuIcon}>✎</span>
-                        <span>Editar publicacion</span>
+                        <span>{ui("Editar publicacion")}</span>
                       </button>
                     ) : null}
                     {post.isEditableByCurrentUser ? (
                       <button className={styles.wallMenuDanger} onClick={() => handleWallAction("delete-post", { postId: post.id })} type="button">
                         <span className={styles.menuIcon}>✕</span>
-                        <span>Eliminar publicacion</span>
+                        <span>{ui("Eliminar publicacion")}</span>
                       </button>
                     ) : null}
                   </div>
@@ -1185,10 +1167,8 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                     className={styles.wallActionButton}
                     onClick={() => setReplyTargets((current) => ({ ...current, [post.id]: null }))}
                     type="button"
-                  >
-                    Responder
-                  </button>
-                  <span>{(post.comments || []).length} comentarios</span>
+                  >{ui(" Responder ")}</button>
+                  <span>{(post.comments || []).length}{ui(" comentarios")}</span>
                 </div>
 
                 <div className={styles.wallReplies}>
@@ -1199,18 +1179,17 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                   <div className={styles.wallAvatar}>
                     {auth.user?.avatarUrl ? (
                       <img
-                        alt={auth.user?.displayName || "Usuario"}
+                        alt={auth.user?.displayName || ui("Usuario")}
                         className={styles.wallAvatarImage}
                         src={auth.user.avatarUrl}
                       />
                     ) : (
-                      auth.user?.displayName?.slice(0, 1).toUpperCase() || "V"
+                      auth.user?.displayName?.slice(0, 1).toUpperCase() || ui("V")
                     )}
                   </div>
                   <div className={styles.wallComposerBody}>
                     {replyTargets[post.id] ? (
-                      <div className={styles.replyTargetPill}>
-                        Respondiendo a {replyTargets[post.id].authorName}
+                      <div className={styles.replyTargetPill}>{ui(" Respondiendo a ")}{replyTargets[post.id].authorName}
                         <button
                           onClick={() =>
                             setReplyTargets((current) => ({
@@ -1219,13 +1198,11 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                             }))
                           }
                           type="button"
-                        >
-                          ×
-                        </button>
+                        >{ui(" × ")}</button>
                       </div>
                     ) : null}
                     <textarea
-                      placeholder="Escribe una respuesta..."
+                      placeholder={ui("Escribe una respuesta...")}
                       rows="2"
                       value={commentDrafts[post.id] || ""}
                       onChange={(event) =>
@@ -1238,8 +1215,8 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                     <div className={styles.wallComposerActions}>
                       <button onClick={() => handleSubmitComment(post.id)} type="button">
                         {submittingCommentPostId === post.id
-                          ? "Publicando..."
-                          : "Publicar comentario"}
+                          ? ui("Publicando...")
+                          : ui("Publicar comentario")}
                       </button>
                     </div>
                   </div>
@@ -1255,8 +1232,8 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           <article className={styles.libraryCard}>
             <div className={styles.libraryHeader}>
               <div>
-                <span>Siguiendo</span>
-                <h2>{followingProfiles.length} creadores en tu circulo</h2>
+                <span>{ui("Siguiendo")}</span>
+                <h2>{followingProfiles.length}{ui(" creadores en tu circulo")}</h2>
               </div>
             </div>
 
@@ -1289,25 +1266,25 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                           src={creator.avatarUrl}
                         />
                       ) : (
-                        creator.displayName?.slice(0, 1).toUpperCase() || "C"
+                        creator.displayName?.slice(0, 1).toUpperCase() || ui("C")
                       )}
                     </div>
                     <div className={styles.followCardBody}>
                       <strong>{creator.displayName}</strong>
                       <small>{creator.handle || buildHandle({ displayName: creator.displayName })}</small>
-                      <div className={styles.followCardButton}>Siguiendo</div>
+                      <div className={styles.followCardButton}>{ui("Siguiendo")}</div>
                       <div className={styles.followCardStats}>
                         <div>
                           <strong>{creator.worksCount || 0}</strong>
-                          <span>Obras</span>
+                          <span>{ui("Obras")}</span>
                         </div>
                         <div>
                           <strong>{creator.followingCount || 0}</strong>
-                          <span>Siguiendo</span>
+                          <span>{ui("Siguiendo")}</span>
                         </div>
                         <div>
                           <strong>{creator.followerCount || 0}</strong>
-                          <span>Seguidores</span>
+                          <span>{ui("Seguidores")}</span>
                         </div>
                       </div>
                     </div>
@@ -1315,7 +1292,7 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                 ))
               ) : (
                 <div className={styles.emptyShelf}>
-                  <p>Aun no sigues a ningun creador.</p>
+                  <p>{ui("Aun no sigues a ningun creador.")}</p>
                 </div>
               )}
             </div>
@@ -1328,20 +1305,18 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           <article className={styles.libraryCard}>
             <div className={styles.libraryHeader}>
               <div>
-                <span>Historias creadas</span>
+                <span>{ui("Historias creadas")}</span>
                 <h2>
                   {status === "ready"
-                    ? `${stories.length} historias en tu universo`
-                    : "Cargando tus historias"}
+                    ? ui("{0} historias en tu universo",[stories.length])
+                    : ui("Cargando tus historias")}
                 </h2>
               </div>
               <button
                 className={styles.creatorShortcut}
                 onClick={() => onNavigate("creator")}
                 type="button"
-              >
-                Ir al panel de creador
-              </button>
+              >{ui(" Ir al panel de creador ")}</button>
             </div>
 
             <div className={styles.storyShelfWrap}>
@@ -1370,22 +1345,20 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                 />
               ) : (
                 <div className={styles.emptyShelf}>
-                  <p>Aun no tienes historias visibles aqui.</p>
+                  <p>{ui("Aun no tienes historias visibles aqui.")}</p>
                   <button
                     className={styles.creatorShortcut}
                     onClick={() => onNavigate("creator")}
                     type="button"
-                  >
-                    Crear una historia
-                  </button>
+                  >{ui(" Crear una historia ")}</button>
                 </div>
               )}
             </div>
 
             {draftStories.length > 0 ? (
               <div className={styles.draftNote}>
-                <strong>{draftStories.length} borradores</strong>
-                <span>Listos para volver a trabajarse desde el panel.</span>
+                <strong>{draftStories.length}{ui(" borradores")}</strong>
+                <span>{ui("Listos para volver a trabajarse desde el panel.")}</span>
               </div>
             ) : null}
           </article>
@@ -1397,26 +1370,24 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
           <article className={styles.libraryCard}>
             <div className={styles.libraryHeader}>
               <div>
-                <span>Tu galeria</span>
+                <span>{ui("Tu galeria")}</span>
                 <h2>
                   {illustrationStatus === "ready"
-                    ? `${illustrations.length} ilustraciones en tu portafolio`
-                    : "Cargando tus ilustraciones"}
+                    ? ui("{0} ilustraciones en tu portafolio",[illustrations.length])
+                    : ui("Cargando tus ilustraciones")}
                 </h2>
               </div>
               <button
                 className={styles.creatorShortcut}
                 onClick={() => onNavigate("creator")}
                 type="button"
-              >
-                Ir al panel de creador
-              </button>
+              >{ui(" Ir al panel de creador ")}</button>
             </div>
 
             <div className={styles.illustrationShelf}>
               {illustrationStatus === "loading" ? (
                 <div className={styles.emptyShelf}>
-                  <p>Cargando tu galeria visual...</p>
+                  <p>{ui("Cargando tu galeria visual...")}</p>
                 </div>
               ) : null}
 
@@ -1449,11 +1420,11 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
                       </div>
                       <div className={styles.illustrationProfileVisualBody}>
                         <small>
-                          {illustration.status === "published" ? "Publicada" : "Borrador"}
+                          {illustration.status === "published" ? ui("Publicada") : ui("Borrador")}
                         </small>
                         <div className={styles.illustrationProfileVisualStats}>
-                          <span>{illustration.likesCount || 0} me gusta</span>
-                          <span>{illustration.commentsCount || 0} comentarios</span>
+                          <span>{illustration.likesCount || 0}{ui(" me gusta")}</span>
+                          <span>{illustration.commentsCount || 0}{ui(" comentarios")}</span>
                         </div>
                       </div>
                     </article>
@@ -1462,28 +1433,28 @@ export function UserProfilePage({ auth, navFilters, onNavigate, initialTab = "in
 
               {illustrationStatus !== "loading" && illustrations.length === 0 ? (
                 <div className={styles.emptyShelf}>
-                  <p>Aun no tienes ilustraciones visibles aqui.</p>
+                  <p>{ui("Aun no tienes ilustraciones visibles aqui.")}</p>
                   <button
                     className={styles.creatorShortcut}
                     onClick={() => onNavigate("creator")}
                     type="button"
-                  >
-                    Crear una ilustracion
-                  </button>
+                  >{ui(" Crear una ilustracion ")}</button>
                 </div>
               ) : null}
             </div>
 
             {draftIllustrations.length > 0 ? (
               <div className={styles.draftNote}>
-                <strong>{draftIllustrations.length} borradores visuales</strong>
-                <span>Listos para volver a trabajarse desde el panel.</span>
+                <strong>{draftIllustrations.length}{ui(" borradores visuales")}</strong>
+                <span>{ui("Listos para volver a trabajarse desde el panel.")}</span>
               </div>
             ) : null}
           </article>
         </section>
       ) : null}
       </main>
+      {reportTarget && <ReportDialog target={reportTarget} auth={auth} onClose={()=>setReportTarget(null)} onSent={setWallMessage} />}
     </AppShell>
   );
 }
+

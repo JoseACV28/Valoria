@@ -41,9 +41,9 @@ export async function fetchCreatorWall(profileId, token = "") {
   return handleJson(response);
 }
 
-export async function fetchCommunityFeed(limit = 6) {
+export async function fetchCommunityFeed(limit = 6, token="") {
   // Recupera una muestra de actividad social para la portada y comunidad.
-  const response = await fetch(`${API_URL}/profiles/community/feed?limit=${limit}`);
+  const response = await fetch(`${API_URL}/profiles/community/feed?limit=${limit}`,{headers:buildAuthHeaders(token)});
   return handleJson(response);
 }
 

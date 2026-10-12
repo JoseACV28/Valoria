@@ -1,3 +1,5 @@
+import {PublicationPreview} from '../common/PublicationPreview';
+import { ui } from "../../i18n/runtime.js";
 // Estudio de publicacion para ilustradores.
 // Reutiliza el mismo patron del panel de creador de historias,
 // pero adaptado a portada, imagen principal, categorias y etiquetas visuales.
@@ -33,7 +35,8 @@ export function IllustrationStudio({
   const [tags, setTags] = useState([]);
   const [galleryItems, setGalleryItems] = useState([]);
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false),[preview,setPreview]=useState(false),[confirming,setConfirming]=useState(false);
+  const submissionPending=useRef(false);
   const galleryItemsRef = useRef([]);
 
   const isEditing = Boolean(illustrationDraft?.id);
@@ -66,6 +69,7 @@ export function IllustrationStudio({
     const categories = illustrationDraft.categories || [];
     setForm({
       title: illustrationDraft.title || "",
+        collectionName:illustrationDraft.collectionName||"",credits:illustrationDraft.credits||"",usageRights:illustrationDraft.usageRights||"Todos los derechos reservados",
       description: illustrationDraft.description || "",
       category: categories[0] || ILLUSTRATION_CATEGORIES[0],
       accentCategory: categories[1] || "",
@@ -192,8 +196,12 @@ export function IllustrationStudio({
     setTags((current) => current.filter((tag) => tag !== tagToRemove));
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  async function handleSubmit(event,confirmed=false) {
+    event?.preventDefault();
+    if((!confirmed&&event?.nativeEvent.submitter?.getAttribute("data-save-illustration")!=="true") || submissionPending.current)return;
+    if(!galleryItems.length){setMessage("Debes agregar al menos una imagen a la galeria.");return false;}
+    if(form.status==='published'&&!confirmed){setPreview(true);setConfirming(true);return;}
+    submissionPending.current=true;
     setLoading(true);
     setMessage("");
 
@@ -231,6 +239,7 @@ export function IllustrationStudio({
       const coverUrl = images[0]?.publicUrl || "";
 
       const payload = {
+        collectionName: form.collectionName||"",credits:form.credits||"",usageRights:form.usageRights||"Todos los derechos reservados",
         title: form.title,
         description: form.description,
         status: form.status,
@@ -244,7 +253,7 @@ export function IllustrationStudio({
         const result = await updateIllustration(illustrationDraft.id, payload, auth.token);
         clearNewGalleryObjectUrls(galleryItems);
         setMessage(`Ilustracion actualizada: ${result.illustration.title}`);
-        onIllustrationUpdated?.(result.illustration);
+        setPreview(false);setConfirming(false);onIllustrationUpdated?.(result.illustration);
       } else {
         const result = await createIllustration(payload, auth.token);
         setForm(initialForm);
@@ -252,11 +261,12 @@ export function IllustrationStudio({
         clearNewGalleryObjectUrls(galleryItems);
         setGalleryItems([]);
         setMessage(`Ilustracion creada: ${result.illustration.title}`);
-        onIllustrationCreated?.(result.illustration);
+        setPreview(false);setConfirming(false);onIllustrationCreated?.(result.illustration);
       }
     } catch (error) {
-      setMessage(error.message);
+      setMessage(error.message);return false;
     } finally {
+      submissionPending.current=false;
       setLoading(false);
     }
   }
@@ -265,31 +275,29 @@ export function IllustrationStudio({
     <section className={styles.section}>
       <div className={styles.heading}>
         <div>
-          <span>Atelier</span>
-          <h2>{isEditing ? "Editar ilustracion" : "Crear una nueva ilustracion"}</h2>
+          <span>{ui("Atelier")}</span>
+          <h2>{isEditing ? ui("Editar ilustracion") : ui("Crear una nueva ilustracion")}</h2>
         </div>
-        <p>
-          Construye una obra visual desde una o varias imagenes, y deja que la
-          primera pieza de la galeria funcione automaticamente como imagen principal.
-        </p>
+        <p>{ui(" Construye una obra visual desde una o varias imagenes, y deja que la primera pieza de la galeria funcione automaticamente como imagen principal. ")}</p>
       </div>
 
-      <form className={styles.card} onSubmit={handleSubmit}>
+      <form className={styles.card} onSubmit={handleSubmit} onKeyDown={event=>{if(event.key==="Enter" && event.target.tagName==="INPUT"){event.preventDefault();}}}>
         <div className={styles.composer}>
           <aside className={styles.mediaRail}>
             <div className={styles.previewCard}>
               {galleryItems[0]?.publicUrl ? (
-                <img alt="Vista previa de galeria" src={galleryItems[0].publicUrl} />
+                <img alt={ui("Vista previa de galeria")} src={galleryItems[0].publicUrl} />
               ) : (
                 <div className={styles.placeholder}>
-                  <strong>Imagen principal</strong>
-                  <span>La primera imagen de la galeria se mostrara en la tarjeta y el detalle</span>
+                  <strong>{ui("Imagen principal")}</strong>
+                  <span>{ui("La primera imagen de la galeria se mostrara en la tarjeta y el detalle")}</span>
                 </div>
               )}
             </div>
 
-            <label className={styles.uploadLabel}>
-              <span>Imagen de galeria</span>
+            <div style={{display:'grid',gap:12,marginBottom:16}}>{[['collectionName','Colección o serie'],['credits','Créditos de la obra'],['usageRights','Permisos de uso']].map(([field,label])=><label key={field}>{ui(label)}<input value={form[field]||''} onChange={event=>setForm(current=>({...current,[field]:event.target.value}))}/></label>)}</div>
+          <label className={styles.uploadLabel}>
+              <span>{ui("Imagen de galeria")}</span>
               <div className={styles.filePicker}>
                 <label className={styles.fileButton}>
                   <input
@@ -298,32 +306,26 @@ export function IllustrationStudio({
                     multiple
                     accept=".png,.gif,.jpg,.jpeg,.webp,image/png,image/gif,image/jpeg,image/webp"
                     onChange={handleGalleryFiles}
-                  />
-                  Agregar imagenes
-                </label>
+                  />{ui(" Agregar imagenes ")}</label>
                 <small className={styles.fileName}>
                   {galleryItems.length
-                    ? `${galleryItems.length} imagenes en la galeria`
-                    : "Sin imagenes todavia"}
+                    ? ui("{0} imagenes en la galeria",[galleryItems.length])
+                    : ui("Sin imagenes todavia")}
                 </small>
               </div>
             </label>
 
             {galleryItems.length > 0 ? (
               <div className={styles.galleryList}>
-                <p className={styles.galleryHint}>
-                  La primera imagen de esta lista sera la principal dentro del detalle publico.
-                  Tambien puedes quitar imagenes ya publicadas antes de guardar cambios.
-                </p>
+                <p className={styles.galleryHint}>{ui(" La primera imagen de esta lista sera la principal dentro del detalle publico. Tambien puedes quitar imagenes ya publicadas antes de guardar cambios. ")}</p>
                 {galleryItems.map((item, index) => (
                   <div key={item.id || `${item.publicUrl}-${index}`} className={styles.galleryThumbCard}>
                     <img
-                      alt={item.altText || `Imagen ${index + 1}`}
+                      alt={item.altText || ui("Imagen {0}",[index + 1])}
                       src={item.publicUrl}
                     />
                     <div className={styles.galleryThumbMeta}>
-                      <small>
-                        Imagen {index + 1} {item.isNew ? "· nueva" : "· publicada"}
+                      <small>{ui(" Imagen ")}{index + 1} {item.isNew ? ui("· nueva") : ui("· publicada")}
                       </small>
                       <div className={styles.galleryThumbActions}>
                         <button
@@ -331,24 +333,18 @@ export function IllustrationStudio({
                           disabled={index === 0}
                           onClick={() => moveGalleryItem(item.id, "up")}
                           type="button"
-                        >
-                          Subir
-                        </button>
+                        >{ui(" Subir ")}</button>
                         <button
                           className={styles.sortThumbButton}
                           disabled={index === galleryItems.length - 1}
                           onClick={() => moveGalleryItem(item.id, "down")}
                           type="button"
-                        >
-                          Bajar
-                        </button>
+                        >{ui(" Bajar ")}</button>
                         <button
                           className={styles.removeThumbButton}
                           onClick={() => removeGalleryItem(item.id)}
                           type="button"
-                        >
-                          Quitar
-                        </button>
+                        >{ui(" Quitar ")}</button>
                       </div>
                     </div>
                   </div>
@@ -359,9 +355,9 @@ export function IllustrationStudio({
 
           <div className={styles.detailsPanel}>
             <label className={styles.field}>
-              <span>Titulo</span>
+              <span>{ui("Titulo")}</span>
               <input
-                placeholder="Nombre de la ilustracion"
+                placeholder={ui("Nombre de la ilustracion")}
                 required
                 value={form.title}
                 onChange={(event) =>
@@ -371,10 +367,10 @@ export function IllustrationStudio({
             </label>
 
             <label className={styles.field}>
-              <span>Descripcion</span>
+              <span>{ui("Descripcion")}</span>
               <textarea
                 rows="7"
-                placeholder="Cuenta el concepto, la escena o la intencion de la pieza."
+                placeholder={ui("Cuenta el concepto, la escena o la intencion de la pieza.")}
                 value={form.description}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, description: event.target.value }))
@@ -384,7 +380,7 @@ export function IllustrationStudio({
 
             <div className={styles.twoCols}>
               <label className={styles.field}>
-                <span>Categoria principal</span>
+                <span>{ui("Categoria principal")}</span>
                 <select
                   value={form.category}
                   onChange={(event) =>
@@ -393,14 +389,14 @@ export function IllustrationStudio({
                 >
                   {ILLUSTRATION_CATEGORIES.map((category) => (
                     <option key={category} value={category}>
-                      {category}
+                      {ui(category)}
                     </option>
                   ))}
                 </select>
               </label>
 
               <label className={styles.field}>
-                <span>Categoria secundaria</span>
+                <span>{ui("Categoria secundaria")}</span>
                 <select
                   value={form.accentCategory}
                   onChange={(event) =>
@@ -410,12 +406,12 @@ export function IllustrationStudio({
                     }))
                   }
                 >
-                  <option value="">Sin segunda categoria</option>
+                  <option value="">{ui("Sin segunda categoria")}</option>
                   {ILLUSTRATION_CATEGORIES.filter(
                     (category) => category !== form.category
                   ).map((category) => (
                     <option key={category} value={category}>
-                      {category}
+                      {ui(category)}
                     </option>
                   ))}
                 </select>
@@ -423,23 +419,23 @@ export function IllustrationStudio({
             </div>
 
             <label className={styles.field}>
-              <span>Estado</span>
+              <span>{ui("Estado")}</span>
               <select
                 value={form.status}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, status: event.target.value }))
                 }
               >
-                <option value="draft">Borrador</option>
-                <option value="published">Publicado</option>
+                <option value="draft">{ui("Borrador")}</option>
+                <option value="published">{ui("Publicado")}</option>
               </select>
             </label>
 
             <div className={styles.field}>
-              <span>Etiquetas</span>
+              <span>{ui("Etiquetas")}</span>
               <div className={styles.inlineBuilder}>
                 <input
-                  placeholder="Agrega una etiqueta"
+                  placeholder={ui("Agrega una etiqueta")}
                   value={tagInput}
                   onChange={(event) => setTagInput(event.target.value)}
                 />
@@ -465,14 +461,16 @@ export function IllustrationStudio({
           </div>
         </div>
 
-        <button disabled={loading || !auth.isAuthenticated} type="submit">
+        {preview&&<PublicationPreview title={form.title} description={form.description} images={galleryItems} onClose={()=>{setPreview(false);setConfirming(false);}} onConfirm={confirming?()=>handleSubmit(null,true):undefined}/>}
+        <button type="button" onClick={()=>{setPreview(true);setConfirming(false);}}>{ui('Vista previa')}</button>
+        <button data-save-illustration="true" disabled={loading || !auth.isAuthenticated} type="submit">
           {loading
-            ? "Guardando..."
+            ? ui("Guardando...")
             : isEditing
-              ? "Guardar cambios"
-              : "Crear ilustracion"}
+              ? ui("Guardar cambios")
+              : ui("Crear ilustracion")}
         </button>
-        {message ? <p className={styles.message}>{message}</p> : null}
+        {message ? <p className={styles.message}>{ui(message)}</p> : null}
       </form>
     </section>
   );

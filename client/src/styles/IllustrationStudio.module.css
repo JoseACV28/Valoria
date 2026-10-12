@@ -11,7 +11,7 @@
 }
 
 .heading span {
-  color: #ffb38b;
+  color: var(--text-main);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.8rem;
@@ -24,16 +24,16 @@
 
 .heading p {
   max-width: 46ch;
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .card {
   display: grid;
   gap: 18px;
   padding: 26px;
-  border-radius: 28px;
-  background: rgba(255, 248, 240, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
 }
 
 .composer {
@@ -53,9 +53,9 @@
   overflow: hidden;
   width: 100%;
   aspect-ratio: 4 / 5;
-  border-radius: 24px;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px dashed var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .previewCard img {
@@ -73,11 +73,11 @@
   height: 100%;
   padding: 18px;
   text-align: center;
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .placeholder strong {
-  color: #fff2e8;
+  color: var(--text-main);
 }
 
 .uploadLabel span {
@@ -109,17 +109,17 @@
   justify-content: center;
   width: fit-content;
   padding: 11px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255, 179, 139, 0.24), rgba(255, 138, 87, 0.34));
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
   border: 1px solid rgba(255, 179, 139, 0.28);
-  color: #fff4ea !important;
+  color: var(--accent-ink) !important;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(45, 23, 16, 0.16);
+  box-shadow: var(--shadow-soft);
 }
 
 .fileName {
-  color: #d8cbc0;
+  color: var(--text-main);
   font-size: 0.8rem;
   line-height: 1.4;
   overflow-wrap: anywhere;
@@ -132,7 +132,7 @@
 
 .galleryHint {
   margin: 0;
-  color: #d8cbc0;
+  color: var(--text-main);
   font-size: 0.83rem;
   line-height: 1.5;
 }
@@ -143,9 +143,9 @@
   gap: 10px;
   align-items: center;
   padding: 10px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
 }
 
 .galleryThumbCard img {
@@ -153,7 +153,7 @@
   height: 72px;
   display: block;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: var(--radius-panel);
 }
 
 .galleryThumbMeta {
@@ -162,7 +162,7 @@
 }
 
 .galleryThumbMeta small {
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .galleryThumbActions {
@@ -176,13 +176,13 @@
   margin-top: 0 !important;
   width: fit-content;
   padding: 7px 12px !important;
-  border-radius: 999px !important;
+  border-radius: var(--radius-control) !important;
   font-size: 0.82rem;
 }
 
 .sortThumbButton {
   background: rgba(173, 137, 232, 0.14) !important;
-  color: #efe2ff !important;
+  color: var(--text-main) !important;
 }
 
 .sortThumbButton:disabled {
@@ -191,7 +191,7 @@
 
 .removeThumbButton {
   background: rgba(255, 138, 87, 0.14) !important;
-  color: #ffd9c7 !important;
+  color: var(--text-main) !important;
 }
 
 .detailsPanel {
@@ -199,9 +199,9 @@
   gap: 18px;
   min-width: 0;
   padding: 18px 18px 6px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
 }
 
 .field {
@@ -210,7 +210,7 @@
 }
 
 .field span {
-  color: #f7eadf;
+  color: var(--text-main);
   font-size: 0.95rem;
 }
 
@@ -219,10 +219,10 @@
 .card select {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
   background: rgba(20, 16, 14, 0.42);
-  color: #fff8f2;
+  color: var(--text-main);
   transition: border-color 0.18s ease, background 0.18s ease,
     box-shadow 0.18s ease;
 }
@@ -255,7 +255,7 @@
 .inlineBuilder button {
   min-width: 44px;
   padding: 0 14px;
-  border-radius: 14px;
+  border-radius: var(--radius-control);
   margin-top: 0;
 }
 
@@ -268,16 +268,16 @@
 .chip {
   margin-top: 0 !important;
   padding: 8px 12px !important;
-  border-radius: 999px !important;
+  border-radius: var(--radius-control) !important;
   background: rgba(175, 141, 215, 0.14) !important;
-  color: #efe2ff !important;
+  color: var(--text-main) !important;
   font-weight: 500 !important;
 }
 
 .card button {
   margin-top: 6px;
   padding: 12px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-control);
   background: #ff8a57;
   color: #2d1710;
   font-weight: 700;
@@ -289,7 +289,7 @@
 
 .message {
   margin: 0;
-  color: #ffd6bd;
+  color: var(--text-main);
 }
 
 @media (max-width: 1024px) {

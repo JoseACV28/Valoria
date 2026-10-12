@@ -1,0 +1,18 @@
+.panel {
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  min-width: 0;
+}
+.field { display: grid; gap: 10px; }
+.label { display: flex; align-items: center; gap: 9px; font-weight: 600; color: var(--text-main); }
+.label svg { width: 20px; height: 20px; color: var(--text-accent); flex-shrink: 0; }
+.field select { width: 100%; border-radius: var(--radius-panel); }
+.message { display: block; margin-top: 10px; color: var(--text-soft); line-height: 1.5; }
+@media (min-width: 641px) {
+  .panel { width: fit-content; max-width: 100%; padding: 12px 16px; }
+  .field { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+  :global(#root) .field > select { width: 240px; min-width: 0; flex: 1 1 200px; margin-top: 0; }
+}

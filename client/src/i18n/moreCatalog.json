@@ -1,0 +1,4328 @@
+{
+  "Abre el formulario para crear el primer capitulo o deja uno guardado como borrador.": [
+    "Open the form to create the first chapter or save a draft.",
+    "Ouvrez le formulaire pour créer le premier chapitre ou enregistrer un brouillon.",
+    "打开表单创建第一章，或保存为草稿。",
+    "양식을 열어 첫 챕터를 만들거나 초안으로 저장하세요.",
+    "フォームから第1章を作成するか、下書きとして保存します。"
+  ],
+  "Abre el formulario solo cuando quieras empezar una nueva historia.": [
+    "Open this form when you want to start a new story.",
+    "Ouvrez ce formulaire pour commencer une nouvelle histoire.",
+    "开始新故事时打开此表单。",
+    "새 이야기를 시작할 때 양식을 여세요.",
+    "新しい作品を始めるときにフォームを開いてください。"
+  ],
+  "Abre tu cuenta para leer, comentar, guardar historias y empezar a publicar cuando quieras dar el salto al panel de creador.": [
+    "Create an account to read, comment, save stories and publish from your creator studio.",
+    "Créez un compte pour lire, commenter, garder des histoires et publier dans votre espace créateur.",
+    "创建账户以阅读、评论、保存故事，并通过创作中心发布作品。",
+    "계정을 만들어 읽고 댓글을 달고 이야기를 저장하며 창작 스튜디오에서 게시하세요.",
+    "アカウントを作成して読書、コメント、作品の保存、公開を始めましょう。"
+  ],
+  "Abre una historia y pulsa “Guardar para leer sin conexión” para conservar su texto aquí.": [
+    "Open a story and choose “Save for offline reading” to keep its text here.",
+    "Ouvrez une histoire et choisissez « Enregistrer pour lire hors connexion » pour garder son texte ici.",
+    "打开故事并选择“保存以供离线阅读”，将文本保存在这里。",
+    "이야기에서 ‘오프라인 읽기 저장’을 선택해 내용을 저장하세요.",
+    "作品を開き「オフライン読書用に保存」でテキストを保存します。"
+  ],
+  "Acuerda un rol con otro creador. Una vez aceptada la invitación, el autor puede compartir el manuscrito para lectura o sugerencias.": [
+    "Agree on a role with another creator. After the invitation is accepted, the author can share the manuscript for reading or suggestions.",
+    "Convenez d’un rôle avec un autre créateur. Une fois l’invitation acceptée, l’auteur peut partager le manuscrit pour lecture ou suggestions.",
+    "与创作者商定角色。邀请接受后，作者可共享稿件以供阅读或提出建议。",
+    "다른 창작자와 역할을 정하세요. 초대 수락 후 작가는 원고를 읽기나 제안용으로 공유할 수 있습니다.",
+    "役割を決め、招待が承諾されると作者は原稿の閲覧や提案を許可できます。"
+  ],
+  "Administra tus historias y sigue publicando capitulos.": [
+    "Manage your stories and keep publishing chapters.",
+    "Gérez vos histoires et continuez à publier des chapitres.",
+    "管理故事并继续发布章节。",
+    "이야기를 관리하고 계속 챕터를 게시하세요.",
+    "作品を管理し、新しい章を公開しましょう。"
+  ],
+  "Ajusta contenido, estado o numero del capitulo seleccionado.": [
+    "Edit the content, status or number of the selected chapter.",
+    "Modifiez le contenu, l’état ou le numéro du chapitre choisi.",
+    "修改选中章节的内容、状态或编号。",
+    "선택한 챕터의 내용, 상태, 번호를 수정하세요.",
+    "選択した章の内容、状態、番号を変更します。"
+  ],
+  "Como esta historia solo tiene un capitulo, tambien puedes optar por eliminar la historia completa.": [
+    "This story has one chapter, so you can also delete the whole story.",
+    "Cette histoire a un seul chapitre ; vous pouvez aussi supprimer l’histoire entière.",
+    "此故事只有一章，也可以删除整个故事。",
+    "이 이야기는 챕터가 하나라서 이야기 전체를 삭제할 수도 있습니다.",
+    "章が1つのため、作品全体の削除も選択できます。"
+  ],
+  "Confirma un código de tu aplicación de autenticación para usar las herramientas administrativas.": [
+    "Confirm a code from your authenticator app to use administrative tools.",
+    "Confirmez un code de votre application d’authentification pour utiliser les outils administratifs.",
+    "输入验证器应用中的代码，以使用管理工具。",
+    "관리 도구를 사용하려면 인증 앱의 코드를 확인하세요.",
+    "管理ツールを使うには認証アプリのコードを確認してください。"
+  ],
+  "Construye una obra visual desde una o varias imagenes, y deja que la primera pieza de la galeria funcione automaticamente como imagen principal.": [
+    "Create a visual work with one or more images. The first gallery image becomes the main image.",
+    "Créez une œuvre avec une ou plusieurs images. La première image devient l’image principale.",
+    "用一张或多张图片创建作品。画廊第一张图片将作为主图。",
+    "한 장 이상의 이미지로 작품을 만드세요. 첫 이미지가 대표 이미지가 됩니다.",
+    "画像を追加して作品を作成します。最初の画像がメイン画像になります。"
+  ],
+  "Copias de texto y formato guardadas en este navegador: hasta 10 obras. Las imágenes, las reseñas y las actualizaciones requieren conexión. Abre primero el sitio con conexión para preparar la lectura. Tus copias se guardan solo en este navegador. También puedes descargarlas como archivo HTML para abrirlas cuando quieras.": [
+    "This browser can store up to 10 formatted works. Images, reviews and updates need an internet connection. Open the site online first to prepare offline reading. Copies stay in this browser; you can also download HTML files.",
+    "Ce navigateur garde jusqu’à 10 œuvres avec leur format. Images, avis et mises à jour nécessitent une connexion. Ouvrez d’abord le site en ligne pour préparer la lecture hors connexion. Les copies restent dans ce navigateur ; vous pouvez aussi les télécharger en HTML.",
+    "此浏览器最多保存10部带格式的作品。图片、书评及更新需要网络。请先联网打开网站以准备离线阅读。副本仅保存在此浏览器，也可下载为HTML文件。",
+    "브라우저에 서식을 포함한 작품 10개까지 저장됩니다. 이미지, 리뷰, 업데이트는 인터넷이 필요합니다. 먼저 온라인으로 사이트를 열어 준비하세요. 저장본은 이 브라우저에만 있으며 HTML로 다운로드할 수도 있습니다.",
+    "このブラウザーに書式付き作品を10件まで保存できます。画像、レビュー、更新には接続が必要です。最初にオンラインで開いて準備してください。保存版はこのブラウザー内のみですが、HTMLでもダウンロードできます。"
+  ],
+  "Cuando haya publicaciones recientes del muro de creador, esta seccion las destacara automaticamente.": [
+    "Recent creator wall posts will appear here automatically.",
+    "Les publications récentes des créateurs apparaîtront ici automatiquement.",
+    "最新创作者动态将自动显示在这里。",
+    "최근 창작자 게시물이 여기에 자동으로 표시됩니다.",
+    "クリエイターの新しい投稿が自動的に表示されます。"
+  ],
+  "Debe estar en formato PNG, GIF, JPG, de menos de 2MB. Dimensiones recomendadas: 512X800 px.": [
+    "Use PNG, GIF or JPG under 2 MB. Recommended size: 512 × 800 px.",
+    "PNG, GIF ou JPG de moins de 2 Mo. Taille conseillée : 512 × 800 px.",
+    "使用小于2MB的PNG、GIF或JPG。建议尺寸：512×800像素。",
+    "2MB 미만 PNG, GIF, JPG. 권장 크기: 512 × 800px.",
+    "2MB未満のPNG、GIF、JPG。推奨サイズ：512×800px。"
+  ],
+  "Debes iniciar sesion para comentar o dar me gusta.": [
+    "Log in to comment or like.",
+    "Connectez-vous pour commenter ou aimer.",
+    "登录后可评论或点赞。",
+    "댓글이나 좋아요를 남기려면 로그인하세요.",
+    "コメントやいいねにはログインが必要です。"
+  ],
+  "Debes iniciar sesion para subir fanarts de comunidad.": [
+    "Log in to upload community fan art.",
+    "Connectez-vous pour ajouter un fan art.",
+    "登录后可上传社区同人画。",
+    "팬아트를 올리려면 로그인하세요.",
+    "ファンアートの投稿にはログインが必要です。"
+  ],
+  "Deja la fecha vacía para guardar sin programación. Si eliges publicar ahora, borra la fecha.": [
+    "Leave the date blank to save without scheduling. Clear it to publish now.",
+    "Laissez la date vide pour enregistrer sans programmation. Effacez-la pour publier maintenant.",
+    "日期留空以保存而不定时发布。立即发布时请清空日期。",
+    "예약 없이 저장하려면 날짜를 비우세요. 지금 게시하려면 날짜를 지우세요.",
+    "予約しない場合は日付を空欄にします。今すぐ公開する場合も日付を削除してください。"
+  ],
+  "Describe tu universo creativo, tus gustos o la forma en que quieres presentarte.": [
+    "Describe your creative world, interests or how you want to introduce yourself.",
+    "Décrivez votre univers créatif, vos goûts ou votre présentation.",
+    "描述你的创作世界、兴趣或自我介绍。",
+    "창작 세계, 취향, 자기소개를 작성하세요.",
+    "創作の世界、好み、自己紹介を書いてください。"
+  ],
+  "El acceso se limita a esta historia y sus capítulos activos. Las sugerencias no cambian el texto; solo el autor puede editar o publicar.": [
+    "Access covers only this story and its active chapters. Suggestions do not change the text; only the author can edit or publish.",
+    "L’accès se limite à cette histoire et ses chapitres actifs. Les suggestions ne modifient pas le texte ; seul l’auteur peut modifier ou publier.",
+    "权限仅限此故事及有效章节。建议不会更改正文；仅作者可编辑或发布。",
+    "접근은 이 이야기와 활성 챕터에만 해당합니다. 제안은 원문을 바꾸지 않으며 작가만 수정하거나 게시할 수 있습니다.",
+    "アクセスはこの作品と有効な章のみです。提案は本文を変更せず、編集や公開は作者のみ可能です。"
+  ],
+  "El autor todavía no ha autorizado el acceso al manuscrito.": [
+    "The author has not authorized manuscript access yet.",
+    "L’auteur n’a pas encore autorisé l’accès au manuscrit.",
+    "作者尚未授权访问稿件。",
+    "작가가 아직 원고 접근을 허용하지 않았습니다.",
+    "作者はまだ原稿へのアクセスを許可していません。"
+  ],
+  "El contenido no esta disponible en este momento.": [
+    "This content is currently unavailable.",
+    "Ce contenu est actuellement indisponible.",
+    "此内容暂不可用。",
+    "지금은 콘텐츠를 볼 수 없습니다.",
+    "現在この内容は利用できません。"
+  ],
+  "El home sigue centrado en lectura. Tu panel de creador vive aparte, con herramientas para publicar y editar.": [
+    "Home focuses on reading. Your creator studio has separate publishing and editing tools.",
+    "L’accueil est dédié à la lecture. L’espace créateur propose les outils de publication et d’édition.",
+    "首页专注于阅读。创作中心提供独立的发布和编辑工具。",
+    "홈은 읽기 중심이며 창작 스튜디오에 게시와 편집 도구가 있습니다.",
+    "ホームは読書中心です。公開・編集ツールはクリエイター管理にあります。"
+  ],
+  "Elige una imagen vertical, cuadrada o horizontal.": [
+    "Choose a portrait, square or landscape image.",
+    "Choisissez une image verticale, carrée ou horizontale.",
+    "选择竖图、方图或横图。",
+    "세로, 정사각형 또는 가로 이미지를 선택하세요.",
+    "縦長、正方形、横長の画像を選択できます。"
+  ],
+  "Escanea este QR con tu aplicación. El segundo paso se activa al confirmar el primer código.": [
+    "Scan this QR with your authenticator app. Two-factor authentication activates after you confirm the first code.",
+    "Scannez ce QR avec votre application. Le second facteur s’active après confirmation du premier code.",
+    "使用验证器应用扫描二维码。确认首个代码后启用双重验证。",
+    "인증 앱으로 QR을 스캔하세요. 첫 코드를 확인하면 2단계 인증이 활성화됩니다.",
+    "認証アプリでQRを読み取ります。最初のコードを確認すると二要素認証が有効になります。"
+  ],
+  "Esta función requiere una sesión real de Supabase.": [
+    "This feature requires a real Supabase session.",
+    "Cette fonction nécessite une session Supabase réelle.",
+    "此功能需要真实的 Supabase 会话。",
+    "실제 Supabase 세션이 필요합니다.",
+    "この機能には実際のSupabaseセッションが必要です。"
+  ],
+  "Esta galeria convive con las historias de Valoria y abre espacio para ilustradores, portadas, fanart y colecciones visuales.": [
+    "This gallery brings together illustrators, covers, fan art and visual collections alongside Valoria stories.",
+    "Cette galerie accueille illustrations, couvertures, fan art et collections aux côtés des histoires de Valoria.",
+    "此画廊与 Valoria 故事共同展示插画、封面、同人画及视觉收藏。",
+    "이 갤러리는 Valoria 이야기와 함께 일러스트, 표지, 팬아트, 컬렉션을 담습니다.",
+    "Valoriaの作品とともに、イラスト、表紙、ファンアート、コレクションを紹介します。"
+  ],
+  "Esta historia aun no tiene capitulos publicados.": [
+    "This story has no published chapters yet.",
+    "Cette histoire n’a pas encore de chapitres publiés.",
+    "此故事尚无已发布章节。",
+    "아직 게시된 챕터가 없습니다.",
+    "この作品には公開された章がまだありません。"
+  ],
+  "Esta historia está marcada como contenido para adultos.": [
+    "This story is marked as mature content.",
+    "Cette histoire est marquée pour adultes.",
+    "此故事被标记为成人内容。",
+    "성인 콘텐츠로 표시된 이야기입니다.",
+    "この作品は成人向けに指定されています。"
+  ],
+  "Esta pieza aun no tiene descripcion visible.": [
+    "This piece has no description yet.",
+    "Cette œuvre n’a pas encore de description.",
+    "此作品暂无描述。",
+    "아직 작품 설명이 없습니다.",
+    "作品の説明はまだありません。"
+  ],
+  "Estamos preparando la primera vitrina visual de Valoria.": [
+    "We are preparing Valoria’s first visual showcase.",
+    "Nous préparons la première vitrine visuelle de Valoria.",
+    "正在准备 Valoria 的首个视觉展台。",
+    "Valoria의 첫 작품 전시를 준비 중입니다.",
+    "Valoriaの最初のビジュアル展示を準備中です。"
+  ],
+  "Estas notas son privadas y no se publican con tu historia.": [
+    "These notes are private and are not published with your story.",
+    "Ces notes sont privées et ne sont pas publiées avec votre histoire.",
+    "这些笔记是私密的，不会随故事发布。",
+    "이 메모는 비공개이며 이야기와 함께 게시되지 않습니다.",
+    "このメモは非公開で、作品と一緒に公開されません。"
+  ],
+  "Este capitulo aun no tiene ilustracion del creador.": [
+    "This chapter has no creator illustration yet.",
+    "Ce chapitre n’a pas encore d’illustration du créateur.",
+    "此章节尚无作者插画。",
+    "아직 창작자의 일러스트가 없습니다.",
+    "この章には作者のイラストがまだありません。"
+  ],
+  "Este capitulo aun no tiene resumen.": [
+    "This chapter has no summary yet.",
+    "Ce chapitre n’a pas encore de résumé.",
+    "此章节暂无摘要。",
+    "아직 챕터 요약이 없습니다.",
+    "この章の要約はまだありません。"
+  ],
+  "Este creador aun no sigue a otros perfiles.": [
+    "This creator is not following other profiles yet.",
+    "Ce créateur ne suit pas encore d’autres profils.",
+    "此创作者尚未关注其他账户。",
+    "아직 다른 프로필을 팔로우하지 않습니다.",
+    "このクリエイターはまだ他の人をフォローしていません。"
+  ],
+  "Este creador aun no tiene ilustraciones publicadas.": [
+    "This creator has no published illustrations yet.",
+    "Ce créateur n’a pas encore publié d’illustrations.",
+    "此创作者尚无公开插画。",
+    "아직 게시한 일러스트가 없습니다.",
+    "このクリエイターの公開イラストはまだありません。"
+  ],
+  "Este espacio quedara listo para listar autores seguidos y sus novedades.": [
+    "Followed authors and their updates will appear here.",
+    "Les auteurs suivis et leurs actualités apparaîtront ici.",
+    "关注的作者及更新将显示在这里。",
+    "팔로우한 작가와 새 소식이 표시됩니다.",
+    "フォローしている作者の更新が表示されます。"
+  ],
+  "Este perfil aun no tiene historias publicadas.": [
+    "This profile has no published stories yet.",
+    "Ce profil n’a pas encore publié d’histoires.",
+    "此账户尚无公开故事。",
+    "아직 게시한 이야기가 없습니다.",
+    "公開作品はまだありません。"
+  ],
+  "Este perfil resume tu actividad como lector y creador dentro de Valoria.": [
+    "Your profile summarizes your reading and creating activity in Valoria.",
+    "Votre profil résume votre activité de lecteur et créateur sur Valoria.",
+    "此资料总结你在 Valoria 的阅读与创作活动。",
+    "프로필은 Valoria의 독서와 창작 활동을 보여줍니다.",
+    "プロフィールはValoriaでの読書・創作活動をまとめます。"
+  ],
+  "Falta activar la comprobación de sesiones en Supabase. Completa ese paso antes de configurar la autenticación.": [
+    "Enable session verification in Supabase before configuring authentication.",
+    "Activez la vérification des sessions dans Supabase avant de configurer l’authentification.",
+    "配置认证前，请先在 Supabase 启用会话验证。",
+    "인증 설정 전에 Supabase 세션 검증을 활성화하세요.",
+    "認証を設定する前にSupabaseのセッション検証を有効にしてください。"
+  ],
+  "Gestiona las secciones que el propietario te ha autorizado.": [
+    "Manage the sections authorized by the owner.",
+    "Gérez les sections autorisées par le propriétaire.",
+    "管理所有者授权的部分。",
+    "소유자가 허용한 섹션을 관리하세요.",
+    "所有者に許可された範囲を管理します。"
+  ],
+  "Guarda una historia o ilustración para empezar tu biblioteca.": [
+    "Save a story or illustration to start your library.",
+    "Enregistrez une histoire ou illustration pour créer votre bibliothèque.",
+    "保存故事或插画以创建书架。",
+    "이야기나 일러스트를 저장해 서재를 시작하세요.",
+    "作品やイラストを保存してライブラリーを始めましょう。"
+  ],
+  "Historias e ilustraciones para descubrir a tu ritmo.": [
+    "Discover stories and illustrations at your own pace.",
+    "Découvrez des histoires et illustrations à votre rythme.",
+    "以自己的节奏发现故事与插画。",
+    "내 속도로 이야기와 일러스트를 발견하세요.",
+    "自分のペースで作品やイラストを見つけましょう。"
+  ],
+  "Ideal para enganchar lectores con entregas semanales.": [
+    "Great for engaging readers with weekly chapters.",
+    "Idéal pour fidéliser les lecteurs avec des chapitres hebdomadaires.",
+    "适合通过每周连载吸引读者。",
+    "주간 연재로 독자를 사로잡기에 좋습니다.",
+    "週ごとの連載で読者を惹きつけるのに最適です。"
+  ],
+  "Ideal para retrato o simbolo del creador.": [
+    "Ideal for a creator portrait or symbol.",
+    "Idéal pour un portrait ou symbole du créateur.",
+    "适合作为创作者头像或标志。",
+    "창작자 초상화나 상징에 좋습니다.",
+    "作者の肖像やシンボルに適しています。"
+  ],
+  "La comunidad aparecera aqui.": [
+    "The community will appear here.",
+    "La communauté apparaîtra ici.",
+    "社区将显示在这里。",
+    "커뮤니티가 여기에 표시됩니다.",
+    "コミュニティがここに表示されます。"
+  ],
+  "La comunidad aun no ha compartido ilustraciones para este capitulo.": [
+    "No community illustrations for this chapter yet.",
+    "La communauté n’a pas encore illustré ce chapitre.",
+    "社区尚未为此章节分享插画。",
+    "아직 이 챕터의 커뮤니티 일러스트가 없습니다.",
+    "この章のコミュニティイラストはまだありません。"
+  ],
+  "La comunidad creadora ya esta viva dentro de Valoria": [
+    "Valoria’s creative community is growing",
+    "La communauté créative de Valoria prend vie",
+    "Valoria 创作社区正在成长",
+    "Valoria 창작 커뮤니티",
+    "Valoriaの創作コミュニティ"
+  ],
+  "La exportación incluye los capítulos activos, publicados y en borrador. El JSON conserva el formato y los metadatos; las imágenes se referencian por enlace.": [
+    "Export includes active published and draft chapters. JSON preserves formatting and metadata; images are linked.",
+    "L’export inclut les chapitres actifs, publiés et brouillons. Le JSON garde le format et les métadonnées ; les images sont liées.",
+    "导出包括有效的公开章节及草稿。JSON保留格式和元数据；图片以链接引用。",
+    "내보내기는 활성 공개 챕터와 초안을 포함합니다. JSON은 서식과 메타데이터를 보존하며 이미지는 링크로 참조됩니다.",
+    "有効な公開章と下書きを出力します。JSONは書式とメタデータを保持し、画像はリンクで参照します。"
+  ],
+  "La pieza dejara de aparecer en tu galeria y en la vista publica.": [
+    "The piece will no longer appear in your gallery or public view.",
+    "L’œuvre ne figurera plus dans votre galerie ni en public.",
+    "此作品将不再显示在画廊或公开页面。",
+    "작품이 갤러리와 공개 화면에 표시되지 않습니다.",
+    "作品はギャラリーと公開画面から非表示になります。"
+  ],
+  "La primera imagen de esta lista sera la principal dentro del detalle publico. Tambien puedes quitar imagenes ya publicadas antes de guardar cambios.": [
+    "The first image is the main public image. You can remove existing images before saving changes.",
+    "La première image est l’image principale publique. Vous pouvez retirer des images avant d’enregistrer.",
+    "第一张图片为公开主图。保存更改前可移除已有图片。",
+    "첫 이미지가 공개 대표 이미지입니다. 저장 전에 기존 이미지를 제거할 수 있습니다.",
+    "最初の画像が公開用メイン画像です。保存前に既存画像を削除できます。"
+  ],
+  "La primera imagen de la galeria se mostrara en la tarjeta y el detalle": [
+    "The first gallery image appears on the card and detail page",
+    "La première image apparaît sur la carte et le détail",
+    "画廊第一张图片显示在卡片和详情页",
+    "첫 이미지가 카드와 상세 화면에 표시됩니다",
+    "最初の画像がカードと詳細画面に表示されます"
+  ],
+  "Las acciones indican si se completaron, fallaron o siguen sin confirmar.": [
+    "Actions show whether they succeeded, failed or remain unconfirmed.",
+    "Les actions indiquent réussite, échec ou attente de confirmation.",
+    "操作显示成功、失败或尚未确认。",
+    "작업의 성공, 실패, 미확인 상태를 표시합니다.",
+    "操作の成功、失敗、未確認状態を表示します。"
+  ],
+  "Las copias se guardan en el servidor, fuera de los archivos públicos. Su restauración se realiza con tus accesos de propietario siguiendo la guía de respaldos.": [
+    "Backups are stored on the server outside public files. Restore them using owner access and the backup guide.",
+    "Les sauvegardes sont stockées hors des fichiers publics. Restaurez-les avec vos accès de propriétaire en suivant le guide.",
+    "备份保存在服务器非公开目录。恢复需使用所有者权限并遵循备份指南。",
+    "백업은 서버의 비공개 영역에 저장됩니다. 소유자 권한으로 백업 안내에 따라 복원하세요.",
+    "バックアップはサーバーの非公開領域に保存されます。復元には所有者のアクセス権とバックアップ手順が必要です。"
+  ],
+  "Los archivos elegidos se suben al guardar. Si recargas antes, tendrás que seleccionarlos de nuevo.": [
+    "Files upload when you save. If you reload first, select them again.",
+    "Les fichiers sont téléversés à l’enregistrement. Si vous rechargez avant, sélectionnez-les à nouveau.",
+    "文件在保存时上传。提前刷新需重新选择文件。",
+    "저장할 때 업로드됩니다. 먼저 새로고침하면 파일을 다시 선택해야 합니다.",
+    "保存時にアップロードします。先に再読み込みすると再選択が必要です。"
+  ],
+  "Modo de demostración: el catálogo no está disponible. Reintenta cuando vuelva la conexión.": [
+    "Demo mode: the catalog is unavailable. Try again when connected.",
+    "Mode démo : catalogue indisponible. Réessayez après reconnexion.",
+    "演示模式：目录不可用。连接恢复后请重试。",
+    "데모 모드: 목록을 사용할 수 없습니다. 연결 후 다시 시도하세요.",
+    "デモモード：カタログを利用できません。接続後に再試行してください。"
+  ],
+  "Márcalo si revelas detalles de la trama. Tu reseña quedará oculta hasta que el lector decida verla.": [
+    "Check this if you reveal plot details. Your review stays hidden until the reader chooses to see it.",
+    "Cochez si vous révélez l’intrigue. Votre avis reste masqué jusqu’à ce que le lecteur choisisse de le voir.",
+    "如透露剧情请勾选。书评将隐藏，直到读者选择查看。",
+    "줄거리를 공개했다면 체크하세요. 독자가 선택할 때까지 리뷰가 숨겨집니다.",
+    "あらすじの核心を明かす場合はチェックしてください。読者が選ぶまでレビューを非表示にします。"
+  ],
+  "No encontramos historias con ese filtro.": [
+    "No stories match this filter.",
+    "Aucune histoire pour ce filtre.",
+    "没有符合此筛选的故事。",
+    "조건에 맞는 이야기가 없습니다.",
+    "この条件の作品はありません。"
+  ],
+  "No hay denuncias pendientes de revisar.": [
+    "No reports awaiting review.",
+    "Aucun signalement en attente.",
+    "没有待审核举报。",
+    "검토할 신고가 없습니다.",
+    "未確認の報告はありません。"
+  ],
+  "No hay sugerencias todavía.": [
+    "No suggestions yet.",
+    "Pas encore de suggestions.",
+    "暂无建议。",
+    "아직 제안이 없습니다.",
+    "提案はまだありません。"
+  ],
+  "No se encontraron usuarios.": [
+    "No users found.",
+    "Aucun utilisateur trouvé.",
+    "未找到用户。",
+    "사용자를 찾을 수 없습니다.",
+    "ユーザーが見つかりません。"
+  ],
+  "No se pudieron cargar los capitulos. Vuelve a intentarlo.": [
+    "Could not load chapters. Try again.",
+    "Impossible de charger les chapitres. Réessayez.",
+    "无法加载章节。请重试。",
+    "챕터를 불러올 수 없습니다. 다시 시도하세요.",
+    "章を読み込めませんでした。再試行してください。"
+  ],
+  "No se pudo mostrar esta página": [
+    "This page could not be displayed",
+    "Impossible d’afficher cette page",
+    "无法显示此页面",
+    "페이지를 표시할 수 없습니다",
+    "ページを表示できませんでした"
+  ],
+  "No tienes borradores abiertos.": [
+    "You have no open drafts.",
+    "Aucun brouillon ouvert.",
+    "没有打开的草稿。",
+    "열린 초안이 없습니다.",
+    "開いている下書きはありません。"
+  ],
+  "No tienes contenido en la papelera.": [
+    "Your trash is empty.",
+    "Votre corbeille est vide.",
+    "回收站为空。",
+    "휴지통이 비어 있습니다.",
+    "ゴミ箱は空です。"
+  ],
+  "Editar perfil público": [
+    "Edit public profile",
+    "Modifier le profil public",
+    "编辑公开资料",
+    "공개 프로필 수정",
+    "公開プロフィールを編集"
+  ],
+  "Editar publicacion": [
+    "Edit publication",
+    "Modifier la publication",
+    "编辑作品",
+    "게시물 수정",
+    "投稿を編集"
+  ],
+  "Editor de perfil": [
+    "Profile editor",
+    "Éditeur de profil",
+    "资料编辑器",
+    "프로필 편집기",
+    "プロフィール編集"
+  ],
+  "Elegir ilustracion": [
+    "Choose illustration",
+    "Choisir une illustration",
+    "选择插画",
+    "일러스트 선택",
+    "イラストを選択"
+  ],
+  "Elegir imagen": [
+    "Choose image",
+    "Choisir une image",
+    "选择图片",
+    "이미지 선택",
+    "画像を選択"
+  ],
+  "Elegir portada": [
+    "Choose cover",
+    "Choisir une couverture",
+    "选择封面",
+    "표지 선택",
+    "表紙を選択"
+  ],
+  "Elemento anterior": [
+    "Previous item",
+    "Élément précédent",
+    "上一个项目",
+    "이전 항목",
+    "前の項目"
+  ],
+  "Eliminar comentario": [
+    "Delete comment",
+    "Supprimer le commentaire",
+    "删除评论",
+    "댓글 삭제",
+    "コメントを削除"
+  ],
+  "Eliminar publicacion": [
+    "Delete publication",
+    "Supprimer la publication",
+    "删除作品",
+    "게시물 삭제",
+    "投稿を削除"
+  ],
+  "En revisión": [
+    "Under review",
+    "En cours de révision",
+    "审核中",
+    "검토 중",
+    "審査中"
+  ],
+  "Entorno de prueba local": [
+    "Local test environment",
+    "Environnement de test local",
+    "本地测试环境",
+    "로컬 테스트 환경",
+    "ローカルテスト環境"
+  ],
+  "Entrando...": [
+    "Logging in…",
+    "Connexion…",
+    "正在登录…",
+    "로그인 중…",
+    "ログイン中…"
+  ],
+  "Enviando…": [
+    "Sending…",
+    "Envoi…",
+    "正在发送…",
+    "보내는 중…",
+    "送信中…"
+  ],
+  "Enviar capítulo a la papelera": [
+    "Move chapter to trash",
+    "Mettre le chapitre à la corbeille",
+    "将章节移至回收站",
+    "챕터를 휴지통으로",
+    "章をゴミ箱に移動"
+  ],
+  "Enviar denuncia": [
+    "Submit report",
+    "Envoyer le signalement",
+    "提交举报",
+    "신고 제출",
+    "報告を送信"
+  ],
+  "Enviar historia a la papelera": [
+    "Move story to trash",
+    "Mettre l’histoire à la corbeille",
+    "将故事移至回收站",
+    "이야기를 휴지통으로",
+    "作品をゴミ箱に移動"
+  ],
+  "Enviar ilustración a la papelera": [
+    "Move illustration to trash",
+    "Mettre l’illustration à la corbeille",
+    "将插画移至回收站",
+    "일러스트를 휴지통으로",
+    "イラストをゴミ箱に移動"
+  ],
+  "Enviar invitación": [
+    "Send invitation",
+    "Envoyer l’invitation",
+    "发送邀请",
+    "초대 보내기",
+    "招待を送信"
+  ],
+  "Enviar respuesta": [
+    "Send reply",
+    "Envoyer la réponse",
+    "发送回复",
+    "답글 보내기",
+    "返信を送信"
+  ],
+  "Enviar sugerencia": [
+    "Send suggestion",
+    "Envoyer la suggestion",
+    "发送建议",
+    "제안 보내기",
+    "提案を送信"
+  ],
+  "Enviar una sugerencia": [
+    "Send a suggestion",
+    "Envoyer une suggestion",
+    "发送建议",
+    "제안 보내기",
+    "提案を送信"
+  ],
+  "Escribe código para mostrar como texto": [
+    "Write code to display as text",
+    "Écrivez du code à afficher comme texte",
+    "输入代码以文本显示",
+    "텍스트로 표시할 코드를 작성하세요",
+    "テキストとして表示するコードを入力"
+  ],
+  "Escribe el primer capitulo de tu historia...": [
+    "Write the first chapter of your story…",
+    "Écrivez le premier chapitre de votre histoire…",
+    "写下故事的第一章…",
+    "이야기의 첫 챕터를 작성하세요…",
+    "物語の第1章を書きましょう…"
+  ],
+  "Escribe una respuesta dentro de esta reseña": [
+    "Write a reply to this review",
+    "Répondez à cet avis",
+    "回复此书评",
+    "리뷰에 답글을 작성하세요",
+    "レビューへの返信を入力"
+  ],
+  "Escribe una respuesta...": [
+    "Write a reply…",
+    "Écrivez une réponse…",
+    "输入回复…",
+    "답글 작성…",
+    "返信を入力…"
+  ],
+  "Escritores con obras publicadas": [
+    "Writers with published works",
+    "Écrivains ayant publié des œuvres",
+    "有公开作品的作家",
+    "작품을 게시한 작가",
+    "公開作品のある作家"
+  ],
+  "Escritura sin distracciones": [
+    "Distraction-free writing",
+    "Écriture sans distractions",
+    "无干扰写作",
+    "집중 글쓰기",
+    "集中して執筆"
+  ],
+  "Especial Valoria": [
+    "Valoria special",
+    "Spécial Valoria",
+    "Valoria 专题",
+    "Valoria 특별 기획",
+    "Valoria特集"
+  ],
+  "Estado del sitio y respaldos": [
+    "Site status and backups",
+    "État du site et sauvegardes",
+    "网站状态与备份",
+    "사이트 상태 및 백업",
+    "サイト状態とバックアップ"
+  ],
+  "Estado en mi biblioteca": [
+    "Status in my library",
+    "État dans ma bibliothèque",
+    "书架状态",
+    "서재 상태",
+    "ライブラリーでの状態"
+  ],
+  "Estadísticas de «{0}»": [
+    "Statistics for “{0}”",
+    "Statistiques de « {0} »",
+    "「{0}」的统计",
+    "«{0}» 통계",
+    "「{0}」の統計"
+  ],
+  "Estilo de párrafo": [
+    "Paragraph style",
+    "Style de paragraphe",
+    "段落样式",
+    "문단 스타일",
+    "段落スタイル"
+  ],
+  "Estrecho": [
+    "Narrow",
+    "Étroit",
+    "窄",
+    "좁게",
+    "狭め"
+  ],
+  "Explora piezas visuales, series y portafolios creativos": [
+    "Explore visual works, series and portfolios",
+    "Explorez des œuvres visuelles, séries et portfolios",
+    "探索视觉作品、系列与作品集",
+    "시각 작품, 시리즈, 포트폴리오 탐색",
+    "ビジュアル作品、シリーズ、ポートフォリオを探索"
+  ],
+  "Fanarts": [
+    "Fan art",
+    "Fan art",
+    "同人画",
+    "팬아트",
+    "ファンアート"
+  ],
+  "Filtrando por": [
+    "Filtering by",
+    "Filtre :",
+    "筛选条件",
+    "필터:",
+    "絞り込み："
+  ],
+  "Filtrar colección": [
+    "Filter collection",
+    "Filtrer par collection",
+    "筛选收藏",
+    "컬렉션 필터",
+    "コレクションで絞り込み"
+  ],
+  "Fragmento que quieres comentar": [
+    "Passage to comment on",
+    "Extrait à commenter",
+    "要评论的片段",
+    "댓글을 남길 부분",
+    "コメントする箇所"
+  ],
+  "GESTIÓN DEL SITIO": [
+    "SITE MANAGEMENT",
+    "GESTION DU SITE",
+    "网站管理",
+    "사이트 관리",
+    "サイト管理"
+  ],
+  "Grande": [
+    "Large",
+    "Grand",
+    "大",
+    "크게",
+    "大"
+  ],
+  "Guardar acceso": [
+    "Save access",
+    "Enregistrer l’accès",
+    "保存权限",
+    "접근 권한 저장",
+    "アクセス権を保存"
+  ],
+  "Guardar configuración": [
+    "Save settings",
+    "Enregistrer la configuration",
+    "保存设置",
+    "설정 저장",
+    "設定を保存"
+  ],
+  "Guardar estado": [
+    "Save status",
+    "Enregistrer le statut",
+    "保存状态",
+    "상태 저장",
+    "状態を保存"
+  ],
+  "Guardar perfil": [
+    "Save profile",
+    "Enregistrer le profil",
+    "保存资料",
+    "프로필 저장",
+    "プロフィールを保存"
+  ],
+  "Guardar permisos": [
+    "Save permissions",
+    "Enregistrer les autorisations",
+    "保存权限",
+    "권한 저장",
+    "権限を保存"
+  ],
+  "Guardar planificación": [
+    "Save plan",
+    "Enregistrer le plan",
+    "保存计划",
+    "계획 저장",
+    "計画を保存"
+  ],
+  "Herramientas adicionales": [
+    "Additional tools",
+    "Outils supplémentaires",
+    "其他工具",
+    "추가 도구",
+    "追加ツール"
+  ],
+  "Hilo de conversación": [
+    "Conversation thread",
+    "Fil de discussion",
+    "讨论串",
+    "대화 스레드",
+    "会話スレッド"
+  ],
+  "Historia destacada": [
+    "Featured story",
+    "Histoire à la une",
+    "精选故事",
+    "추천 이야기",
+    "注目の作品"
+  ],
+  "Historia sin titulo": [
+    "Untitled story",
+    "Histoire sans titre",
+    "无标题故事",
+    "제목 없는 이야기",
+    "無題の作品"
+  ],
+  "Icono Valoria": [
+    "Valoria icon",
+    "Icône Valoria",
+    "Valoria 图标",
+    "Valoria 아이콘",
+    "Valoriaアイコン"
+  ],
+  "Ilustracion": [
+    "Illustration",
+    "Illustration",
+    "插画",
+    "일러스트",
+    "イラスト"
+  ],
+  "Ilustracion activa": [
+    "Current illustration",
+    "Illustration actuelle",
+    "当前插画",
+    "현재 일러스트",
+    "現在のイラスト"
+  ],
+  "Ilustracion del creador": [
+    "Creator illustration",
+    "Illustration du créateur",
+    "创作者插画",
+    "창작자 일러스트",
+    "クリエイターのイラスト"
+  ],
+  "Ilustracion destacada": [
+    "Featured illustration",
+    "Illustration à la une",
+    "精选插画",
+    "추천 일러스트",
+    "注目のイラスト"
+  ],
+  "Ilustracion no encontrada": [
+    "Illustration not found",
+    "Illustration introuvable",
+    "未找到插画",
+    "일러스트를 찾을 수 없습니다",
+    "イラストが見つかりません"
+  ],
+  "Ilustraciones creadas": [
+    "Created illustrations",
+    "Illustrations créées",
+    "已创作插画",
+    "작성한 일러스트",
+    "作成したイラスト"
+  ],
+  "Ilustraciones de la comunidad": [
+    "Community illustrations",
+    "Illustrations de la communauté",
+    "社区插画",
+    "커뮤니티 일러스트",
+    "コミュニティのイラスト"
+  ],
+  "Ilustraciones inspiradas por esta obra": [
+    "Illustrations inspired by this work",
+    "Illustrations inspirées de cette œuvre",
+    "受此作品启发的插画",
+    "이 작품에서 영감받은 일러스트",
+    "この作品に着想を得たイラスト"
+  ],
+  "Ilustración de {0}": [
+    "Illustration by {0}",
+    "Illustration de {0}",
+    "{0} 的插画",
+    "{0}의 일러스트",
+    "{0}のイラスト"
+  ],
+  "Ilustradores con obras publicadas": [
+    "Illustrators with published works",
+    "Illustrateurs ayant publié des œuvres",
+    "有公开作品的插画师",
+    "작품을 게시한 일러스트레이터",
+    "公開作品のあるイラストレーター"
+  ],
+  "Imagen {0}": [
+    "Image {0}",
+    "Image {0}",
+    "图片 {0}",
+    "이미지 {0}",
+    "画像 {0}"
+  ],
+  "Inicia sesión para enviar una denuncia.": [
+    "Log in to submit a report.",
+    "Connectez-vous pour signaler.",
+    "登录后可提交举报。",
+    "신고하려면 로그인하세요.",
+    "報告にはログインが必要です。"
+  ],
+  "Inicia sesión para sincronizar tu biblioteca": [
+    "Log in to sync your library",
+    "Connectez-vous pour synchroniser votre bibliothèque",
+    "登录以同步书架",
+    "서재를 동기화하려면 로그인하세요",
+    "ログインしてライブラリーを同期"
+  ],
+  "Ir a fanarts de comunidad": [
+    "Go to community fan art",
+    "Voir le fan art communautaire",
+    "查看社区同人画",
+    "커뮤니티 팬아트로",
+    "コミュニティのファンアートへ"
+  ],
+  "Ir a los comentarios": [
+    "Go to comments",
+    "Voir les commentaires",
+    "前往评论",
+    "댓글로 이동",
+    "コメントへ"
+  ],
+  "Lectura social y descubrimiento": [
+    "Social reading and discovery",
+    "Lecture sociale et découverte",
+    "社交阅读与发现",
+    "함께 읽고 발견하기",
+    "交流しながら読書と発見"
+  ],
+  "Lecturas, votos y comentarios listos para convertir en prueba social.": [
+    "Reading, votes and comments from your community.",
+    "Lectures, votes et commentaires de votre communauté.",
+    "社区的阅读、投票与评论。",
+    "커뮤니티의 읽기, 투표 및 댓글.",
+    "コミュニティの読書・投票・コメント。"
+  ],
+  "Leyendo": [
+    "Reading",
+    "En cours de lecture",
+    "阅读中",
+    "읽는 중",
+    "読書中"
+  ],
+  "Likes medios": [
+    "Average likes",
+    "J’aime moyens",
+    "平均点赞",
+    "평균 좋아요",
+    "平均いいね"
+  ],
+  "Listo para Supabase y subida de imagenes": [
+    "Ready for Supabase and image uploads",
+    "Prêt pour Supabase et les images",
+    "支持 Supabase 与图片上传",
+    "Supabase 및 이미지 업로드 지원",
+    "Supabaseと画像アップロードに対応"
+  ],
+  "Listos para volver a trabajarse desde el panel.": [
+    "Ready to continue editing in your studio.",
+    "Prêts à être retravaillés dans votre espace.",
+    "可在创作中心继续编辑。",
+    "스튜디오에서 계속 편집할 수 있습니다.",
+    "管理画面で編集を続けられます。"
+  ],
+  "Madura": [
+    "Mature",
+    "Pour adultes",
+    "成人",
+    "성인",
+    "成人向け"
+  ],
+  "Marcar revisada": [
+    "Mark reviewed",
+    "Marquer comme révisé",
+    "标记已审核",
+    "검토 완료 표시",
+    "確認済みにする"
+  ],
+  "Meta de palabras para este texto": [
+    "Word goal for this text",
+    "Objectif de mots pour ce texte",
+    "此文本的字数目标",
+    "이 글의 단어 목표",
+    "この文章の単語数目標"
+  ],
+  "Metricas visibles": [
+    "Visible metrics",
+    "Indicateurs visibles",
+    "可见指标",
+    "표시 지표",
+    "表示指標"
+  ],
+  "Monoespaciada": [
+    "Monospace",
+    "Chasse fixe",
+    "等宽",
+    "고정폭",
+    "等幅"
+  ],
+  "Mostrando solo las historias que coinciden con tu busqueda": [
+    "Showing stories matching your search",
+    "Histoires correspondant à votre recherche",
+    "仅显示匹配搜索的故事",
+    "검색과 일치하는 이야기만 표시",
+    "検索に一致する作品を表示"
+  ],
+  "Motivo de la decisión": [
+    "Reason for decision",
+    "Motif de la décision",
+    "决定原因",
+    "결정 사유",
+    "判断の理由"
+  ],
+  "Muy grande": [
+    "Extra large",
+    "Très grand",
+    "特大",
+    "아주 크게",
+    "特大"
+  ],
+  "Noche": [
+    "Night",
+    "Nuit",
+    "夜间",
+    "야간",
+    "ナイト"
+  ],
+  "Nombre de la ilustracion": [
+    "Illustration title",
+    "Titre de l’illustration",
+    "插画标题",
+    "일러스트 제목",
+    "イラストのタイトル"
+  ],
+  "Nombre de tu aporte visual": [
+    "Title of your visual contribution",
+    "Titre de votre contribution visuelle",
+    "视觉投稿标题",
+    "시각 작품 제목",
+    "投稿イラストのタイトル"
+  ],
+  "Nombre de tu colección": [
+    "Collection name",
+    "Nom de la collection",
+    "收藏名称",
+    "컬렉션 이름",
+    "コレクション名"
+  ],
+  "Nombre del escritor o ilustrador": [
+    "Writer or illustrator name",
+    "Nom de l’écrivain ou illustrateur",
+    "作家或插画师姓名",
+    "작가 또는 일러스트레이터 이름",
+    "作家・イラストレーター名"
+  ],
+  "Nombre del personaje": [
+    "Character name",
+    "Nom du personnage",
+    "人物姓名",
+    "등장인물 이름",
+    "登場人物名"
+  ],
+  "Nombre del usuario": [
+    "Username",
+    "Nom d’utilisateur",
+    "用户名",
+    "사용자 이름",
+    "ユーザー名"
+  ],
+  "Nombre público": [
+    "Public name",
+    "Nom public",
+    "公开名称",
+    "공개 이름",
+    "公開名"
+  ],
+  "Nombre real": [
+    "Real name",
+    "Nom réel",
+    "真实姓名",
+    "실명",
+    "本名"
+  ],
+  "Nombre real:": [
+    "Real name:",
+    "Nom réel :",
+    "真实姓名：",
+    "실명:",
+    "本名："
+  ],
+  "Nombre visible": [
+    "Display name",
+    "Nom affiché",
+    "显示名称",
+    "표시 이름",
+    "表示名"
+  ],
+  "Normal": [
+    "Normal",
+    "Normal",
+    "正常",
+    "보통",
+    "標準"
+  ],
+  "Normas de la comunidad": [
+    "Community rules",
+    "Règles de la communauté",
+    "社区规则",
+    "커뮤니티 규칙",
+    "コミュニティルール"
+  ],
+  "Notificaciones silenciadas (": [
+    "Muted notifications (",
+    "Notifications masquées (",
+    "已静音通知（",
+    "숨긴 알림 (",
+    "ミュート中の通知（"
+  ],
+  "Numero": [
+    "Number",
+    "Numéro",
+    "编号",
+    "번호",
+    "番号"
+  ],
+  "Obras en biblioteca": [
+    "Works in library",
+    "Œuvres en bibliothèque",
+    "书架作品",
+    "서재 작품",
+    "ライブラリー内の作品"
+  ],
+  "Ocultar atelier": [
+    "Hide studio",
+    "Masquer l’atelier",
+    "隐藏工作室",
+    "스튜디오 숨기기",
+    "スタジオを非表示"
+  ],
+  "Ocultar capitulo": [
+    "Hide chapter",
+    "Masquer le chapitre",
+    "隐藏章节",
+    "챕터 숨기기",
+    "章を非表示"
+  ],
+  "Ocultar creador": [
+    "Hide creator",
+    "Masquer le créateur",
+    "隐藏创作者",
+    "창작자 숨기기",
+    "クリエイターを非表示"
+  ],
+  "Ocultar temporalmente": [
+    "Hide temporarily",
+    "Masquer temporairement",
+    "暂时隐藏",
+    "임시로 숨기기",
+    "一時的に非表示"
+  ],
+  "Organiza tus piezas visuales y construye tu galeria publica.": [
+    "Organize your visual works and build your public gallery.",
+    "Organisez vos œuvres et votre galerie publique.",
+    "整理视觉作品并创建公开画廊。",
+    "시각 작품을 정리하고 공개 갤러리를 만드세요.",
+    "作品を整理して公開ギャラリーを作成しましょう。"
+  ],
+  "Paginación de resultados": [
+    "Result pages",
+    "Pages de résultats",
+    "结果分页",
+    "검색 결과 페이지",
+    "検索結果のページ"
+  ],
+  "Panel de ilustrador": [
+    "Illustrator studio",
+    "Espace illustrateur",
+    "插画创作中心",
+    "일러스트 스튜디오",
+    "イラストレーター管理"
+  ],
+  "Pantalla de creador": [
+    "Creator view",
+    "Vue créateur",
+    "创作者界面",
+    "창작자 화면",
+    "クリエイター画面"
+  ],
+  "Para creadores": [
+    "For creators",
+    "Pour les créateurs",
+    "面向创作者",
+    "창작자를 위한",
+    "クリエイター向け"
+  ],
+  "Pequeña": [
+    "Small",
+    "Petit",
+    "小",
+    "작게",
+    "小"
+  ],
+  "Perfil creativo": [
+    "Creative profile",
+    "Profil créatif",
+    "创作资料",
+    "창작 프로필",
+    "クリエイタープロフィール"
+  ],
+  "Perfil público": [
+    "Public profile",
+    "Profil public",
+    "公开资料",
+    "공개 프로필",
+    "公開プロフィール"
+  ],
+  "Perfiles de usuario": [
+    "User profiles",
+    "Profils utilisateurs",
+    "用户资料",
+    "사용자 프로필",
+    "ユーザープロフィール"
+  ],
+  "Permisos de uso:": [
+    "Usage rights:",
+    "Droits d’usage :",
+    "使用权限：",
+    "사용 권한:",
+    "利用権："
+  ],
+  "Permisos de {0}": [
+    "Permissions for {0}",
+    "Autorisations de {0}",
+    "{0} 的权限",
+    "{0} 권한",
+    "{0} の権限"
+  ],
+  "Permisos: {0}": [
+    "Permissions: {0}",
+    "Autorisations : {0}",
+    "权限：{0}",
+    "권한: {0}",
+    "権限：{0}"
+  ],
+  "Personajes principales": [
+    "Main characters",
+    "Personnages principaux",
+    "主要人物",
+    "주요 등장인물",
+    "主な登場人物"
+  ],
+  "Personajes y etiquetas de la historia": [
+    "Story characters and tags",
+    "Personnages et étiquettes de l’histoire",
+    "故事人物与标签",
+    "이야기 등장인물 및 태그",
+    "作品の登場人物とタグ"
+  ],
+  "Personaliza tu experiencia": [
+    "Customize your experience",
+    "Personnalisez votre expérience",
+    "个性化体验",
+    "내 경험 설정",
+    "使い方をカスタマイズ"
+  ],
+  "Personaliza tu presencia en Valoria": [
+    "Customize your presence in Valoria",
+    "Personnalisez votre présence sur Valoria",
+    "个性化 Valoria 个人主页",
+    "Valoria 프로필 꾸미기",
+    "Valoriaのプロフィールをカスタマイズ"
+  ],
+  "Planificación privada: personajes, escenas y cronología": [
+    "Private planning: characters, scenes and timeline",
+    "Plan privé : personnages, scènes et chronologie",
+    "私人计划：人物、场景与时间线",
+    "비공개 계획: 등장인물, 장면, 연대표",
+    "非公開の構想：登場人物・場面・年表"
+  ],
+  "Plazo de recuperación terminado": [
+    "Recovery period ended",
+    "Délai de récupération terminé",
+    "恢复期限已结束",
+    "복원 기간 종료",
+    "復元期間終了"
+  ],
+  "Por ejemplo, 1500": [
+    "For example, 1500",
+    "Par exemple, 1500",
+    "例如1500",
+    "예: 1500",
+    "例：1500"
+  ],
+  "Portada y datos de «{0}»": [
+    "Cover and details for “{0}”",
+    "Couverture et détails de « {0} »",
+    "「{0}」的封面与信息",
+    "«{0}» 표지 및 정보",
+    "「{0}」の表紙と情報"
+  ],
+  "Preferencias de notificaciones": [
+    "Notification preferences",
+    "Préférences de notifications",
+    "通知偏好",
+    "알림 설정",
+    "通知設定"
+  ],
+  "Preguntas frecuentes": [
+    "Frequently asked questions",
+    "Questions fréquentes",
+    "常见问题",
+    "자주 묻는 질문",
+    "よくある質問"
+  ],
+  "Preparando espacio de escritura...": [
+    "Preparing writing space…",
+    "Préparation de l’espace d’écriture…",
+    "正在准备写作空间…",
+    "글쓰기 공간 준비 중…",
+    "執筆スペースを準備中…"
+  ],
+  "Primeros pasos": [
+    "Getting started",
+    "Premiers pas",
+    "开始使用",
+    "시작하기",
+    "はじめに"
+  ],
+  "Programar publicación (": [
+    "Schedule publication (",
+    "Programmer la publication (",
+    "定时发布（",
+    "게시 예약 (",
+    "公開を予約（"
+  ],
+  "Propietario · acceso permanente": [
+    "Owner · permanent access",
+    "Propriétaire · accès permanent",
+    "所有者 · 永久权限",
+    "소유자 · 영구 접근",
+    "所有者・恒久アクセス"
+  ],
+  "Propuesta": [
+    "Proposal",
+    "Proposition",
+    "提案",
+    "제안",
+    "提案"
+  ],
+  "Protege la administración con un segundo paso de autenticación.": [
+    "Protect administration with two-factor authentication.",
+    "Protégez l’administration avec un second facteur.",
+    "通过双重验证保护管理权限。",
+    "2단계 인증으로 관리 기능을 보호하세요.",
+    "二要素認証で管理機能を保護します。"
+  ],
+  "Publicación programada:": [
+    "Scheduled publication:",
+    "Publication programmée :",
+    "定时发布：",
+    "예약 게시:",
+    "予約公開："
+  ],
+  "Publicada": [
+    "Published",
+    "Publiée",
+    "已发布",
+    "게시됨",
+    "公開済み"
+  ],
+  "Publicados": [
+    "Published",
+    "Publiés",
+    "已发布",
+    "게시됨",
+    "公開済み"
+  ],
+  "Publicar capitulo": [
+    "Publish chapter",
+    "Publier le chapitre",
+    "发布章节",
+    "챕터 게시",
+    "章を公開"
+  ],
+  "Publicar comentario": [
+    "Post comment",
+    "Publier le commentaire",
+    "发表评论",
+    "댓글 게시",
+    "コメントを投稿"
+  ],
+  "Publicar estado": [
+    "Post update",
+    "Publier un statut",
+    "发布动态",
+    "소식 게시",
+    "近況を投稿"
+  ],
+  "Publicar fanart": [
+    "Publish fan art",
+    "Publier le fan art",
+    "发布同人画",
+    "팬아트 게시",
+    "ファンアートを投稿"
+  ],
+  "Publicar reseña": [
+    "Publish review",
+    "Publier l’avis",
+    "发布书评",
+    "리뷰 게시",
+    "レビューを投稿"
+  ],
+  "Puntuacion": [
+    "Score",
+    "Note",
+    "评分",
+    "평점",
+    "評価"
+  ],
+  "Página": [
+    "Page",
+    "Page",
+    "页面",
+    "페이지",
+    "ページ"
+  ],
+  "Página anterior": [
+    "Previous page",
+    "Page précédente",
+    "上一页",
+    "이전 페이지",
+    "前のページ"
+  ],
+  "Página siguiente": [
+    "Next page",
+    "Page suivante",
+    "下一页",
+    "다음 페이지",
+    "次のページ"
+  ],
+  "Páginas del capítulo": [
+    "Chapter pages",
+    "Pages du chapitre",
+    "章节页数",
+    "챕터 페이지",
+    "章のページ"
+  ],
+  "Páginas del libro": [
+    "Book pages",
+    "Pages du livre",
+    "书籍页数",
+    "책 페이지",
+    "本のページ"
+  ],
+  "QR privado para configurar tu aplicación de autenticación": [
+    "Private QR for authenticator setup",
+    "QR privé pour configurer votre application",
+    "设置验证器的私人二维码",
+    "인증 앱 설정용 비공개 QR",
+    "認証アプリ設定用の非公開QR"
+  ],
+  "Que se lleva el lector de este capitulo": [
+    "What the reader takes from this chapter",
+    "Ce que le lecteur retient du chapitre",
+    "读者从本章得到什么",
+    "독자가 이 챕터에서 얻는 것",
+    "読者がこの章から受け取るもの"
+  ],
+  "Quiero leer": [
+    "Want to read",
+    "À lire",
+    "想读",
+    "읽고 싶음",
+    "読みたい"
+  ],
+  "Quiero leer / ver": [
+    "Want to read / view",
+    "À lire / voir",
+    "想读／看",
+    "읽기 / 보기 희망",
+    "読みたい・見たい"
+  ],
+  "Quitar copia": [
+    "Remove copy",
+    "Retirer la copie",
+    "移除副本",
+    "저장본 제거",
+    "保存版を削除"
+  ],
+  "Quitar de mi biblioteca": [
+    "Remove from library",
+    "Retirer de ma bibliothèque",
+    "从书架移除",
+    "서재에서 제거",
+    "ライブラリーから削除"
+  ],
+  "Quitar enlace": [
+    "Remove link",
+    "Retirer le lien",
+    "移除链接",
+    "링크 제거",
+    "リンクを削除"
+  ],
+  "Quitar me gusta": [
+    "Unlike",
+    "Retirer J’aime",
+    "取消点赞",
+    "좋아요 취소",
+    "いいねを取り消す"
+  ],
+  "Quitar me gusta de la ilustracion": [
+    "Unlike illustration",
+    "Retirer J’aime de l’illustration",
+    "取消插画点赞",
+    "일러스트 좋아요 취소",
+    "イラストのいいねを取り消す"
+  ],
+  "RECUPERACIÓN": [
+    "RECOVERY",
+    "RÉCUPÉRATION",
+    "恢复",
+    "복원",
+    "復元"
+  ],
+  "Rating": [
+    "Rating",
+    "Note",
+    "评分",
+    "평점",
+    "評価"
+  ],
+  "Recargar página": [
+    "Reload page",
+    "Recharger la page",
+    "重新加载页面",
+    "페이지 새로고침",
+    "ページを再読み込み"
+  ],
+  "Recomendado: vertical y contrastada": [
+    "Recommended: portrait with good contrast",
+    "Conseillé : verticale avec bon contraste",
+    "建议：竖图且对比鲜明",
+    "권장: 대비가 선명한 세로 이미지",
+    "推奨：コントラストのある縦長画像"
+  ],
+  "Recuperable hasta {0}": [
+    "Recoverable until {0}",
+    "Récupérable jusqu’au {0}",
+    "可恢复至 {0}",
+    "{0}까지 복원 가능",
+    "{0} まで復元可能"
+  ],
+  "Recuperar una versión anterior": [
+    "Restore an earlier version",
+    "Restaurer une version antérieure",
+    "恢复早期版本",
+    "이전 버전 복원",
+    "以前の版を復元"
+  ],
+  "Registro de acciones": [
+    "Activity log",
+    "Journal des actions",
+    "操作日志",
+    "작업 기록",
+    "操作ログ"
+  ],
+  "Reportar comentario": [
+    "Report comment",
+    "Signaler le commentaire",
+    "举报评论",
+    "댓글 신고",
+    "コメントを報告"
+  ],
+  "Reportar usuario": [
+    "Report user",
+    "Signaler l’utilisateur",
+    "举报用户",
+    "사용자 신고",
+    "ユーザーを報告"
+  ],
+  "Resolución": [
+    "Resolution",
+    "Résolution",
+    "处理结果",
+    "처리 결과",
+    "処理結果"
+  ],
+  "Resolver": [
+    "Resolve",
+    "Résoudre",
+    "处理",
+    "해결",
+    "解決"
+  ],
+  "Respaldo diario:": [
+    "Daily backup:",
+    "Sauvegarde quotidienne :",
+    "每日备份：",
+    "일일 백업:",
+    "毎日のバックアップ："
+  ],
+  "Respaldo en curso…": [
+    "Backup in progress…",
+    "Sauvegarde en cours…",
+    "正在备份…",
+    "백업 중…",
+    "バックアップ中…"
+  ],
+  "Responder": [
+    "Reply",
+    "Répondre",
+    "回复",
+    "답글",
+    "返信"
+  ],
+  "Respondiendo a": [
+    "Replying to",
+    "En réponse à",
+    "正在回复",
+    "답글 대상",
+    "返信先"
+  ],
+  "Restaurar visibilidad": [
+    "Restore visibility",
+    "Restaurer la visibilité",
+    "恢复可见",
+    "표시 복원",
+    "表示を復元"
+  ],
+  "Resultados": [
+    "Results",
+    "Résultats",
+    "结果",
+    "결과",
+    "結果"
+  ],
+  "Revisar contenido denunciado": [
+    "Review reported content",
+    "Examiner le contenu signalé",
+    "审核举报内容",
+    "신고 콘텐츠 검토",
+    "報告された内容を確認"
+  ],
+  "Rol": [
+    "Role",
+    "Rôle",
+    "角色",
+    "역할",
+    "役割"
+  ],
+  "Sans serif": [
+    "Sans serif",
+    "Sans empattement",
+    "无衬线",
+    "고딕체",
+    "サンセリフ"
+  ],
+  "Se muestra como texto; no se ejecuta.": [
+    "Displayed as text; never executed.",
+    "Affiché comme texte ; non exécuté.",
+    "显示为文本，不会执行。",
+    "텍스트로 표시되며 실행되지 않습니다.",
+    "テキストとして表示し、実行しません。"
+  ],
+  "Secciones de administración": [
+    "Administration sections",
+    "Sections d’administration",
+    "管理部分",
+    "관리 섹션",
+    "管理セクション"
+  ],
+  "Seguridad de la cuenta": [
+    "Account security",
+    "Sécurité du compte",
+    "账户安全",
+    "계정 보안",
+    "アカウントセキュリティ"
+  ],
+  "Selecciona una historia": [
+    "Choose a story",
+    "Choisissez une histoire",
+    "选择故事",
+    "이야기 선택",
+    "作品を選択"
+  ],
+  "Seleccionar": [
+    "Select",
+    "Sélectionner",
+    "选择",
+    "선택",
+    "選択"
+  ],
+  "Sepia": [
+    "Sepia",
+    "Sépia",
+    "棕褐",
+    "세피아",
+    "セピア"
+  ],
+  "Serif": [
+    "Serif",
+    "Avec empattement",
+    "衬线",
+    "명조체",
+    "セリフ"
+  ],
+  "Seudonimo publico": [
+    "Public pen name",
+    "Pseudonyme public",
+    "公开笔名",
+    "공개 필명",
+    "公開ペンネーム"
+  ],
+  "Siguiente capitulo": [
+    "Next chapter",
+    "Chapitre suivant",
+    "下一章",
+    "다음 챕터",
+    "次の章"
+  ],
+  "Siguiente elemento": [
+    "Next item",
+    "Élément suivant",
+    "下一个项目",
+    "다음 항목",
+    "次の項目"
+  ],
+  "Silenciar notificacion": [
+    "Mute notification",
+    "Masquer la notification",
+    "静音通知",
+    "알림 숨기기",
+    "通知をミュート"
+  ],
+  "Sin acceso al manuscrito": [
+    "No manuscript access",
+    "Sans accès au manuscrit",
+    "无法访问稿件",
+    "원고 접근 불가",
+    "原稿アクセス不可"
+  ],
+  "Sin descripcion todavia.": [
+    "No description yet.",
+    "Pas encore de description.",
+    "暂无描述。",
+    "아직 설명이 없습니다.",
+    "説明はまだありません。"
+  ],
+  "Sin imagenes todavia": [
+    "No images yet",
+    "Pas encore d’images",
+    "暂无图片",
+    "아직 이미지가 없습니다",
+    "画像はまだありません"
+  ],
+  "Sin permisos administrativos": [
+    "No administrative permissions",
+    "Sans autorisations administratives",
+    "无管理权限",
+    "관리 권한 없음",
+    "管理権限なし"
+  ],
+  "Sin segunda categoria": [
+    "No secondary category",
+    "Aucune catégorie secondaire",
+    "无次要分类",
+    "보조 카테고리 없음",
+    "副カテゴリーなし"
+  ],
+  "Sin sinopsis todavia.": [
+    "No synopsis yet.",
+    "Pas encore de synopsis.",
+    "暂无简介。",
+    "아직 줄거리가 없습니다.",
+    "あらすじはまだありません。"
+  ],
+  "Sobre": [
+    "About",
+    "À propos",
+    "关于",
+    "소개",
+    "概要"
+  ],
+  "Sobre {0}": [
+    "About {0}",
+    "À propos de {0}",
+    "关于 {0}",
+    "{0} 소개",
+    "{0} について"
+  ],
+  "Solo lectura": [
+    "Read only",
+    "Lecture seule",
+    "只读",
+    "읽기 전용",
+    "閲覧のみ"
+  ],
+  "Studio": [
+    "Studio",
+    "Atelier",
+    "工作室",
+    "스튜디오",
+    "スタジオ"
+  ],
+  "Subiendo avatar...": [
+    "Uploading avatar…",
+    "Envoi de l’avatar…",
+    "正在上传头像…",
+    "아바타 업로드 중…",
+    "アバターをアップロード中…"
+  ],
+  "Subiendo fondo...": [
+    "Uploading background…",
+    "Envoi du fond…",
+    "正在上传背景…",
+    "배경 업로드 중…",
+    "背景をアップロード中…"
+  ],
+  "Subir": [
+    "Upload",
+    "Téléverser",
+    "上传",
+    "업로드",
+    "アップロード"
+  ],
+  "Subtítulo": [
+    "Subtitle",
+    "Sous-titre",
+    "副标题",
+    "부제",
+    "サブタイトル"
+  ],
+  "Sugerencias": [
+    "Suggestions",
+    "Suggestions",
+    "建议",
+    "제안",
+    "提案"
+  ],
+  "Tamaño": [
+    "Size",
+    "Taille",
+    "大小",
+    "크기",
+    "サイズ"
+  ],
+  "Tamaño de letra": [
+    "Font size",
+    "Taille du texte",
+    "字号",
+    "글자 크기",
+    "文字サイズ"
+  ],
+  "Tareas autorizadas": [
+    "Authorized tasks",
+    "Tâches autorisées",
+    "授权任务",
+    "허용된 작업",
+    "許可された操作"
+  ],
+  "Te gusta": [
+    "Liked",
+    "Vous aimez",
+    "已点赞",
+    "좋아요 표시됨",
+    "いいね済み"
+  ],
+  "Tendencias": [
+    "Trending",
+    "Tendances",
+    "趋势",
+    "인기",
+    "トレンド"
+  ],
+  "Terminada": [
+    "Completed",
+    "Terminée",
+    "已完结",
+    "완결",
+    "完結"
+  ],
+  "Tipo de letra": [
+    "Font family",
+    "Police",
+    "字体",
+    "글꼴",
+    "フォント"
+  ],
+  "Tipografía": [
+    "Typography",
+    "Typographie",
+    "字体排版",
+    "글꼴",
+    "書体"
+  ],
+  "Titulo del fanart": [
+    "Fan art title",
+    "Titre du fan art",
+    "同人画标题",
+    "팬아트 제목",
+    "ファンアートのタイトル"
+  ],
+  "Tu biblioteca": [
+    "Your library",
+    "Votre bibliothèque",
+    "你的书架",
+    "내 서재",
+    "あなたのライブラリー"
+  ],
+  "Tu espacio personal": [
+    "Your personal space",
+    "Votre espace personnel",
+    "你的个人空间",
+    "내 개인 공간",
+    "自分のスペース"
+  ],
+  "Tu fanart aparecera aqui": [
+    "Your fan art will appear here",
+    "Votre fan art apparaîtra ici",
+    "你的同人画将显示在这里",
+    "팬아트가 여기에 표시됩니다",
+    "ファンアートがここに表示されます"
+  ],
+  "Tu galeria": [
+    "Your gallery",
+    "Votre galerie",
+    "你的画廊",
+    "내 갤러리",
+    "あなたのギャラリー"
+  ],
+  "Tu historia aun no tiene capitulos": [
+    "Your story has no chapters yet",
+    "Votre histoire n’a pas encore de chapitres",
+    "你的故事暂无章节",
+    "아직 챕터가 없습니다",
+    "作品に章がまだありません"
+  ],
+  "Tu historia empieza aquí": [
+    "Your story starts here",
+    "Votre histoire commence ici",
+    "你的故事从这里开始",
+    "이야기는 여기서 시작됩니다",
+    "あなたの物語はここから"
+  ],
+  "Tu obra": [
+    "Your work",
+    "Votre œuvre",
+    "你的作品",
+    "내 작품",
+    "あなたの作品"
+  ],
+  "Tu papelera": [
+    "Your trash",
+    "Votre corbeille",
+    "你的回收站",
+    "내 휴지통",
+    "あなたのゴミ箱"
+  ],
+  "Tu reseña al terminar el capitulo": [
+    "Your review after the chapter",
+    "Votre avis après le chapitre",
+    "读完本章后的书评",
+    "챕터를 마친 후 리뷰",
+    "章を読み終えた感想"
+  ],
+  "Usuario": [
+    "User",
+    "Utilisateur",
+    "用户",
+    "사용자",
+    "ユーザー"
+  ],
+  "Ver galeria completa": [
+    "View full gallery",
+    "Voir toute la galerie",
+    "查看完整画廊",
+    "전체 갤러리 보기",
+    "ギャラリー全体を見る"
+  ],
+  "Ver imagen anterior": [
+    "View previous image",
+    "Voir l’image précédente",
+    "上一张图片",
+    "이전 이미지 보기",
+    "前の画像を見る"
+  ],
+  "Ver imagen siguiente": [
+    "View next image",
+    "Voir l’image suivante",
+    "下一张图片",
+    "다음 이미지 보기",
+    "次の画像を見る"
+  ],
+  "Ver mis copias": [
+    "View saved copies",
+    "Voir mes copies",
+    "查看保存的副本",
+    "저장본 보기",
+    "保存版を見る"
+  ],
+  "Ver todas las colecciones": [
+    "View all collections",
+    "Voir toutes les collections",
+    "查看全部收藏",
+    "모든 컬렉션 보기",
+    "すべてのコレクションを見る"
+  ],
+  "Verificando…": [
+    "Verifying…",
+    "Vérification…",
+    "正在验证…",
+    "확인 중…",
+    "確認中…"
+  ],
+  "Versiones del borrador": [
+    "Draft versions",
+    "Versions du brouillon",
+    "草稿版本",
+    "초안 버전",
+    "下書きの版"
+  ],
+  "Visibilidad:": [
+    "Visibility:",
+    "Visibilité :",
+    "可见性：",
+    "공개 상태:",
+    "公開状態："
+  ],
+  "Visible solo dentro del perfil del creador": [
+    "Visible only on the creator’s profile",
+    "Visible uniquement sur le profil du créateur",
+    "仅在创作者资料页显示",
+    "창작자 프로필에만 표시",
+    "作者のプロフィール内のみ表示"
+  ],
+  "Vista ampliada de la ilustración": [
+    "Enlarged illustration",
+    "Illustration agrandie",
+    "插画放大视图",
+    "확대한 일러스트",
+    "拡大イラスト"
+  ],
+  "Vista previa de galeria": [
+    "Gallery preview",
+    "Aperçu de la galerie",
+    "画廊预览",
+    "갤러리 미리보기",
+    "ギャラリープレビュー"
+  ],
+  "Vista previa de portada": [
+    "Cover preview",
+    "Aperçu de la couverture",
+    "封面预览",
+    "표지 미리보기",
+    "表紙プレビュー"
+  ],
+  "Vista previa del capítulo": [
+    "Chapter preview",
+    "Aperçu du chapitre",
+    "章节预览",
+    "챕터 미리보기",
+    "章のプレビュー"
+  ],
+  "Vista previa del fanart": [
+    "Fan art preview",
+    "Aperçu du fan art",
+    "同人画预览",
+    "팬아트 미리보기",
+    "ファンアートプレビュー"
+  ],
+  "Vistas": [
+    "Views",
+    "Vues",
+    "浏览量",
+    "조회수",
+    "閲覧数"
+  ],
+  "Volver a ilustraciones": [
+    "Back to illustrations",
+    "Retour aux illustrations",
+    "返回插画",
+    "일러스트로 돌아가기",
+    "イラストに戻る"
+  ],
+  "Volver a recibir notificaciones": [
+    "Unmute notifications",
+    "Réactiver les notifications",
+    "恢复通知",
+    "알림 다시 받기",
+    "通知を再開"
+  ],
+  "Volver al panel": [
+    "Back to studio",
+    "Retour à l’espace",
+    "返回创作中心",
+    "스튜디오로 돌아가기",
+    "管理画面に戻る"
+  ],
+  "Ya tienes la sesion activa": [
+    "You are already logged in",
+    "Vous êtes déjà connecté",
+    "你已登录",
+    "이미 로그인되어 있습니다",
+    "ログイン済みです"
+  ],
+  "activas": [
+    "active",
+    "actives",
+    "活跃",
+    "활성",
+    "有効"
+  ],
+  "borradores visuales": [
+    "visual drafts",
+    "brouillons visuels",
+    "视觉草稿",
+    "시각 초안",
+    "イラスト下書き"
+  ],
+  "capítulos guardados": [
+    "saved chapters",
+    "chapitres enregistrés",
+    "已保存章节",
+    "저장된 챕터",
+    "保存した章"
+  ],
+  "corazones": [
+    "hearts",
+    "cœurs",
+    "爱心",
+    "하트",
+    "ハート"
+  ],
+  "creadores en tu circulo": [
+    "creators in your circle",
+    "créateurs dans votre cercle",
+    "创作圈中的创作者",
+    "내 모임의 창작자",
+    "つながりのあるクリエイター"
+  ],
+  "Estados reales, comentarios entre autores y conexiones de seguimiento sembradas sobre la base para que puedas probar el ecosistema completo.": [
+    "Creator updates, comments and connections across the community.",
+    "Actualités, commentaires et liens entre créateurs de la communauté.",
+    "社区中的创作者动态、评论与关注关系。",
+    "커뮤니티의 창작자 소식, 댓글 및 연결.",
+    "コミュニティの近況、コメント、つながり。"
+  ],
+  "Prueba con otra categoria, una parte del titulo o el nombre del escritor.": [
+    "Try another category, part of the title or the writer’s name.",
+    "Essayez une autre catégorie, un titre partiel ou le nom de l’écrivain.",
+    "尝试其他分类、部分标题或作者姓名。",
+    "다른 카테고리, 제목 일부 또는 작가 이름으로 검색하세요.",
+    "別のカテゴリー、タイトルの一部、作者名で検索してください。"
+  ],
+  "Prueba otra busqueda o vuelve mas tarde para descubrir nuevas obras.": [
+    "Try another search or come back later for new works.",
+    "Essayez une autre recherche ou revenez découvrir de nouvelles œuvres.",
+    "尝试其他搜索或稍后查看新作品。",
+    "다른 검색을 하거나 나중에 새 작품을 확인하세요.",
+    "別の検索を試すか、後で新しい作品を見つけましょう。"
+  ],
+  "Prueba volver a la galeria o revisar el enlace.": [
+    "Go back to the gallery or check the link.",
+    "Retournez à la galerie ou vérifiez le lien.",
+    "返回画廊或检查链接。",
+    "갤러리로 돌아가거나 링크를 확인하세요.",
+    "ギャラリーに戻るかリンクを確認してください。"
+  ],
+  "Publica capitulos solo sobre la historia que tengas seleccionada.": [
+    "Publish chapters only in the selected story.",
+    "Publiez les chapitres dans l’histoire sélectionnée.",
+    "仅在选中的故事中发布章节。",
+    "선택한 이야기에만 챕터를 게시하세요.",
+    "選択した作品にのみ章を公開します。"
+  ],
+  "Puedes probar la creacion ahora mismo. Sin credenciales usa respaldo local; con Supabase activo persiste en la nube.": [
+    "Try creating now. Demo mode uses local storage; an active Supabase connection saves to the cloud.",
+    "Essayez la création. Le mode démo utilise le stockage local ; Supabase actif enregistre dans le cloud.",
+    "可立即试用创作。演示模式使用本地存储；启用Supabase后存入云端。",
+    "지금 창작을 시험하세요. 데모는 로컬 저장을 사용하고 Supabase 연결 시 클라우드에 저장합니다.",
+    "作成を試せます。デモではローカルに、Supabase接続時はクラウドに保存します。"
+  ],
+  "Puedes restaurar historias, capítulos e ilustraciones durante 30 días. Se recuperan como borradores para que revises su publicación.": [
+    "Restore stories, chapters and illustrations within 30 days. They return as drafts so you can review publication.",
+    "Restaurez histoires, chapitres et illustrations pendant 30 jours. Ils reviennent en brouillons pour revoir leur publication.",
+    "30天内可恢复故事、章节和插画。恢复后为草稿，便于重新检查发布。",
+    "30일 안에 이야기, 챕터, 일러스트를 복원할 수 있습니다. 게시 여부를 확인하도록 초안으로 복원됩니다.",
+    "作品・章・イラストは30日以内に復元できます。公開を再確認できるよう下書きに戻ります。"
+  ],
+  "Resume el corazon de la historia, el tono y lo que engancha.": [
+    "Summarize the story’s heart, tone and hook.",
+    "Résumez le cœur, le ton et l’accroche de l’histoire.",
+    "概括故事的核心、基调与吸引点。",
+    "이야기의 핵심, 분위기, 매력을 요약하세요.",
+    "物語の核心、雰囲気、魅力をまとめてください。"
+  ],
+  "Se la primera persona en aportar una pieza inspirada por esta ilustracion.": [
+    "Be the first to share art inspired by this illustration.",
+    "Partagez la première œuvre inspirée de cette illustration.",
+    "成为首位分享受此插画启发的作品的人。",
+    "이 일러스트에서 영감받은 첫 작품을 공유하세요.",
+    "このイラストに着想を得た最初の作品を投稿しましょう。"
+  ],
+  "Se la primera persona en reaccionar a esta ilustracion.": [
+    "Be the first to react to this illustration.",
+    "Soyez la première personne à réagir.",
+    "成为首位回应此插画的人。",
+    "이 일러스트에 첫 반응을 남기세요.",
+    "このイラストに最初の反応をしましょう。"
+  ],
+  "Selecciona una cuenta y concede solo las tareas que necesita. Desmarca todos los permisos para revocar su acceso. El rol de propietario no se puede delegar desde aquí.": [
+    "Select an account and grant only necessary tasks. Clear all permissions to revoke access. Ownership cannot be delegated here.",
+    "Choisissez un compte et les tâches nécessaires. Retirez toutes les autorisations pour révoquer l’accès. Le rôle de propriétaire ne se délègue pas ici.",
+    "选择账户并仅授权必要任务。取消所有权限以撤销访问。所有者角色不能在此委派。",
+    "계정을 선택하고 필요한 작업만 허용하세요. 모든 권한을 해제하면 접근이 취소됩니다. 소유자 역할은 여기서 위임할 수 없습니다.",
+    "必要な操作だけを許可します。すべての権限を外すとアクセスが失効します。所有者の役割はここでは委任できません。"
+  ],
+  "Si en realidad quieres eliminar toda la historia, puedes hacerlo desde aqui mismo.": [
+    "You can also delete the whole story here.",
+    "Vous pouvez aussi supprimer l’histoire entière ici.",
+    "也可在这里删除整个故事。",
+    "여기서 이야기 전체를 삭제할 수도 있습니다.",
+    "ここから作品全体を削除することもできます。"
+  ],
+  "Sin conexión. Puedes leer tus copias y conservar los borradores en este dispositivo.": [
+    "Offline. Read saved copies and keep drafts on this device.",
+    "Hors connexion. Lisez vos copies et gardez vos brouillons sur cet appareil.",
+    "离线状态。可阅读副本并在此设备保存草稿。",
+    "오프라인입니다. 저장본을 읽고 이 기기에 초안을 보관할 수 있습니다.",
+    "オフラインです。保存版を読み、下書きをこの端末に保管できます。"
+  ],
+  "Solo tú puedes administrar permisos. Eliminar el sitio, transferir su propiedad y modificar credenciales de infraestructura se gestionan fuera de este panel, con tus accesos al alojamiento y Supabase.": [
+    "Only you can manage permissions. Site deletion, ownership transfers and infrastructure credentials are managed outside this panel through hosting and Supabase owner access.",
+    "Vous seul gérez les autorisations. Suppression du site, transfert de propriété et identifiants d’infrastructure se gèrent hors de ce panneau, avec vos accès d’hébergement et Supabase.",
+    "仅你可管理权限。删除网站、转移所有权和更改基础设施凭证需在此面板之外通过托管和Supabase所有者权限处理。",
+    "소유자만 권한을 관리합니다. 사이트 삭제, 소유권 이전, 인프라 자격 증명 변경은 이 패널 밖에서 호스팅과 Supabase 소유자 접근으로 처리합니다.",
+    "権限管理は所有者のみです。サイト削除、所有権移転、インフラ認証情報の変更は、ホスティングとSupabaseの所有者権限で別途行います。"
+  ],
+  "Sube una ilustracion para este capitulo": [
+    "Upload an illustration for this chapter",
+    "Ajoutez une illustration pour ce chapitre",
+    "为本章上传插画",
+    "이 챕터의 일러스트 업로드",
+    "この章のイラストをアップロード"
+  ],
+  "Sube una pieza visual inspirada en esta ilustracion del creador.": [
+    "Upload art inspired by this creator’s illustration.",
+    "Ajoutez une œuvre inspirée de cette illustration.",
+    "上传受此创作者插画启发的作品。",
+    "이 일러스트에서 영감받은 작품을 올리세요.",
+    "このイラストに着想を得た作品をアップロードしてください。"
+  ],
+  "Todavía no se ha completado una copia en esta ejecución del servidor.": [
+    "No backup has completed during this server run yet.",
+    "Aucune sauvegarde terminée depuis ce démarrage du serveur.",
+    "此次服务器运行期间尚未完成备份。",
+    "이번 서버 실행 중 완료된 백업이 없습니다.",
+    "今回のサーバー起動後、バックアップはまだ完了していません。"
+  ],
+  "Tu acceso está verificado con autenticación de dos pasos.": [
+    "Your access is verified with two-factor authentication.",
+    "Votre accès est vérifié avec deux facteurs.",
+    "你的访问已通过双重验证。",
+    "2단계 인증으로 접근이 확인되었습니다.",
+    "二要素認証でアクセスが確認されています。"
+  ],
+  "Tu avance se guarda en este navegador.": [
+    "Your progress is saved in this browser.",
+    "Votre progression est enregistrée dans ce navigateur.",
+    "阅读进度保存在此浏览器。",
+    "진도가 이 브라우저에 저장됩니다.",
+    "進捗はこのブラウザーに保存されます。"
+  ],
+  "Tu avance se sincroniza con tu cuenta.": [
+    "Your progress syncs with your account.",
+    "Votre progression se synchronise avec votre compte.",
+    "阅读进度与你的账户同步。",
+    "진도가 계정과 동기화됩니다.",
+    "進捗はアカウントと同期します。"
+  ],
+  "Tu contenido guardado se conserva. Recarga para volver a intentarlo.": [
+    "Your saved content is preserved. Reload to try again.",
+    "Votre contenu enregistré est conservé. Rechargez pour réessayer.",
+    "已保存内容仍保留。请刷新重试。",
+    "저장한 내용은 유지됩니다. 새로고침 후 다시 시도하세요.",
+    "保存した内容は保持されています。再読み込みして再試行してください。"
+  ],
+  "Tu cuenta es la propietaria. Tú decides quién puede administrar y qué permisos tiene.": [
+    "You are the owner. You decide who administers and which permissions they have.",
+    "Vous êtes propriétaire. Vous décidez qui administre et avec quelles autorisations.",
+    "你的账户为所有者。你决定管理员及其权限。",
+    "소유자 계정입니다. 관리자와 권한을 결정할 수 있습니다.",
+    "あなたは所有者です。管理者とその権限を決められます。"
+  ],
+  "Tu cuenta no tiene permisos administrativos.": [
+    "Your account has no administrative permissions.",
+    "Votre compte n’a pas d’autorisations administratives.",
+    "你的账户无管理权限。",
+    "계정에 관리 권한이 없습니다.",
+    "このアカウントには管理権限がありません。"
+  ],
+  "Tu historia se vera mejor con una portada vertical, etiquetas claras y una descripcion que explique el conflicto principal.": [
+    "Use a portrait cover, clear tags and a description of the main conflict.",
+    "Utilisez une couverture verticale, des étiquettes claires et une description du conflit principal.",
+    "建议使用竖版封面、明确标签及说明主要冲突的简介。",
+    "세로 표지, 명확한 태그, 주요 갈등을 설명하는 소개를 사용하세요.",
+    "縦長の表紙、明確なタグ、主要な葛藤を説明する紹介文がおすすめです。"
+  ],
+  "Tu perfil personal vive aqui, separado del home y del panel de creador.": [
+    "Your personal profile lives here, separate from Home and the creator studio.",
+    "Votre profil personnel est ici, distinct de l’accueil et de l’espace créateur.",
+    "个人资料位于此处，与首页和创作中心分开。",
+    "개인 프로필은 홈 및 창작 스튜디오와 별도로 여기에 있습니다.",
+    "個人プロフィールはホームや管理画面とは別にここにあります。"
+  ],
+  "Tus historias, ilustraciones y colecciones personales.": [
+    "Your stories, illustrations and personal collections.",
+    "Vos histoires, illustrations et collections personnelles.",
+    "你的故事、插画及个人收藏。",
+    "내 이야기, 일러스트 및 개인 컬렉션.",
+    "自分の作品、イラスト、コレクション。"
+  ],
+  "Un flujo listo para publicar series, medir lecturas y construir audiencias.": [
+    "Publish series, track reading and grow your audience.",
+    "Publiez des séries, mesurez les lectures et développez votre audience.",
+    "发布系列、统计阅读并扩大读者群。",
+    "시리즈를 게시하고 독서를 측정하며 독자를 늘리세요.",
+    "シリーズを公開し、読書を測定し、読者を増やしましょう。"
+  ],
+  "Una guia rapida para entender como publicar, leer e interactuar dentro de Valoria.": [
+    "A quick guide to publishing, reading and interacting in Valoria.",
+    "Un guide rapide pour publier, lire et interagir sur Valoria.",
+    "在Valoria发布、阅读和互动的快速指南。",
+    "Valoria 게시, 독서 및 소통 빠른 안내.",
+    "Valoriaでの公開、読書、交流のクイックガイド。"
+  ],
+  "Una homepage moderna con enfoque en descubrimiento y conversion.": [
+    "A modern home for discovering new works.",
+    "Un accueil moderne pour découvrir des œuvres.",
+    "探索新作品的现代首页。",
+    "새 작품을 발견하는 현대적인 홈.",
+    "新しい作品を発見するホーム。"
+  ],
+  "Una portada viva para descubrir ficcion serial, arte visual, guardar favoritas y volver cada noche a explorar.": [
+    "Discover serial fiction and visual art, save favorites and explore every night.",
+    "Découvrez des séries et de l’art, gardez vos favoris et explorez chaque soir.",
+    "发现连载故事和视觉艺术，收藏喜爱作品，每晚继续探索。",
+    "연재와 예술을 발견하고 즐겨찾기를 저장하며 매일 탐색하세요.",
+    "連載やアートを見つけ、お気に入りに保存し、毎晩探索しましょう。"
+  ],
+  "Una vitrina editorial con enfoque mobile-first y lectura por capitulos.": [
+    "An editorial showcase for mobile and chapter reading.",
+    "Une vitrine éditoriale pour mobile et lecture par chapitres.",
+    "适合手机和分章阅读的编辑展台。",
+    "모바일과 챕터 읽기를 위한 작품 전시.",
+    "モバイルと章ごとの読書に適した展示。"
+  ],
+  "Usa el buscador superior para encontrar escritores por nombre y entrar a sus perfiles públicos.": [
+    "Use the top search bar to find writers by name and open their public profiles.",
+    "Recherchez les écrivains par nom en haut et ouvrez leurs profils publics.",
+    "使用顶部搜索栏按姓名查找作家并打开公开资料。",
+    "상단에서 작가 이름을 검색하고 공개 프로필을 여세요.",
+    "上部で作家名を検索し、公開プロフィールを開けます。"
+  ],
+  "Usa el buscador superior para encontrar ilustradores por nombre y entrar a sus perfiles públicos.": [
+    "Use the top search bar to find illustrators by name and open their public profiles.",
+    "Recherchez les illustrateurs par nom en haut et ouvrez leurs profils publics.",
+    "使用顶部搜索栏按姓名查找插画师并打开公开资料。",
+    "상단에서 일러스트레이터 이름을 검색하고 공개 프로필을 여세요.",
+    "上部でイラストレーター名を検索し、公開プロフィールを開けます。"
+  ],
+  "Usa una aplicación de autenticación. Conserva tu acceso a Google o al correo y a esa aplicación; la recuperación de un factor perdido requiere el procedimiento del propietario.": [
+    "Use an authenticator app. Keep access to Google or email and the app. Recovering a lost factor requires the owner’s recovery procedure.",
+    "Utilisez une application d’authentification. Gardez l’accès à Google ou au courriel et à cette application. Un facteur perdu se récupère selon la procédure du propriétaire.",
+    "使用验证器应用。保留Google或邮箱及应用的访问权限。丢失验证因素后需遵循所有者恢复流程。",
+    "인증 앱을 사용하세요. Google 또는 이메일과 앱에 대한 접근을 유지하세요. 인증 수단 분실 시 소유자의 복구 절차가 필요합니다.",
+    "認証アプリを使い、Googleまたはメールとアプリへのアクセスを維持してください。認証手段を失った場合は所有者の復旧手順が必要です。"
+  ],
+  "Usa una imagen amplia para que la cabecera mantenga buena presencia visual.": [
+    "Use a wide image for a clear header.",
+    "Utilisez une image large pour l’en-tête.",
+    "使用宽幅图片以保持页眉美观。",
+    "넓은 이미지로 헤더를 꾸미세요.",
+    "ヘッダーには横幅の広い画像を使ってください。"
+  ],
+  "Vas a enviar a la papelera Cap {0}: {1}": [
+    "Move Chapter {0}: {1} to trash",
+    "Mettre le chapitre {0} : {1} à la corbeille",
+    "将第{0}章：{1}移至回收站",
+    "챕터 {0}: {1}을 휴지통으로",
+    "第{0}章：{1}をゴミ箱に移動"
+  ],
+  "Vas a enviar a la papelera el único capítulo: {0}": [
+    "Move the only chapter to trash: {0}",
+    "Mettre l’unique chapitre à la corbeille : {0}",
+    "将唯一章节移至回收站：{0}",
+    "유일한 챕터를 휴지통으로: {0}",
+    "唯一の章をゴミ箱に移動：{0}"
+  ],
+  "Vas a enviar a la papelera la ilustración": [
+    "Move this illustration to trash",
+    "Mettre cette illustration à la corbeille",
+    "将此插画移至回收站",
+    "이 일러스트를 휴지통으로",
+    "このイラストをゴミ箱に移動"
+  ],
+  "Última copia completa: {0}": [
+    "Last complete backup: {0}",
+    "Dernière sauvegarde complète : {0}",
+    "最近完整备份：{0}",
+    "마지막 전체 백업: {0}",
+    "最新の完全バックアップ：{0}"
+  ],
+  "▣ Cambiar imagen de fondo": [
+    "▣ Change background image",
+    "▣ Changer l’image de fond",
+    "▣ 更换背景图片",
+    "▣ 배경 이미지 변경",
+    "▣ 背景画像を変更"
+  ],
+  "◉ Cambiar imagen de usuario": [
+    "◉ Change avatar",
+    "◉ Changer l’avatar",
+    "◉ 更换头像",
+    "◉ 아바타 변경",
+    "◉ アバターを変更"
+  ],
+  "{0} piezas visibles ahora": [
+    "{0} pieces available now",
+    "{0} œuvres disponibles",
+    "现有{0}幅作品",
+    "현재 작품 {0}개",
+    "現在{0}件の作品"
+  ],
+  "{0} imagenes en la galeria": [
+    "{0} images in gallery",
+    "{0} images dans la galerie",
+    "画廊有{0}张图片",
+    "갤러리 이미지 {0}개",
+    "ギャラリーの画像{0}枚"
+  ],
+  "{0} ilustraciones en tu portafolio": [
+    "{0} illustrations in your portfolio",
+    "{0} illustrations dans votre portfolio",
+    "作品集有{0}幅插画",
+    "포트폴리오 일러스트 {0}개",
+    "ポートフォリオのイラスト{0}件"
+  ],
+  "{0} historias publicadas por {1}": [
+    "{0} stories published by {1}",
+    "{0} histoires publiées par {1}",
+    "{1}发布了{0}个故事",
+    "{1} 게시 이야기 {0}개",
+    "{1}の公開作品{0}件"
+  ],
+  "{0} historias en tu universo": [
+    "{0} stories in your universe",
+    "{0} histoires dans votre univers",
+    "你的创作世界中有{0}个故事",
+    "내 세계의 이야기 {0}개",
+    "あなたの世界の作品{0}件"
+  ],
+  "{0} historias en tu cuenta": [
+    "{0} stories in your account",
+    "{0} histoires dans votre compte",
+    "账户中有{0}个故事",
+    "내 계정의 이야기 {0}개",
+    "アカウントの作品{0}件"
+  ],
+  "{0} ha publicado {1} historias y cuenta con {2} seguidores dentro de Valoria.": [
+    "{0} has published {1} stories and has {2} followers in Valoria.",
+    "{0} a publié {1} histoires et a {2} abonnés sur Valoria.",
+    "{0}在Valoria发布了{1}个故事，有{2}位粉丝。",
+    "{0}님은 이야기 {1}개와 Valoria 팔로워 {2}명이 있습니다.",
+    "{0}はValoriaで{1}作品を公開し、{2}人のフォロワーがいます。"
+  ],
+  "{0} forma parte del universo de Valoria.": [
+    "{0} is part of the Valoria universe.",
+    "{0} fait partie de l’univers Valoria.",
+    "{0}是Valoria世界的一员。",
+    "{0}님은 Valoria의 일원입니다.",
+    "{0}はValoriaの一員です。"
+  ],
+  "{0} de 5": [
+    "{0} out of 5",
+    "{0} sur 5",
+    "{0}/5",
+    "5점 중 {0}",
+    "5点中{0}"
+  ],
+  "de {0} · {1} % de la meta": [
+    "of {0} · {1}% of goal",
+    "sur {0} · {1} % de l’objectif",
+    "目标{0} · 已完成{1}%",
+    "목표 {0} 중 · {1}%",
+    "目標{0}・{1}%"
+  ],
+  "de": [
+    "of",
+    "de",
+    "／",
+    "중",
+    "／"
+  ],
+  "en borrador": [
+    "in draft",
+    "en brouillon",
+    "草稿中",
+    "초안",
+    "下書き"
+  ],
+  "en vitrina": [
+    "on display",
+    "à découvrir",
+    "展示中",
+    "전시 중",
+    "展示中"
+  ],
+  "en {0}": [
+    "in {0}",
+    "dans {0}",
+    "在{0}",
+    "{0}에서",
+    "{0}で"
+  ],
+  "escritor: \"{0}\"": [
+    "writer: \"{0}\"",
+    "écrivain : « {0} »",
+    "作家：「{0}」",
+    "작가: \"{0}\"",
+    "作家：「{0}」"
+  ],
+  "etiqueta": [
+    "tag",
+    "étiquette",
+    "标签",
+    "태그",
+    "タグ"
+  ],
+  "ha publicado": [
+    "has published",
+    "a publié",
+    "已发布",
+    "게시함",
+    "公開済み"
+  ],
+  "historia o etiqueta: \"{0}\"": [
+    "story or tag: \"{0}\"",
+    "histoire ou étiquette : « {0} »",
+    "故事或标签：「{0}」",
+    "이야기 또는 태그: \"{0}\"",
+    "作品・タグ：「{0}」"
+  ],
+  "historia publicada": [
+    "published story",
+    "histoire publiée",
+    "公开故事",
+    "게시한 이야기",
+    "公開作品"
+  ],
+  "historias publicadas por": [
+    "stories published by",
+    "histoires publiées par",
+    "故事发布者",
+    "이야기 게시자",
+    "作品の作者"
+  ],
+  "historias y cuenta con": [
+    "stories and has",
+    "histoires et a",
+    "个故事，以及",
+    "이야기 및",
+    "作品と"
+  ],
+  "ilustraciones publicadas": [
+    "published illustrations",
+    "illustrations publiées",
+    "已公开插画",
+    "게시한 일러스트",
+    "公開イラスト"
+  ],
+  "ilustración publicada": [
+    "published illustration",
+    "illustration publiée",
+    "已公开插画",
+    "게시한 일러스트",
+    "公開イラスト"
+  ],
+  "lecturas": [
+    "reads",
+    "lectures",
+    "阅读",
+    "읽기",
+    "読書"
+  ],
+  "listas para explorar": [
+    "ready to explore",
+    "à explorer",
+    "可探索",
+    "탐색 가능",
+    "探索できる"
+  ],
+  "media de historias": [
+    "story average",
+    "moyenne des histoires",
+    "故事平均",
+    "이야기 평균",
+    "作品平均"
+  ],
+  "o crea tu cuenta con correo": [
+    "or sign up with email",
+    "ou inscrivez-vous par courriel",
+    "或用邮箱注册",
+    "또는 이메일로 가입",
+    "またはメールで登録"
+  ],
+  "oculta por moderación": [
+    "hidden by moderation",
+    "masquée par la modération",
+    "审核隐藏",
+    "관리자가 숨김",
+    "管理により非表示"
+  ],
+  "palabra": [
+    "word",
+    "mot",
+    "字词",
+    "단어",
+    "単語"
+  ],
+  "para descubrir": [
+    "to discover",
+    "à découvrir",
+    "可发现",
+    "발견하기",
+    "見つける"
+  ],
+  "perfiles en su circulo creativo": [
+    "profiles in their creative circle",
+    "profils dans son cercle créatif",
+    "创作圈中的账户",
+    "창작 모임 프로필",
+    "創作仲間のプロフィール"
+  ],
+  "perfiles en tu circulo creativo": [
+    "profiles in your creative circle",
+    "profils dans votre cercle créatif",
+    "你的创作圈账户",
+    "내 창작 모임 프로필",
+    "創作仲間のプロフィール"
+  ],
+  "personaje": [
+    "character",
+    "personnage",
+    "人物",
+    "등장인물",
+    "登場人物"
+  ],
+  "piezas en tu portafolio": [
+    "pieces in your portfolio",
+    "œuvres dans votre portfolio",
+    "作品集中的作品",
+    "포트폴리오 작품",
+    "ポートフォリオの作品"
+  ],
+  "piezas visuales publicadas por": [
+    "visual works published by",
+    "œuvres visuelles publiées par",
+    "视觉作品发布者",
+    "시각 작품 게시자",
+    "ビジュアル作品の作者"
+  ],
+  "por ilustracion": [
+    "per illustration",
+    "par illustration",
+    "每幅插画",
+    "일러스트당",
+    "イラストあたり"
+  ],
+  "publicadas y": [
+    "published and",
+    "publiées et",
+    "已发布及",
+    "게시됨 및",
+    "公開済みと"
+  ],
+  "publicados en": [
+    "published in",
+    "publiés dans",
+    "发布于",
+    "게시 위치",
+    "公開場所"
+  ],
+  "publicados y": [
+    "published and",
+    "publiés et",
+    "已发布及",
+    "게시됨 및",
+    "公開済みと"
+  ],
+  "seguidores dentro de Valoria.": [
+    "followers in Valoria.",
+    "abonnés sur Valoria.",
+    "Valoria粉丝。",
+    "Valoria 팔로워.",
+    "Valoriaのフォロワー。"
+  ],
+  "según publicación del autor": [
+    "as published by the author",
+    "selon la publication de l’auteur",
+    "按作者发布",
+    "작가 게시 기준",
+    "作者の公開に基づく"
+  ],
+  "y": [
+    "and",
+    "et",
+    "和",
+    "및",
+    "と"
+  ],
+  "· Copia del": [
+    "· Copy from",
+    "· Copie du",
+    "· 副本日期",
+    "· 저장 날짜",
+    "・保存日"
+  ],
+  "· Eliminado el": [
+    "· Deleted on",
+    "· Supprimé le",
+    "· 删除日期",
+    "· 삭제 날짜",
+    "・削除日"
+  ],
+  "· nueva": [
+    "· new",
+    "· nouvelle",
+    "· 新",
+    "· 신규",
+    "・新規"
+  ],
+  "· publicada": [
+    "· published",
+    "· publiée",
+    "· 已发布",
+    "· 게시됨",
+    "・公開済み"
+  ],
+  "B": [
+    "B",
+    "B",
+    "B",
+    "B",
+    "B"
+  ],
+  "C": [
+    "C",
+    "C",
+    "C",
+    "C",
+    "C"
+  ],
+  "I": [
+    "I",
+    "I",
+    "I",
+    "I",
+    "I"
+  ],
+  "L": [
+    "L",
+    "L",
+    "L",
+    "L",
+    "L"
+  ],
+  "U": [
+    "U",
+    "U",
+    "U",
+    "U",
+    "U"
+  ],
+  "V": [
+    "V",
+    "V",
+    "V",
+    "V",
+    "V"
+  ],
+  "Valoria": [
+    "Valoria",
+    "Valoria",
+    "Valoria",
+    "Valoria",
+    "Valoria"
+  ],
+  "Verdana": [
+    "Verdana",
+    "Verdana",
+    "Verdana",
+    "Verdana",
+    "Verdana"
+  ],
+  "https://...": [
+    "https://...",
+    "https://...",
+    "https://...",
+    "https://...",
+    "https://..."
+  ],
+  "f": [
+    "f",
+    "f",
+    "f",
+    "f",
+    "f"
+  ],
+  "p": [
+    "p",
+    "p",
+    "p",
+    "p",
+    "p"
+  ],
+  "px": [
+    "px",
+    "px",
+    "px",
+    "px",
+    "px"
+  ],
+  "t": [
+    "t",
+    "t",
+    "t",
+    "t",
+    "t"
+  ],
+  "x": [
+    "x",
+    "x",
+    "x",
+    "x",
+    "x"
+  ],
+  "© 2026 Valoria": [
+    "© 2026 Valoria",
+    "© 2026 Valoria",
+    "© 2026 Valoria",
+    "© 2026 Valoria",
+    "© 2026 Valoria"
+  ],
+  "Administradores": [
+    "Administrators",
+    "Administrateurs",
+    "管理员",
+    "관리자",
+    "管理者"
+  ],
+  "Ahora sigues a {0}.": [
+    "You now follow {0}.",
+    "Vous suivez maintenant {0}.",
+    "你已关注{0}。",
+    "이제 {0}님을 팔로우합니다.",
+    "{0}をフォローしました。"
+  ],
+  "Archivo preparado para descargar.": [
+    "File ready to download.",
+    "Fichier prêt à télécharger.",
+    "文件已准备下载。",
+    "다운로드 파일 준비 완료.",
+    "ダウンロードの準備ができました。"
+  ],
+  "Archivo preparado. Guárdalo y ábrelo en tu navegador para leer sin conexión.": [
+    "File ready. Save and open it in your browser to read offline.",
+    "Fichier prêt. Enregistrez-le et ouvrez-le pour lire hors connexion.",
+    "文件已就绪。保存后在浏览器打开即可离线阅读。",
+    "파일을 저장하고 브라우저로 열어 오프라인으로 읽으세요.",
+    "保存したファイルをブラウザーで開くとオフラインで読めます。"
+  ],
+  "Avatar cargado correctamente.": [
+    "Avatar uploaded.",
+    "Avatar téléversé.",
+    "头像已上传。",
+    "아바타 업로드 완료.",
+    "アバターをアップロードしました。"
+  ],
+  "Biblioteca actualizada.": [
+    "Library updated.",
+    "Bibliothèque mise à jour.",
+    "书架已更新。",
+    "서재 업데이트 완료.",
+    "ライブラリーを更新しました。"
+  ],
+  "Cambios guardados.": [
+    "Changes saved.",
+    "Modifications enregistrées.",
+    "更改已保存。",
+    "변경 사항 저장됨.",
+    "変更を保存しました。"
+  ],
+  "Capitulo actualizado.": [
+    "Chapter updated.",
+    "Chapitre mis à jour.",
+    "章节已更新。",
+    "챕터 업데이트 완료.",
+    "章を更新しました。"
+  ],
+  "Capitulo actualizado: {0}": [
+    "Chapter updated: {0}",
+    "Chapitre mis à jour : {0}",
+    "章节已更新：{0}",
+    "챕터 업데이트: {0}",
+    "章を更新：{0}"
+  ],
+  "Capitulo creado.": [
+    "Chapter created.",
+    "Chapitre créé.",
+    "章节已创建。",
+    "챕터 생성 완료.",
+    "章を作成しました。"
+  ],
+  "Capitulo creado: {0}": [
+    "Chapter created: {0}",
+    "Chapitre créé : {0}",
+    "章节已创建：{0}",
+    "챕터 생성: {0}",
+    "章を作成：{0}"
+  ],
+  "Capitulo eliminado.": [
+    "Chapter deleted.",
+    "Chapitre supprimé.",
+    "章节已删除。",
+    "챕터 삭제됨.",
+    "章を削除しました。"
+  ],
+  "Capitulo publicado.": [
+    "Chapter published.",
+    "Chapitre publié.",
+    "章节已发布。",
+    "챕터 게시됨.",
+    "章を公開しました。"
+  ],
+  "Comentario actualizado.": [
+    "Comment updated.",
+    "Commentaire mis à jour.",
+    "评论已更新。",
+    "댓글 업데이트 완료.",
+    "コメントを更新しました。"
+  ],
+  "Comentario eliminado del muro.": [
+    "Comment removed from wall.",
+    "Commentaire retiré du mur.",
+    "已从动态墙删除评论。",
+    "게시판 댓글 삭제됨.",
+    "掲示板のコメントを削除しました。"
+  ],
+  "Comentario eliminado.": [
+    "Comment deleted.",
+    "Commentaire supprimé.",
+    "评论已删除。",
+    "댓글 삭제됨.",
+    "コメントを削除しました。"
+  ],
+  "Comentario marcado para revision.": [
+    "Comment flagged for review.",
+    "Commentaire signalé pour révision.",
+    "评论已标记审核。",
+    "댓글 검토 요청됨.",
+    "コメントを確認対象にしました。"
+  ],
+  "Comentario publicado en el muro.": [
+    "Comment posted on wall.",
+    "Commentaire publié sur le mur.",
+    "评论已发布到动态墙。",
+    "게시판 댓글 게시됨.",
+    "掲示板にコメントしました。"
+  ],
+  "Comentario publicado.": [
+    "Comment posted.",
+    "Commentaire publié.",
+    "评论已发布。",
+    "댓글 게시됨.",
+    "コメントを投稿しました。"
+  ],
+  "Comentarios y respuestas": [
+    "Comments and replies",
+    "Commentaires et réponses",
+    "评论与回复",
+    "댓글 및 답글",
+    "コメントと返信"
+  ],
+  "Copia de texto guardada en este dispositivo. Encuéntrala en Sin conexión.": [
+    "Text saved on this device. Find it in Offline.",
+    "Texte enregistré sur cet appareil. Retrouvez-le dans Hors connexion.",
+    "文本已保存在此设备。在“离线阅读”中查看。",
+    "기기에 저장되었습니다. 오프라인 메뉴에서 찾으세요.",
+    "この端末に保存しました。「オフライン」で確認できます。"
+  ],
+  "Cronología": [
+    "Timeline",
+    "Chronologie",
+    "时间线",
+    "연대표",
+    "年表"
+  ],
+  "Créditos de la obra": [
+    "Work credits",
+    "Crédits de l’œuvre",
+    "作品署名",
+    "작품 크레딧",
+    "作品クレジット"
+  ],
+  "Cuenta bloqueada. Puedes gestionar el bloqueo en tu biblioteca.": [
+    "Account blocked. Manage blocks in your library.",
+    "Compte bloqué. Gérez les blocages dans votre bibliothèque.",
+    "账户已屏蔽。可在书架管理屏蔽。",
+    "계정 차단됨. 서재에서 차단을 관리하세요.",
+    "ブロックしました。ライブラリーで管理できます。"
+  ],
+  "Cuenta creada y sesion iniciada.": [
+    "Account created and logged in.",
+    "Compte créé et connecté.",
+    "账户已创建并登录。",
+    "계정 생성 및 로그인 완료.",
+    "アカウント作成・ログイン完了。"
+  ],
+  "Código confirmado. Actualizando la protección de tu acceso…": [
+    "Code confirmed. Updating account protection…",
+    "Code confirmé. Mise à jour de la protection…",
+    "代码已确认。正在更新账户保护…",
+    "코드 확인됨. 접근 보호 업데이트 중…",
+    "コード確認済み。保護を更新中…"
+  ],
+  "Datos de la historia guardados.": [
+    "Story details saved.",
+    "Détails de l’histoire enregistrés.",
+    "故事信息已保存。",
+    "이야기 정보 저장됨.",
+    "作品情報を保存しました。"
+  ],
+  "Debes iniciar sesion para realizar esta accion.": [
+    "Log in to perform this action.",
+    "Connectez-vous pour cette action.",
+    "此操作需要登录。",
+    "이 작업을 하려면 로그인하세요.",
+    "この操作にはログインが必要です。"
+  ],
+  "Editando comentario.": [
+    "Editing comment.",
+    "Modification du commentaire.",
+    "正在编辑评论。",
+    "댓글 수정 중.",
+    "コメント編集中。"
+  ],
+  "Escribe el contenido del capitulo.": [
+    "Enter chapter content.",
+    "Écrivez le contenu du chapitre.",
+    "请输入章节内容。",
+    "챕터 내용을 작성하세요.",
+    "章の内容を入力してください。"
+  ],
+  "Escribe el contenido del primer capitulo.": [
+    "Enter the first chapter’s content.",
+    "Écrivez le premier chapitre.",
+    "请输入第一章内容。",
+    "첫 챕터 내용을 작성하세요.",
+    "第1章の内容を入力してください。"
+  ],
+  "Estado actualizado.": [
+    "Status updated.",
+    "Statut mis à jour.",
+    "状态已更新。",
+    "상태 업데이트 완료.",
+    "状態を更新しました。"
+  ],
+  "Estado eliminado.": [
+    "Status deleted.",
+    "Statut supprimé.",
+    "动态已删除。",
+    "소식 삭제됨.",
+    "近況を削除しました。"
+  ],
+  "Estado publicado en el muro.": [
+    "Update posted on wall.",
+    "Statut publié sur le mur.",
+    "动态已发布。",
+    "게시판 소식 게시됨.",
+    "掲示板に近況を投稿しました。"
+  ],
+  "Estado publicado en tu muro.": [
+    "Update posted on your wall.",
+    "Statut publié sur votre mur.",
+    "动态已发布到你的动态墙。",
+    "내 게시판에 소식 게시됨.",
+    "自分の掲示板に近況を投稿しました。"
+  ],
+  "Estado y respaldos": [
+    "Status and backups",
+    "État et sauvegardes",
+    "状态与备份",
+    "상태 및 백업",
+    "状態とバックアップ"
+  ],
+  "Fanart publicado en la galeria de comunidad.": [
+    "Fan art published in community gallery.",
+    "Fan art publié dans la galerie communautaire.",
+    "同人画已发布到社区画廊。",
+    "커뮤니티 갤러리에 팬아트 게시됨.",
+    "コミュニティにファンアートを投稿しました。"
+  ],
+  "Fichas de personajes": [
+    "Character sheets",
+    "Fiches de personnages",
+    "人物档案",
+    "등장인물 설정",
+    "登場人物設定"
+  ],
+  "Fondo cargado correctamente.": [
+    "Background uploaded.",
+    "Fond téléversé.",
+    "背景已上传。",
+    "배경 업로드 완료.",
+    "背景をアップロードしました。"
+  ],
+  "Guardado en tu biblioteca.": [
+    "Saved to your library.",
+    "Enregistré dans votre bibliothèque.",
+    "已保存到书架。",
+    "서재에 저장됨.",
+    "ライブラリーに保存しました。"
+  ],
+  "Has dejado de seguir a {0}.": [
+    "You unfollowed {0}.",
+    "Vous ne suivez plus {0}.",
+    "已取消关注{0}。",
+    "{0}님 팔로우 취소됨.",
+    "{0}のフォローを解除しました。"
+  ],
+  "Historia creada: {0}": [
+    "Story created: {0}",
+    "Histoire créée : {0}",
+    "故事已创建：{0}",
+    "이야기 생성: {0}",
+    "作品を作成：{0}"
+  ],
+  "Historia creada: {0}. Se guardo tambien el Capitulo 1.": [
+    "Story created: {0}. Chapter 1 was also saved.",
+    "Histoire créée : {0}. Le chapitre 1 a aussi été enregistré.",
+    "故事已创建：{0}。第一章也已保存。",
+    "이야기 생성: {0}. 첫 챕터도 저장되었습니다.",
+    "作品を作成：{0}。第1章も保存しました。"
+  ],
+  "Historia eliminada.": [
+    "Story deleted.",
+    "Histoire supprimée.",
+    "故事已删除。",
+    "이야기 삭제됨.",
+    "作品を削除しました。"
+  ],
+  "Ilustracion actualizada.": [
+    "Illustration updated.",
+    "Illustration mise à jour.",
+    "插画已更新。",
+    "일러스트 업데이트 완료.",
+    "イラストを更新しました。"
+  ],
+  "Ilustracion actualizada: {0}": [
+    "Illustration updated: {0}",
+    "Illustration mise à jour : {0}",
+    "插画已更新：{0}",
+    "일러스트 업데이트: {0}",
+    "イラストを更新：{0}"
+  ],
+  "Ilustracion creada.": [
+    "Illustration created.",
+    "Illustration créée.",
+    "插画已创建。",
+    "일러스트 생성 완료.",
+    "イラストを作成しました。"
+  ],
+  "Ilustracion creada: {0}": [
+    "Illustration created: {0}",
+    "Illustration créée : {0}",
+    "插画已创建：{0}",
+    "일러스트 생성: {0}",
+    "イラストを作成：{0}"
+  ],
+  "Ilustracion eliminada.": [
+    "Illustration deleted.",
+    "Illustration supprimée.",
+    "插画已删除。",
+    "일러스트 삭제됨.",
+    "イラストを削除しました。"
+  ],
+  "Ilustracion publicada para este capitulo.": [
+    "Illustration published for this chapter.",
+    "Illustration publiée pour ce chapitre.",
+    "本章插画已发布。",
+    "챕터 일러스트 게시됨.",
+    "この章のイラストを公開しました。"
+  ],
+  "Introduce un enlace https://, http:// o mailto: válido.": [
+    "Enter a valid https://, http:// or mailto: link.",
+    "Entrez un lien https://, http:// ou mailto: valide.",
+    "请输入有效的https://、http://或mailto:链接。",
+    "올바른 https://, http:// 또는 mailto: 링크를 입력하세요.",
+    "有効なhttps://、http://、mailto:リンクを入力してください。"
+  ],
+  "Invitación enviada.": [
+    "Invitation sent.",
+    "Invitation envoyée.",
+    "邀请已发送。",
+    "초대 전송 완료.",
+    "招待を送信しました。"
+  ],
+  "La portada debe ser PNG, GIF o JPG y pesar menos de 2MB.": [
+    "Cover must be PNG, GIF or JPG under 2 MB.",
+    "La couverture doit être PNG, GIF ou JPG de moins de 2 Mo.",
+    "封面需为小于2MB的PNG、GIF或JPG。",
+    "표지는 2MB 미만 PNG, GIF, JPG여야 합니다.",
+    "表紙は2MB未満のPNG、GIF、JPGです。"
+  ],
+  "Las imagenes deben ser PNG, GIF, JPG o WEBP y pesar menos de 8MB.": [
+    "Images must be PNG, GIF, JPG or WEBP under 8 MB.",
+    "Images PNG, GIF, JPG ou WEBP de moins de 8 Mo.",
+    "图片需为小于8MB的PNG、GIF、JPG或WEBP。",
+    "이미지는 8MB 미만 PNG, GIF, JPG, WEBP여야 합니다.",
+    "画像は8MB未満のPNG、GIF、JPG、WEBPです。"
+  ],
+  "Meta de escritura": [
+    "Writing goal",
+    "Objectif d’écriture",
+    "写作目标",
+    "쓰기 목표",
+    "執筆目標"
+  ],
+  "Modo edicion activado para la publicacion.": [
+    "Editing enabled for this publication.",
+    "Mode édition activé.",
+    "此作品已进入编辑模式。",
+    "게시물 편집 활성화.",
+    "投稿の編集モードを有効にしました。"
+  ],
+  "No hay espacio para guardar esta copia.": [
+    "Not enough space to save this copy.",
+    "Espace insuffisant pour cette copie.",
+    "空间不足，无法保存副本。",
+    "저장 공간이 부족합니다.",
+    "保存する空き容量がありません。"
+  ],
+  "No recibirás nuevas notificaciones de esta cuenta. Puedes cambiarlo en tu biblioteca.": [
+    "Notifications from this account are muted. Change this in your library.",
+    "Notifications de ce compte masquées. Modifiez cela dans votre bibliothèque.",
+    "此账户通知已静音。可在书架更改。",
+    "계정 알림이 숨겨집니다. 서재에서 변경하세요.",
+    "このアカウントの通知を停止しました。ライブラリーで変更できます。"
+  ],
+  "No recibirás nuevas notificaciones de este hilo. Puedes cambiarlo en tu biblioteca.": [
+    "Notifications from this thread are muted. Change this in your library.",
+    "Notifications de ce fil masquées. Modifiez cela dans votre bibliothèque.",
+    "此讨论串通知已静音。可在书架更改。",
+    "스레드 알림이 숨겨집니다. 서재에서 변경하세요.",
+    "この会話の通知を停止しました。ライブラリーで変更できます。"
+  ],
+  "No se pudieron guardar las preferencias locales.": [
+    "Could not save local preferences.",
+    "Impossible d’enregistrer les préférences locales.",
+    "无法保存本地偏好。",
+    "로컬 설정을 저장하지 못했습니다.",
+    "ローカル設定を保存できませんでした。"
+  ],
+  "No se pudo cancelar la configuración. Reintenta con conexión.": [
+    "Could not cancel setup. Reconnect and try again.",
+    "Impossible d’annuler. Réessayez avec une connexion.",
+    "无法取消设置。连接后重试。",
+    "설정을 취소하지 못했습니다. 연결 후 다시 시도하세요.",
+    "設定を中止できませんでした。接続後に再試行してください。"
+  ],
+  "No se pudo confirmar el código. Usa el código actual de tu aplicación y reintenta.": [
+    "Could not verify the code. Use your app’s current code and try again.",
+    "Code non confirmé. Utilisez le code actuel de votre application et réessayez.",
+    "无法确认代码。请使用应用中的当前代码重试。",
+    "코드를 확인하지 못했습니다. 앱의 현재 코드로 다시 시도하세요.",
+    "コードを確認できませんでした。アプリの現在のコードで再試行してください。"
+  ],
+  "No se pudo consultar la protección de la cuenta.": [
+    "Could not check account protection.",
+    "Impossible de vérifier la protection du compte.",
+    "无法查询账户保护。",
+    "계정 보호를 확인하지 못했습니다.",
+    "アカウント保護を確認できませんでした。"
+  ],
+  "No se pudo guardar la copia local.": [
+    "Could not save the local copy.",
+    "Impossible d’enregistrer la copie locale.",
+    "无法保存本地副本。",
+    "로컬 저장본을 저장하지 못했습니다.",
+    "ローカルの保存版を保存できませんでした。"
+  ],
+  "No se pudo iniciar la configuración. Comprueba la conexión y reintenta.": [
+    "Could not start setup. Check your connection and try again.",
+    "Impossible de démarrer. Vérifiez la connexion et réessayez.",
+    "无法开始设置。检查连接后重试。",
+    "설정을 시작하지 못했습니다. 연결을 확인하고 다시 시도하세요.",
+    "設定を開始できませんでした。接続を確認して再試行してください。"
+  ],
+  "No se pudo preparar el archivo. Reintenta.": [
+    "Could not prepare the file. Try again.",
+    "Impossible de préparer le fichier. Réessayez.",
+    "无法准备文件。请重试。",
+    "파일을 준비하지 못했습니다. 다시 시도하세요.",
+    "ファイルを準備できませんでした。再試行してください。"
+  ],
+  "Notas de escenas": [
+    "Scene notes",
+    "Notes de scènes",
+    "场景笔记",
+    "장면 메모",
+    "場面のメモ"
+  ],
+  "Notificaciones silenciadas para este hilo.": [
+    "Thread notifications muted.",
+    "Notifications de ce fil masquées.",
+    "此讨论串通知已静音。",
+    "스레드 알림 숨김.",
+    "この会話の通知を停止しました。"
+  ],
+  "Nuevos capítulos de autores y obras que sigo": [
+    "New chapters from followed authors and works",
+    "Nouveaux chapitres des auteurs et œuvres suivis",
+    "关注的作者和作品的新章节",
+    "팔로우한 작가와 작품의 새 챕터",
+    "フォロー中の作者と作品の新しい章"
+  ],
+  "Perfil actualizado.": [
+    "Profile updated.",
+    "Profil mis à jour.",
+    "资料已更新。",
+    "프로필 업데이트 완료.",
+    "プロフィールを更新しました。"
+  ],
+  "Perfil marcado para revision.": [
+    "Profile flagged for review.",
+    "Profil signalé pour révision.",
+    "资料已标记审核。",
+    "프로필 검토 요청됨.",
+    "プロフィールを確認対象にしました。"
+  ],
+  "Permisos de uso": [
+    "Usage rights",
+    "Droits d’usage",
+    "使用权限",
+    "사용 권한",
+    "利用権"
+  ],
+  "Planificación privada guardada.": [
+    "Private plan saved.",
+    "Plan privé enregistré.",
+    "私人计划已保存。",
+    "비공개 계획 저장됨.",
+    "非公開の構想を保存しました。"
+  ],
+  "Preferencias guardadas": [
+    "Preferences saved",
+    "Préférences enregistrées",
+    "偏好已保存",
+    "설정 저장됨",
+    "設定を保存しました"
+  ],
+  "Preferencias guardadas solo en este dispositivo": [
+    "Preferences saved only on this device",
+    "Préférences enregistrées sur cet appareil uniquement",
+    "偏好仅保存在此设备",
+    "이 기기에만 설정 저장됨",
+    "設定はこの端末にのみ保存されます"
+  ],
+  "Preferencias guardadas.": [
+    "Preferences saved.",
+    "Préférences enregistrées.",
+    "偏好已保存。",
+    "설정 저장됨.",
+    "設定を保存しました。"
+  ],
+  "Protección confirmada para este acceso.": [
+    "Protection confirmed for this session.",
+    "Protection confirmée pour cette session.",
+    "此会话的保护已确认。",
+    "이 세션의 보호가 확인되었습니다.",
+    "このセッションの保護を確認しました。"
+  ],
+  "Publicacion actualizada.": [
+    "Publication updated.",
+    "Publication mise à jour.",
+    "作品已更新。",
+    "게시물 업데이트 완료.",
+    "投稿を更新しました。"
+  ],
+  "Publicacion eliminada del muro.": [
+    "Publication removed from wall.",
+    "Publication retirée du mur.",
+    "动态墙投稿已删除。",
+    "게시판 게시물 삭제됨.",
+    "掲示板の投稿を削除しました。"
+  ],
+  "Quitaste tu me gusta de esta ilustracion.": [
+    "You unliked this illustration.",
+    "J’aime retiré de cette illustration.",
+    "已取消此插画的点赞。",
+    "일러스트 좋아요 취소됨.",
+    "イラストのいいねを取り消しました。"
+  ],
+  "Reseña publicada.": [
+    "Review published.",
+    "Avis publié.",
+    "书评已发布。",
+    "리뷰 게시됨.",
+    "レビューを投稿しました。"
+  ],
+  "Respuesta publicada.": [
+    "Reply published.",
+    "Réponse publiée.",
+    "回复已发布。",
+    "답글 게시됨.",
+    "返信を投稿しました。"
+  ],
+  "Sesion iniciada.": [
+    "Logged in.",
+    "Connecté.",
+    "已登录。",
+    "로그인 완료.",
+    "ログインしました。"
+  ],
+  "Solo el creador puede publicar en su propio muro.": [
+    "Only the creator can post on their wall.",
+    "Seul le créateur publie sur son mur.",
+    "仅创作者可在自己的动态墙发布。",
+    "창작자만 자신의 게시판에 게시할 수 있습니다.",
+    "自分の掲示板には本人のみ投稿できます。"
+  ],
+  "Solo puedes subir imagenes para el perfil.": [
+    "Only profile images can be uploaded.",
+    "Seules les images de profil sont acceptées.",
+    "仅可上传个人资料图片。",
+    "프로필 이미지만 올릴 수 있습니다.",
+    "プロフィール画像のみアップロードできます。"
+  ],
+  "Te gusto esta ilustracion.": [
+    "You liked this illustration.",
+    "Vous aimez cette illustration.",
+    "你已点赞此插画。",
+    "일러스트 좋아요 표시됨.",
+    "このイラストにいいねしました。"
+  ],
+  "Te gusto esta reseña.": [
+    "You liked this review.",
+    "Vous aimez cet avis.",
+    "你已点赞此书评。",
+    "리뷰 좋아요 표시됨.",
+    "このレビューにいいねしました。"
+  ],
+  "Terminadas": [
+    "Completed",
+    "Terminées",
+    "已完结",
+    "완결",
+    "完結"
+  ],
+  "Tu sesion no tiene un perfil valido. Cierra sesion e inicia nuevamente.": [
+    "No valid profile for this session. Log out and log in again.",
+    "Profil de session invalide. Déconnectez-vous et reconnectez-vous.",
+    "会话没有有效资料。请退出后重新登录。",
+    "세션에 유효한 프로필이 없습니다. 다시 로그인하세요.",
+    "有効なプロフィールがありません。ログアウトして再ログインしてください。"
+  ],
+  "Usuario bloqueado en esta experiencia local.": [
+    "User blocked locally.",
+    "Utilisateur bloqué localement.",
+    "用户已在本地屏蔽。",
+    "사용자가 로컬에서 차단됨.",
+    "ユーザーをローカルでブロックしました。"
+  ],
+  "Usuario silenciado en esta experiencia local.": [
+    "User muted locally.",
+    "Utilisateur masqué localement.",
+    "用户已在本地静音。",
+    "사용자가 로컬에서 숨겨짐.",
+    "ユーザーをローカルでミュートしました。"
+  ],
+  "Ya habias marcado esta reseña.": [
+    "You already liked this review.",
+    "Vous avez déjà aimé cet avis.",
+    "你已点赞此书评。",
+    "이미 이 리뷰에 좋아요를 표시했습니다.",
+    "このレビューはいいね済みです。"
+  ],
+  "{0} La copia local se conserva.": [
+    "{0} The local copy is preserved.",
+    "{0} La copie locale est conservée.",
+    "{0} 本地副本仍保留。",
+    "{0} 로컬 저장본은 유지됩니다.",
+    "{0} ローカルの保存版は保持されています。"
+  ],
+  "Romance": [
+    "Romance",
+    "Romance",
+    "爱情",
+    "로맨스",
+    "恋愛"
+  ],
+  "Fantasia": [
+    "Fantasy",
+    "Fantastique",
+    "奇幻",
+    "판타지",
+    "ファンタジー"
+  ],
+  "Humor": [
+    "Humor",
+    "Humour",
+    "幽默",
+    "유머",
+    "ユーモア"
+  ],
+  "Ciencia ficcion": [
+    "Science fiction",
+    "Science-fiction",
+    "科幻",
+    "공상 과학",
+    "SF"
+  ],
+  "Fanfiction": [
+    "Fan fiction",
+    "Fanfiction",
+    "同人小说",
+    "팬픽",
+    "二次創作"
+  ],
+  "Relato corto": [
+    "Short story",
+    "Nouvelle",
+    "短篇",
+    "단편",
+    "短編"
+  ],
+  "Paranormal": [
+    "Paranormal",
+    "Paranormal",
+    "超自然",
+    "초자연",
+    "超常現象"
+  ],
+  "Terror": [
+    "Horror",
+    "Horreur",
+    "恐怖",
+    "공포",
+    "ホラー"
+  ],
+  "Misterio": [
+    "Mystery",
+    "Mystère",
+    "悬疑",
+    "미스터리",
+    "ミステリー"
+  ],
+  "LGBTQ+": [
+    "LGBTQ+",
+    "LGBTQ+",
+    "LGBTQ+",
+    "LGBTQ+",
+    "LGBTQ+"
+  ],
+  "Ficcion juvenil": [
+    "Teen fiction",
+    "Fiction jeunesse",
+    "青少年小说",
+    "청소년 소설",
+    "青春小説"
+  ],
+  "Thriller": [
+    "Thriller",
+    "Thriller",
+    "惊悚",
+    "스릴러",
+    "スリラー"
+  ],
+  "Aventura": [
+    "Adventure",
+    "Aventure",
+    "冒险",
+    "모험",
+    "冒険"
+  ],
+  "Historia real": [
+    "True story",
+    "Histoire vraie",
+    "真实故事",
+    "실화",
+    "実話"
+  ],
+  "Retrato": [
+    "Portrait",
+    "Portrait",
+    "肖像",
+    "초상화",
+    "肖像"
+  ],
+  "Concept art": [
+    "Concept art",
+    "Art conceptuel",
+    "概念艺术",
+    "콘셉트 아트",
+    "コンセプトアート"
+  ],
+  "Fanart": [
+    "Fan art",
+    "Fan art",
+    "同人画",
+    "팬아트",
+    "ファンアート"
+  ],
+  "Paisaje": [
+    "Landscape",
+    "Paysage",
+    "风景",
+    "풍경",
+    "風景"
+  ],
+  "Portadas": [
+    "Covers",
+    "Couvertures",
+    "封面",
+    "표지",
+    "表紙"
+  ],
+  "Comic": [
+    "Comic",
+    "Bande dessinée",
+    "漫画",
+    "만화",
+    "コミック"
+  ],
+  "Pixel art": [
+    "Pixel art",
+    "Pixel art",
+    "像素艺术",
+    "픽셀 아트",
+    "ピクセルアート"
+  ],
+  "Las mejores selecciones para ti": [
+    "The best picks for you",
+    "Les meilleures sélections pour vous",
+    "为你精选",
+    "나를 위한 추천",
+    "あなたへのおすすめ"
+  ],
+  "Ficcion romantica, fantasia y drama serial para perderte por horas.": [
+    "Romance, fantasy and serial drama to get lost in.",
+    "Romance, fantastique et séries pour vous évader.",
+    "沉浸于爱情、奇幻与连载剧情。",
+    "로맨스, 판타지, 연재 드라마에 빠져보세요.",
+    "恋愛、ファンタジー、連載ドラマに浸りましょう。"
+  ],
+  "Historias para quedarse despierto": [
+    "Stories to keep you awake",
+    "Histoires pour rester éveillé",
+    "让你熬夜的故事",
+    "잠 못 이루게 하는 이야기",
+    "眠れなくなる物語"
+  ],
+  "Series largas con cliffhangers, pactos rotos y secretos familiares.": [
+    "Long series with cliffhangers, broken promises and family secrets.",
+    "Longues séries, suspense, promesses brisées et secrets de famille.",
+    "长篇连载，悬念、破碎承诺与家庭秘密。",
+    "긴 연재의 반전, 깨진 약속, 가족의 비밀.",
+    "長い連載、緊迫の展開、破られた約束、家族の秘密。"
+  ],
+  "Creemos que las disfrutaras": [
+    "We think you’ll enjoy these",
+    "Nous pensons que vous les aimerez",
+    "你可能会喜欢",
+    "마음에 들 만한 이야기",
+    "きっと楽しめる作品"
+  ],
+  "Lecturas suaves, intensas y muy faciles de devorar desde el primer capitulo.": [
+    "Gentle and intense reads that captivate from the first chapter.",
+    "Lectures douces ou intenses, captivantes dès le premier chapitre.",
+    "温柔或热烈的故事，第一章即令人着迷。",
+    "첫 챕터부터 빠져드는 부드럽고 강렬한 이야기.",
+    "第1章から惹き込まれる、優しく情熱的な物語。"
+  ],
+  "Gestionar perfiles públicos": [
+    "Manage public profiles",
+    "Gérer les profils publics",
+    "管理公开资料",
+    "공개 프로필 관리",
+    "公開プロフィールを管理"
+  ],
+  "Editar avisos y normas": [
+    "Edit notices and rules",
+    "Modifier avis et règles",
+    "编辑公告与规则",
+    "공지 및 규칙 수정",
+    "お知らせとルールを編集"
+  ],
+  "Revisar denuncias": [
+    "Review reports",
+    "Examiner les signalements",
+    "审核举报",
+    "신고 검토",
+    "報告を確認"
+  ],
+  "Teen": [
+    "Teen",
+    "Adolescents",
+    "青少年",
+    "청소년",
+    "ティーン"
+  ],
+  "Separador de escena": [
+    "Scene break",
+    "Séparation de scène",
+    "场景分隔",
+    "장면 구분",
+    "場面区切り"
+  ],
+  "Tachado": [
+    "Strikethrough",
+    "Barré",
+    "删除线",
+    "취소선",
+    "取り消し線"
+  ],
+  "Alinear a la izquierda": [
+    "Align left",
+    "Aligner à gauche",
+    "左对齐",
+    "왼쪽 정렬",
+    "左揃え"
+  ],
+  "Izquierda": [
+    "Left",
+    "Gauche",
+    "左",
+    "왼쪽",
+    "左"
+  ],
+  "Centrar texto": [
+    "Center text",
+    "Centrer le texte",
+    "文本居中",
+    "가운데 정렬",
+    "中央揃え"
+  ],
+  "Centrar": [
+    "Center",
+    "Centrer",
+    "居中",
+    "가운데",
+    "中央"
+  ],
+  "Alinear a la derecha": [
+    "Align right",
+    "Aligner à droite",
+    "右对齐",
+    "오른쪽 정렬",
+    "右揃え"
+  ],
+  "Derecha": [
+    "Right",
+    "Droite",
+    "右",
+    "오른쪽",
+    "右"
+  ],
+  "Lista con viñetas": [
+    "Bulleted list",
+    "Liste à puces",
+    "项目列表",
+    "글머리 목록",
+    "箇条書き"
+  ],
+  "Viñetas": [
+    "Bullets",
+    "Puces",
+    "项目符号",
+    "글머리",
+    "箇条書き"
+  ],
+  "Numeración": [
+    "Numbering",
+    "Numérotation",
+    "编号",
+    "번호 매기기",
+    "番号"
+  ],
+  "Insertar enlace": [
+    "Insert link",
+    "Insérer un lien",
+    "插入链接",
+    "링크 삽입",
+    "リンクを挿入"
+  ],
+  "Insertar emoji": [
+    "Insert emoji",
+    "Insérer un émoji",
+    "插入表情",
+    "이모지 삽입",
+    "絵文字を挿入"
+  ],
+  "Insertar bloque de código": [
+    "Insert code block",
+    "Insérer un bloc de code",
+    "插入代码块",
+    "코드 블록 삽입",
+    "コードブロックを挿入"
+  ],
+  "Quitar formato": [
+    "Clear formatting",
+    "Effacer le format",
+    "清除格式",
+    "서식 제거",
+    "書式をクリア"
+  ],
+  "Formato de {0}": [
+    "Formatting for {0}",
+    "Format de {0}",
+    "{0}的格式",
+    "{0} 서식",
+    "{0}の書式"
+  ],
+  "Cargando editor…": [
+    "Loading editor…",
+    "Chargement de l’éditeur…",
+    "正在加载编辑器…",
+    "편집기 불러오는 중…",
+    "エディターを読み込み中…"
+  ],
+  "Pendiente": [
+    "Pending",
+    "En attente",
+    "待处理",
+    "대기 중",
+    "保留中"
+  ],
+  "Revisada": [
+    "Reviewed",
+    "Révisée",
+    "已审核",
+    "검토됨",
+    "確認済み"
+  ],
+  "Descartada": [
+    "Dismissed",
+    "Rejetée",
+    "已驳回",
+    "기각됨",
+    "却下"
+  ],
+  "Todo": [
+    "All",
+    "Tout",
+    "全部",
+    "전체",
+    "すべて"
+  ],
+  "Resultados destacados": [
+    "Featured results",
+    "Résultats à la une",
+    "精选结果",
+    "추천 결과",
+    "注目の検索結果"
+  ],
+  "Historias que coinciden con tu filtro actual.": [
+    "Stories matching your current filter.",
+    "Histoires correspondant au filtre.",
+    "符合当前筛选的故事。",
+    "현재 조건에 맞는 이야기.",
+    "現在の条件に一致する作品。"
+  ],
+  "Mas historias relacionadas": [
+    "More related stories",
+    "Autres histoires liées",
+    "更多相关故事",
+    "더 많은 관련 이야기",
+    "関連作品をもっと見る"
+  ],
+  "Sigue explorando resultados dentro de la misma busqueda.": [
+    "Explore more results from this search.",
+    "Explorez les autres résultats de cette recherche.",
+    "继续探索此搜索的结果。",
+    "같은 검색에서 결과를 더 살펴보세요.",
+    "この検索の他の結果を探索しましょう。"
+  ],
+  "Sigue descubriendo": [
+    "Keep discovering",
+    "Continuez à découvrir",
+    "继续发现",
+    "계속 발견하기",
+    "さらに見つける"
+  ],
+  "Una ultima tanda de historias filtradas para continuar leyendo.": [
+    "More filtered stories to keep reading.",
+    "Encore des histoires filtrées à lire.",
+    "更多符合筛选的故事供继续阅读。",
+    "계속 읽을 수 있는 더 많은 이야기.",
+    "続きを読むための検索作品。"
+  ],
+  "Galeria destacada para ti": [
+    "Featured gallery for you",
+    "Galerie à la une pour vous",
+    "为你精选的画廊",
+    "나를 위한 추천 갤러리",
+    "おすすめのギャラリー"
+  ],
+  "Obras visuales que coinciden con tu filtro actual.": [
+    "Visual works matching your current filter.",
+    "Œuvres visuelles correspondant au filtre.",
+    "符合当前筛选的视觉作品。",
+    "현재 조건에 맞는 시각 작품.",
+    "現在の条件に一致するビジュアル作品。"
+  ],
+  "Piezas visuales para descubrir autores, estilos y atmosferas.": [
+    "Discover artists, styles and atmospheres through visual works.",
+    "Découvrez artistes, styles et ambiances à travers leurs œuvres.",
+    "通过视觉作品发现作者、风格与氛围。",
+    "시각 작품으로 작가, 스타일, 분위기를 발견하세요.",
+    "ビジュアル作品から作者、スタイル、雰囲気を発見。"
+  ],
+  "Mas ilustraciones relacionadas": [
+    "More related illustrations",
+    "Autres illustrations liées",
+    "更多相关插画",
+    "더 많은 관련 일러스트",
+    "関連イラストをもっと見る"
+  ],
+  "Obras para mirar con calma": [
+    "Works to enjoy slowly",
+    "Œuvres à admirer calmement",
+    "值得细看的作品",
+    "천천히 감상할 작품",
+    "ゆっくり楽しむ作品"
+  ],
+  "Sigue explorando obras dentro de la misma busqueda.": [
+    "Explore more works from this search.",
+    "Explorez d’autres œuvres de cette recherche.",
+    "继续探索此搜索中的作品。",
+    "같은 검색의 작품을 더 살펴보세요.",
+    "この検索の作品をさらに探索。"
+  ],
+  "Fanart, concept art y piezas visuales para acompañar la lectura.": [
+    "Fan art, concept art and visual works to accompany reading.",
+    "Fan art, art conceptuel et œuvres pour accompagner la lecture.",
+    "同人画、概念艺术与伴随阅读的视觉作品。",
+    "독서와 함께하는 팬아트, 콘셉트 아트 및 시각 작품.",
+    "読書と楽しむファンアート、コンセプトアート、ビジュアル作品。"
+  ],
+  "Copia recuperada de este dispositivo": [
+    "Copy restored from this device",
+    "Copie restaurée depuis cet appareil",
+    "已从此设备恢复副本",
+    "이 기기에서 저장본 복원됨",
+    "この端末の保存版を復元"
+  ],
+  "Borrador recuperado de tu cuenta": [
+    "Draft restored from your account",
+    "Brouillon restauré depuis votre compte",
+    "已从账户恢复草稿",
+    "계정에서 초안 복원됨",
+    "アカウントの下書きを復元"
+  ],
+  "Guardado en este dispositivo · sincronización pendiente": [
+    "Saved on this device · sync pending",
+    "Enregistré sur cet appareil · synchronisation en attente",
+    "已保存在此设备 · 等待同步",
+    "기기에 저장됨 · 동기화 대기",
+    "端末に保存済み・同期待ち"
+  ],
+  "Guardado en este dispositivo": [
+    "Saved on this device",
+    "Enregistré sur cet appareil",
+    "已保存在此设备",
+    "이 기기에 저장됨",
+    "この端末に保存済み"
+  ],
+  "No se pudo guardar la copia local. Guarda antes de salir.": [
+    "Local copy could not be saved. Save before leaving.",
+    "Copie locale non enregistrée. Enregistrez avant de quitter.",
+    "无法保存本地副本。离开前请保存。",
+    "로컬 저장 실패. 나가기 전에 저장하세요.",
+    "ローカル保存ができませんでした。終了前に保存してください。"
+  ],
+  "Sin conexión · guardado en este dispositivo": [
+    "Offline · saved on this device",
+    "Hors connexion · enregistré sur cet appareil",
+    "离线 · 已保存在此设备",
+    "오프라인 · 기기에 저장됨",
+    "オフライン・端末に保存済み"
+  ],
+  "Guardando en tu cuenta…": [
+    "Saving to your account…",
+    "Enregistrement dans votre compte…",
+    "正在保存到账户…",
+    "계정에 저장 중…",
+    "アカウントに保存中…"
+  ],
+  "Borrador guardado en tu cuenta": [
+    "Draft saved to your account",
+    "Brouillon enregistré dans votre compte",
+    "草稿已保存到账户",
+    "계정에 초안 저장됨",
+    "アカウントに下書きを保存済み"
+  ],
+  "Sin sincronizar: tu copia local se conserva": [
+    "Not synced: your local copy is preserved",
+    "Non synchronisé : copie locale conservée",
+    "未同步：本地副本仍保留",
+    "동기화 안 됨: 로컬 저장본 유지",
+    "未同期：ローカルの保存版は保持"
+  ],
+  "No se pudo guardar. Conserva el contenido y reintenta antes de salir.": [
+    "Could not save. Keep the content and retry before leaving.",
+    "Enregistrement impossible. Gardez le contenu et réessayez avant de quitter.",
+    "无法保存。保留内容并在离开前重试。",
+    "저장 실패. 내용을 보관하고 나가기 전에 다시 시도하세요.",
+    "保存できませんでした。内容を保持し、終了前に再試行してください。"
+  ],
+  "Como publico mi primera historia en Valoria?": [
+    "How do I publish my first story in Valoria?",
+    "Comment publier ma première histoire sur Valoria ?",
+    "如何在Valoria发布第一个故事？",
+    "Valoria에 첫 이야기를 어떻게 게시하나요?",
+    "Valoriaで最初の作品を公開するには？"
+  ],
+  "Crea una cuenta, entra al Panel de creador y usa el boton Crear historia para abrir el formulario editorial.": [
+    "Create an account, open Creator studio and choose Create story.",
+    "Créez un compte, ouvrez l’espace créateur et choisissez Créer une histoire.",
+    "创建账户，进入创作中心并选择创建故事。",
+    "계정을 만들고 창작 스튜디오에서 이야기 만들기를 선택하세요.",
+    "アカウントを作成し、クリエイター管理から作品作成を選びます。"
+  ],
+  "Puedo dejar capitulos en borrador antes de publicarlos?": [
+    "Can I save chapters as drafts before publishing?",
+    "Puis-je garder des chapitres en brouillon ?",
+    "发布前可以将章节保存为草稿吗？",
+    "게시 전 챕터를 초안으로 저장할 수 있나요?",
+    "公開前に章を下書きにできますか？"
+  ],
+  "Si. Los capitulos pueden guardarse como borrador y publicarse despues desde la biblioteca del creador.": [
+    "Yes. Save chapters as drafts and publish later from your studio.",
+    "Oui. Enregistrez les chapitres en brouillon et publiez-les plus tard.",
+    "可以。章节可保存为草稿，以后从创作中心发布。",
+    "네. 초안으로 저장하고 나중에 스튜디오에서 게시할 수 있습니다.",
+    "はい。下書きで保存し、後で管理画面から公開できます。"
+  ],
+  "Las reseñas cambian segun el capitulo que estoy leyendo?": [
+    "Are reviews specific to the chapter I am reading?",
+    "Les avis dépendent-ils du chapitre lu ?",
+    "书评是否针对正在阅读的章节？",
+    "리뷰는 읽고 있는 챕터에 따라 다른가요?",
+    "レビューは読んでいる章ごとですか？"
+  ],
+  "Si. Cada capitulo mantiene sus propias reseñas, respuestas y me gusta de forma independiente.": [
+    "Yes. Each chapter has separate reviews, replies and likes.",
+    "Oui. Chaque chapitre possède ses avis, réponses et J’aime.",
+    "是的。每章的书评、回复与点赞独立。",
+    "네. 챕터별 리뷰, 답글, 좋아요가 별도로 저장됩니다.",
+    "はい。レビュー、返信、いいねは各章で独立しています。"
+  ],
+  "Como agrego ilustraciones a un capitulo?": [
+    "How do I add illustrations to a chapter?",
+    "Comment illustrer un chapitre ?",
+    "如何为章节添加插画？",
+    "챕터에 일러스트를 어떻게 추가하나요?",
+    "章にイラストを追加するには？"
+  ],
+  "Desde el formulario de capitulo puedes subir una imagen del creador y luego los lectores pueden sumar ilustraciones de comunidad.": [
+    "Upload a creator image in the chapter form. Readers can then add community illustrations.",
+    "Ajoutez une image dans le formulaire du chapitre. Les lecteurs peuvent ensuite contribuer.",
+    "可在章节表单上传作者图片，读者之后可添加社区插画。",
+    "챕터 양식에서 작가 이미지를 올리면 독자도 커뮤니티 일러스트를 추가할 수 있습니다.",
+    "章のフォームで作者の画像をアップロードし、読者もコミュニティイラストを追加できます。"
+  ],
+  "Puedo editar mi perfil y mis imagenes?": [
+    "Can I edit my profile and images?",
+    "Puis-je modifier mon profil et mes images ?",
+    "可以编辑个人资料和图片吗？",
+    "프로필과 이미지를 수정할 수 있나요?",
+    "プロフィールと画像は変更できますか？"
+  ],
+  "Si. En Mi perfil puedes abrir Edita tu perfil para cambiar nombre visible, descripcion, avatar y portada.": [
+    "Yes. Open Edit profile in My profile to change your name, bio, avatar and cover.",
+    "Oui. Dans Mon profil, modifiez le nom, la bio, l’avatar et la couverture.",
+    "可以。在我的资料中编辑名称、简介、头像和背景。",
+    "네. 내 프로필에서 이름, 소개, 아바타, 표지를 변경하세요.",
+    "はい。マイプロフィールから名前、紹介文、アバター、表紙を変更できます。"
+  ],
+  "Que pasa si sigo a un escritor?": [
+    "What happens when I follow a writer?",
+    "Que se passe-t-il si je suis un écrivain ?",
+    "关注作家后会怎样？",
+    "작가를 팔로우하면 어떻게 되나요?",
+    "作家をフォローするとどうなりますか？"
+  ],
+  "Su perfil pasa a tu seccion Siguiendo y el contador de seguidores del creador se actualiza en su vista publica.": [
+    "Their profile appears in Following and their public follower count updates.",
+    "Son profil rejoint vos abonnements et son compteur public est mis à jour.",
+    "其资料出现在关注列表，公开粉丝数量会更新。",
+    "팔로잉 목록에 표시되고 공개 팔로워 수가 업데이트됩니다.",
+    "フォロー中に表示され、公開フォロワー数が更新されます。"
+  ],
+  "Necesito iniciar sesion para comentar o seguir?": [
+    "Do I need to log in to comment or follow?",
+    "Faut-il se connecter pour commenter ou suivre ?",
+    "评论或关注需要登录吗？",
+    "댓글이나 팔로우에 로그인이 필요한가요?",
+    "コメントやフォローにはログインが必要ですか？"
+  ],
+  "Si. Sin sesion puedes explorar perfiles e historias, pero para interactuar debes ingresar a tu cuenta.": [
+    "Yes. You can explore without logging in, but interaction needs an account.",
+    "Oui. Vous pouvez explorer sans connexion, mais il faut un compte pour interagir.",
+    "是的。无需登录可浏览资料和故事，但互动需要登录。",
+    "네. 탐색은 가능하지만 소통하려면 로그인해야 합니다.",
+    "はい。閲覧はできますが、交流にはログインが必要です。"
+  ],
+  "El modo libro y el modo tradicional guardan el mismo contenido?": [
+    "Do book mode and traditional mode use the same content?",
+    "Les deux modes de lecture ont-ils le même contenu ?",
+    "书籍模式和传统模式内容相同吗？",
+    "책 모드와 일반 모드의 내용이 같나요?",
+    "本形式と通常形式の内容は同じですか？"
+  ],
+  "Si. Son dos formatos de lectura distintos sobre el mismo capitulo publicado.": [
+    "Yes. They are two layouts for the same published chapter.",
+    "Oui. Ce sont deux formats du même chapitre publié.",
+    "是的。两种布局显示同一公开章节。",
+    "네. 같은 공개 챕터의 두 가지 읽기 형식입니다.",
+    "はい。同じ公開章を異なる形式で表示します。"
+  ],
+  "Como encuentro escritores dentro de la plataforma?": [
+    "How do I find writers?",
+    "Comment trouver des écrivains ?",
+    "如何查找作家？",
+    "작가를 어떻게 찾나요?",
+    "作家を探すには？"
+  ],
+  "Usa el buscador superior y el filtro Escritores. También puedes abrir un perfil desde sus obras.": [
+    "Use the top search and Writers filter, or open profiles from their works.",
+    "Utilisez la recherche et le filtre Écrivains, ou ouvrez un profil depuis ses œuvres.",
+    "使用顶部搜索及作家筛选，或从其作品打开资料。",
+    "상단 검색과 작가 필터를 사용하거나 작품에서 프로필을 여세요.",
+    "上部の検索と作家フィルター、または作品からプロフィールを開きます。"
+  ],
+  "Valoria guarda mis lecturas y valoraciones?": [
+    "Does Valoria save my reading and ratings?",
+    "Valoria conserve-t-il mes lectures et avis ?",
+    "Valoria保存阅读和评价吗？",
+    "Valoria가 독서와 평가를 저장하나요?",
+    "Valoriaは読書と評価を保存しますか？"
+  ],
+  "Si. Las lecturas, reseñas, likes y seguimiento quedan ligados a la base conectada de la plataforma.": [
+    "Yes. Reading, reviews, likes and follows are stored in the connected database.",
+    "Oui. Lectures, avis, J’aime et abonnements sont enregistrés dans la base connectée.",
+    "是的。阅读、书评、点赞和关注保存在关联数据库。",
+    "네. 읽기, 리뷰, 좋아요, 팔로우가 연결된 데이터베이스에 저장됩니다.",
+    "はい。読書、レビュー、いいね、フォローは接続先のデータベースに保存されます。"
+  ],
+  "Español": [
+    "Spanish",
+    "Espagnol",
+    "西班牙语",
+    "스페인어",
+    "スペイン語"
+  ],
+  "Inglés": [
+    "English",
+    "Anglais",
+    "英语",
+    "영어",
+    "英語"
+  ],
+  "Portugués": [
+    "Portuguese",
+    "Portugais",
+    "葡萄牙语",
+    "포르투갈어",
+    "ポルトガル語"
+  ],
+  "Francés": [
+    "French",
+    "Français",
+    "法语",
+    "프랑스어",
+    "フランス語"
+  ],
+  "Italiano": [
+    "Italian",
+    "Italien",
+    "意大利语",
+    "이탈리아어",
+    "イタリア語"
+  ],
+  "Alemán": [
+    "German",
+    "Allemand",
+    "德语",
+    "독일어",
+    "ドイツ語"
+  ],
+  "Chino": [
+    "Chinese",
+    "Chinois",
+    "中文",
+    "중국어",
+    "中国語"
+  ],
+  "Coreano": [
+    "Korean",
+    "Coréen",
+    "韩语",
+    "한국어",
+    "韓国語"
+  ],
+  "Japonés": [
+    "Japanese",
+    "Japonais",
+    "日语",
+    "일본어",
+    "日本語"
+  ],
+  "Hindi": [
+    "Hindi",
+    "Hindi",
+    "印地语",
+    "힌디어",
+    "ヒンディー語"
+  ],
+  "Árabe": [
+    "Arabic",
+    "Arabe",
+    "阿拉伯语",
+    "아랍어",
+    "アラビア語"
+  ],
+  "Bengalí": [
+    "Bengali",
+    "Bengali",
+    "孟加拉语",
+    "벵골어",
+    "ベンガル語"
+  ],
+  "Ruso": [
+    "Russian",
+    "Russe",
+    "俄语",
+    "러시아어",
+    "ロシア語"
+  ],
+  "Urdu": [
+    "Urdu",
+    "Ourdou",
+    "乌尔都语",
+    "우르두어",
+    "ウルドゥー語"
+  ],
+  "Indonesio": [
+    "Indonesian",
+    "Indonésien",
+    "印度尼西亚语",
+    "인도네시아어",
+    "インドネシア語"
+  ],
+  "Suajili": [
+    "Swahili",
+    "Swahili",
+    "斯瓦希里语",
+    "스와힐리어",
+    "スワヒリ語"
+  ],
+  "Turco": [
+    "Turkish",
+    "Turc",
+    "土耳其语",
+    "터키어",
+    "トルコ語"
+  ],
+  "Vietnamita": [
+    "Vietnamese",
+    "Vietnamien",
+    "越南语",
+    "베트남어",
+    "ベトナム語"
+  ],
+  "Tamil": [
+    "Tamil",
+    "Tamoul",
+    "泰米尔语",
+    "타밀어",
+    "タミル語"
+  ],
+  "Telugu": [
+    "Telugu",
+    "Télougou",
+    "泰卢固语",
+    "텔루구어",
+    "テルグ語"
+  ],
+  "resultado": [
+    "result",
+    "résultat",
+    "个结果",
+    "결과",
+    "件の結果"
+  ],
+  "resultados": [
+    "results",
+    "résultats",
+    "个结果",
+    "결과",
+    "件の結果"
+  ],
+  "en los datos disponibles": [
+    "in available data",
+    "dans les données disponibles",
+    "在可用数据中",
+    "사용 가능한 데이터에서",
+    "利用可能なデータ内"
+  ],
+  "{0} lecturas": [
+    "{0} reads",
+    "{0} lectures",
+    "{0}次阅读",
+    "읽기 {0}회",
+    "読書{0}回"
+  ],
+  "{0} vistas": [
+    "{0} views",
+    "{0} vues",
+    "{0}次浏览",
+    "조회 {0}회",
+    "閲覧{0}回"
+  ]
+}

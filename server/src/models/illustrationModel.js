@@ -39,6 +39,8 @@ function mapIllustration(
     author: post.author_name || "Ilustrador de Valoria",
     authorAvatarUrl: post.author_avatar_url || "",
     status: post.status,
+    moderation_hidden_at: post.moderation_hidden_at,
+    deleted_at: post.deleted_at,
     visibility: post.visibility,
     isFeatured: Boolean(post.is_featured),
     matureContent: Boolean(post.mature_content || false),
@@ -51,7 +53,8 @@ function mapIllustration(
     publishedAt: post.published_at || post.created_at || null,
     categories,
     tags,
-    images
+    images,
+    collectionName:post.collection_name||"",credits:post.credits||"",usageRights:post.usage_rights||"Todos los derechos reservados"
   };
 }
 
@@ -579,8 +582,8 @@ export class IllustrationModel {
 
     const { data: posts, error } = await supabaseAdmin
       .from("illustration_posts")
-      .select("*")
-      .eq("status", "published")
+      .select("*").is("deleted_at", null)
+      .eq("status", "published").is("moderation_hidden_at", null)
       .eq("visibility", "public")
       .order("is_featured", { ascending: false })
       .order("created_at", { ascending: false });
@@ -627,7 +630,7 @@ export class IllustrationModel {
     if (looksLikeUuid(identifier)) {
       const byId = await supabaseAdmin
         .from("illustration_posts")
-        .select("*")
+        .select("*").is("deleted_at", null)
         .eq("id", identifier)
         .maybeSingle();
 
@@ -641,7 +644,7 @@ export class IllustrationModel {
     if (!basePost) {
       const bySlug = await supabaseAdmin
         .from("illustration_posts")
-        .select("*")
+        .select("*").is("deleted_at", null)
         .eq("slug", identifier)
         .maybeSingle();
 
@@ -683,7 +686,7 @@ export class IllustrationModel {
 
     const { data, error } = await supabaseAdmin
       .from("illustration_posts")
-      .select("*")
+      .select("*").is("deleted_at", null)
       .eq("author_id", authorId)
       .order("created_at", { ascending: false });
 
@@ -734,7 +737,8 @@ export class IllustrationModel {
       cover_url: coverUrl,
       status: input.status || "draft",
       visibility: input.visibility || "public",
-      is_featured: Boolean(input.isFeatured)
+      is_featured: Boolean(input.isFeatured),
+      collection_name: input.collectionName||"", credits:input.credits||"", usage_rights:input.usageRights||"Todos los derechos reservados"
     };
 
     const { data, error } = await supabaseAdmin
@@ -763,6 +767,7 @@ export class IllustrationModel {
     }
 
     const payload = {};
+    for(const [key,column] of [["collectionName","collection_name"],["credits","credits"],["usageRights","usage_rights"]])if(input[key]!==undefined)payload[column]=String(input[key]).slice(0,2000);
 
     if (input.title !== undefined) {
       payload.title = input.title;

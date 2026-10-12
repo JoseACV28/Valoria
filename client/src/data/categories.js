@@ -16,3 +16,5 @@ export const ALL_CATEGORIES = [
   "Aventura",
   "Historia real"
 ];
+
+export const categoryLabel = value => ({Fantasia:'Fantasía', 'Ciencia ficcion':'Ciencia ficción', 'Ficcion juvenil':'Ficción juvenil'}[value] || value);

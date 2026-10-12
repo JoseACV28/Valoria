@@ -1,3 +1,5 @@
+import {listWorkspaceRows} from './workspaceModel.js';
+import { profilesBlocked } from '../middlewares/profileBlocks.js';
 // Modelo de notificaciones.
 // Centraliza altas, lectura y listado de interacciones para creadores y lectores.
 import { randomUUID } from "node:crypto";
@@ -198,12 +200,18 @@ async function resolveActorSnapshot(actorId, fallbackName = "") {
 
 export class NotificationModel {
   static async create(input) {
+    if(await profilesBlocked(input.actorId,input.recipientId))return null;
     // Inserta una notificacion nueva cuando la interaccion proviene de otro usuario.
     if (!input.recipientId || input.recipientId === input.actorId) {
       return null;
     }
 
     if (!isSupabaseEnabled()) {
+      const prefs=await listWorkspaceRows(input.recipientId,'preferences');
+      const settings=prefs.find(x=>x.key==='notifications')?.data;
+      if(input.type==='chapter_published'&&settings?.newChapters===false)return null;
+      if(/comment|reply|review/.test(input.type)&&settings?.replies===false)return null;
+      if(prefs.some(x=>(x.key===`mute-user:${input.actorId}`||(input.threadId&&x.key===`mute-thread:${input.threadId}`))&&x.data?.enabled))return null;
       const notification = {
         id: randomUUID(),
         recipient_id: input.recipientId,
@@ -223,6 +231,13 @@ export class NotificationModel {
       return mapNotification(notification);
     }
 
+    const {data:preference,error:preferenceError}=await supabaseAdmin.from('user_workspace').select('data').eq('user_id',input.recipientId).eq('namespace','preferences').eq('key','notifications').maybeSingle();
+    if(preferenceError)return null;
+    if((input.type==='chapter_published' && preference?.data?.newChapters===false) || (/comment|reply|review/.test(input.type) && preference?.data?.replies===false))return null;
+    const muteKeys=[`mute-user:${input.actorId}`,...(input.threadId?[`mute-thread:${input.threadId}`]:[])];
+    const {data:mutes,error:muteError}=await supabaseAdmin.from('user_workspace').select('data').eq('user_id',input.recipientId).eq('namespace','preferences').in('key',muteKeys);
+    if(muteError)return null;
+    if(mutes?.some(item=>item.data.enabled))return null;
     const actor = await resolveActorSnapshot(input.actorId, input.actorName);
 
     const payload = {

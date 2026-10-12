@@ -1,0 +1,10 @@
+import { ui } from "../../i18n/runtime.js";
+import { useState } from 'react';
+import { workspaceRequest } from '../../api/workspaceApi';
+import { contentToHtml } from '../../utils/richContent';
+export function ReportReview({report,auth}) {
+  const [target,setTarget]=useState(null),[open,setOpen]=useState(false),[reason,setReason]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
+  async function inspect(){if(open){setOpen(false);return;}setBusy(true);try{const data=await workspaceRequest(`reports/${report.id}/target`,auth.token);setTarget(data.target);setOpen(true);}catch(e){setMessage(e.message);}finally{setBusy(false);}}
+  async function visibility(){setBusy(true);try{const data=await workspaceRequest(`reports/${report.id}/visibility`,auth.token,'PUT',{hidden:!target.hidden,reason});setTarget(current=>({...current,hidden:!current.hidden}));setMessage(data.message);}catch(e){setMessage(e.message);}finally{setBusy(false);}}
+  return <div><button type="button" disabled={busy} aria-expanded={open} onClick={inspect}>{open?ui("Cerrar contenido"):ui("Revisar contenido denunciado")}</button>{open&&target&&<section style={{padding:16,marginTop:14,border:'1px solid var(--line-soft)',borderRadius:'var(--radius-panel)'}}><h3>{target.title}</h3><p style={{whiteSpace:'pre-wrap'}}>{target.description}</p>{target.chapters?.map(chapter=><details key={chapter.id}><summary>{chapter.title}</summary><div dangerouslySetInnerHTML={{__html:contentToHtml(chapter.content)}}/></details>)}{target.canHide&&<><p>{ui("Visibilidad: ")}{target.hidden?ui("oculta por moderación"):ui("según publicación del autor")}</p><label>{ui("Motivo de la decisión")}<textarea minLength={5} maxLength={2000} value={reason} onChange={event=>setReason(event.target.value)}/></label><button disabled={busy||reason.trim().length<5} type="button" onClick={visibility}>{target.hidden?ui("Restaurar visibilidad"):ui("Ocultar temporalmente")}</button></>}</section>}{message&&<p role="status">{ui(message)}</p>}</div>;
+}

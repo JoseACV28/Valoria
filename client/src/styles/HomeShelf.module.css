@@ -28,9 +28,14 @@
   gap: 14px;
 }
 
+@media (max-width: 840px) {
+  .row.carousel {grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(145px,36%);overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--brand-300) transparent;}
+  .carousel .card {scroll-snap-align:start;}
+}
+
 .card {
   position: relative;
-  border-radius: 18px;
+  border-radius: var(--radius-panel);
   background: transparent;
 }
 
@@ -46,7 +51,7 @@
 .coverWrap {
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: var(--radius-panel);
 }
 
 .typePill {
@@ -60,14 +65,14 @@
   min-width: 76px;
   height: 30px;
   padding: 0 12px;
-  border-radius: 999px;
-  color: #fff8ff;
+  border-radius: var(--radius-control);
+  color: var(--text-main);
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 20px rgba(8, 4, 14, 0.14);
+  backdrop-filter: none;
+  box-shadow: var(--shadow-soft);
 }
 
 .typePillStory {
@@ -79,9 +84,9 @@
   width: 100%;
   aspect-ratio: 0.72;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
   display: block;
 }
 
@@ -156,7 +161,7 @@
   width: 3.5px;
   height: 3.5px;
   border-radius: 999px;
-  background: rgba(255, 248, 255, 0.78);
+  background: var(--bg-surface);
   transform: translate(-50%, -50%);
 }
 
@@ -164,10 +169,10 @@
   display: grid;
   gap: 0;
   padding: 10px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 24px rgba(8, 4, 14, 0.14);
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-soft);
 }
 
 .cardVariantEditorial .cardCopy {
@@ -190,3 +195,17 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.coverWrap{display:block;padding:0;width:100%}
+
+/* Filas de lectura en la estética de biblioteca. */
+.cardVariantEditorial .cardButton { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.cardVariantEditorial .cardCopy { padding:10px 0 0; }
+.typePill { display:none; }
+.coverWrap,.card img { border-radius:6px; }
+.card h3 .authorLink { font-size:.94rem; font-weight:600; color:var(--text-main); text-decoration:none; }
+.card h3 .authorLink:hover { text-decoration:underline; }
+.authorLink { text-decoration:none; }
+.row { grid-template-columns:repeat(5,minmax(0,1fr)); gap:20px; }
+@media(max-width:1100px) { .row { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:700px) { .row { grid-template-columns:repeat(2,minmax(0,1fr)); } }

@@ -1,6 +1,8 @@
 // Modelo de autenticacion.
 // Encapsula login/registro tanto para Supabase como para fallback local.
 import { randomUUID } from "node:crypto";
+import { getSiteAccess } from './siteAdministration.js';
+import { verifySiteSession, revokeSiteSession } from '../utils/sessionSecurity.js';
 import {
   buildPasswordHash,
   comparePassword,
@@ -21,6 +23,7 @@ function buildFallbackSession(user) {
     access_token: accessToken,
     refresh_token: null,
     expires_in: 60 * 60 * 24 * 7,
+    expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
     token_type: "bearer",
     user: {
       id: user.id,
@@ -49,7 +52,7 @@ function normalizeAuthPayload(session) {
       displayName:
         session.user.user_metadata?.display_name ||
         session.user.user_metadata?.displayName ||
-        session.user.email,
+        "Creador de Valoria",
       realName:
         session.user.user_metadata?.real_name ||
         session.user.user_metadata?.realName ||
@@ -80,7 +83,7 @@ async function syncProfile(user) {
     existingProfile?.display_name ||
     user.user_metadata?.display_name ||
     user.user_metadata?.displayName ||
-    user.email;
+    "Creador de Valoria";
 
   const profilePayload = {
     id: user.id,
@@ -114,6 +117,17 @@ async function syncProfile(user) {
 }
 
 export class AuthModel {
+  static async logout(token, userId) {
+    if (!isSupabaseAuthEnabled()) {
+      demoSessions.delete(token);
+      return;
+    }
+    if (!supabaseAdmin) throw Object.assign(new Error('No se pudo cerrar la sesión remota.'), { status: 503 });
+    await revokeSiteSession(token, userId);
+    const { error } = await supabaseAdmin.auth.admin.signOut(token, 'local');
+    if (error) throw Object.assign(new Error('No se pudo cerrar la sesión remota.'), { status: 503 });
+  }
+
   static async register({ email, password, displayName }) {
     // Registra un usuario nuevo en Supabase o en el modo demo local.
     if (!isSupabaseAuthEnabled()) {
@@ -131,7 +145,8 @@ export class AuthModel {
       };
 
       demoUsers.push(user);
-      return normalizeAuthPayload(buildFallbackSession(user));
+      const payload = normalizeAuthPayload(buildFallbackSession(user));
+      return { ...payload, user: { ...payload.user, ...await getSiteAccess(user.id) } };
     }
 
     const { data, error } = await supabasePublic.auth.signUp({
@@ -169,10 +184,11 @@ export class AuthModel {
       const user = demoUsers.find((item) => item.email === email);
 
       if (!user || !comparePassword(password, user.passwordHash)) {
-        throw new Error("Correo o contrasena invalidos");
+        throw Object.assign(new Error("Correo o contrasena invalidos"), { status: 401 });
       }
 
-      return normalizeAuthPayload(buildFallbackSession(user));
+      const payload = normalizeAuthPayload(buildFallbackSession(user));
+      return { ...payload, user: { ...payload.user, ...await getSiteAccess(user.id) } };
     }
 
     const { data, error } = await supabasePublic.auth.signInWithPassword({
@@ -181,7 +197,7 @@ export class AuthModel {
     });
 
     if (error) {
-      throw new Error(error.message);
+      throw Object.assign(new Error('Correo o contrasena invalidos'), { status: 401 });
     }
 
     await syncProfile(data.user);
@@ -201,7 +217,11 @@ export class AuthModel {
 
     if (!isSupabaseAuthEnabled()) {
       const session = demoSessions.get(token);
-      return session ? normalizeAuthPayload(session).user : null;
+      if (session && session.expires_at <= Math.floor(Date.now() / 1000)) {
+        demoSessions.delete(token);
+        return null;
+      }
+      return session ? { ...normalizeAuthPayload(session).user, ...await getSiteAccess(session.user.id) } : null;
     }
 
     const { data, error } = await supabasePublic.auth.getUser(token);
@@ -209,6 +229,9 @@ export class AuthModel {
     if (error || !data.user) {
       return null;
     }
+
+    const security = await verifySiteSession(token, data.user.id);
+    if (!security.active) return null;
 
     await syncProfile(data.user);
 
@@ -228,10 +251,10 @@ export class AuthModel {
       id: data.user.id,
       email: data.user.email,
       displayName:
-        profileData?.display_name ||
-        data.user.user_metadata?.display_name ||
+        (profileData?.display_name !== data.user.email ? profileData?.display_name : "") ||
+        (data.user.user_metadata?.display_name !== data.user.email ? data.user.user_metadata?.display_name : "") ||
         data.user.user_metadata?.displayName ||
-        data.user.email,
+        "Creador de Valoria",
       realName:
         profileData?.real_name ||
         data.user.user_metadata?.real_name ||
@@ -239,7 +262,12 @@ export class AuthModel {
         "",
       avatarUrl: profileData?.avatar_url || "",
       coverUrl: profileData?.cover_url || "",
-      bio: profileData?.bio || ""
+      bio: profileData?.bio || "",
+      isModerator: Boolean(profileData?.is_moderator),
+      mfaVerified: security.mfaVerified,
+      mfaEnrolled: security.mfaEnrolled,
+      sessionCheck: security.sessionCheck,
+      ...await getSiteAccess(data.user.id)
     };
   }
 }

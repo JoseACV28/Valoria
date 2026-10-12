@@ -4,20 +4,20 @@ import { demoProfileFollows } from "../data/demoStore.js";
 import { isSupabaseEnabled, supabaseAdmin } from "../config/supabase.js";
 import { StoryModel } from "./storyModel.js";
 
-function mapProfile(profile, stories, followerCount, followingCount, isFollowing, currentUserId) {
+export function mapProfile(profile, stories, followerCount, followingCount, isFollowing, currentUserId) {
   // Construye el perfil publico unificado que consumen vistas propias y ajenas.
-  const publishedStories = stories.filter((story) => story.status === "published");
+  const publishedStories = stories.filter((story) => story.status === "published" && !story.moderation_hidden_at && !story.deleted_at);
   const isOwnProfile = Boolean(currentUserId && currentUserId === profile.id);
 
   return {
     id: profile.id,
-    displayName: profile.display_name || profile.email,
+    displayName: profile.display_name && profile.display_name!==profile.email ? profile.display_name : "Creador de Valoria",
     realName: isOwnProfile ? profile.real_name || "" : "",
-    email: profile.email,
+    ...(isOwnProfile ? { email: profile.email } : {}),
     bio: profile.bio || "",
     avatarUrl: profile.avatar_url || "",
     coverUrl: profile.cover_url || "",
-    handle: `@${(profile.display_name || profile.email || "valoria")
+    handle: `@${(profile.display_name && profile.display_name !== profile.email ? profile.display_name : "valoria")
       .toLowerCase()
       .replace(/\s+/g, "")}`,
     worksCount: publishedStories.length,

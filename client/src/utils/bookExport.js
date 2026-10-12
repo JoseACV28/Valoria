@@ -1,0 +1,26 @@
+import {zipSync,strToU8} from 'fflate';import {contentToHtml,escapeHtml} from './richContent';import {createOfflineDocument,downloadFile} from './offlineDocument';
+const xml=value=>escapeHtml(String(value||''));
+function xhtml(content){const holder=document.createElement('div');holder.innerHTML=contentToHtml(content);return [...holder.childNodes].map(node=>new XMLSerializer().serializeToString(node)).join('');}
+export function createEpub({story,chapters},cover){
+ const id=`urn:uuid:${story.id}`,language=({Espanol:'es',English:'en',Portugues:'pt',Frances:'fr',Italiano:'it',Aleman:'de',Chino:'zh',Coreano:'ko',Japones:'ja',Hindi:'hi'})[story.language]||'und';const files={mimetype:[strToU8('application/epub+zip'),{level:0}]};
+ const page=(title,body)=>`<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="${language}"><head><title>${xml(title)}</title><link rel="stylesheet" type="text/css" href="style.css"/></head><body>${body}</body></html>`;
+ files['META-INF/container.xml']=strToU8('<?xml version="1.0"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/></rootfiles></container>');
+ files['EPUB/style.css']=strToU8('body{font-family:serif;line-height:1.7;margin:5%;color:#33233f}h1,h2{color:#69448d}img{max-width:100%}blockquote{border-left:2px solid #9572c0;padding-left:1em}pre{white-space:pre-wrap}');
+ files['EPUB/cover.xhtml']=strToU8(page(story.title,`${cover?'<img src="cover.png" alt="Portada"/>':''}<h1>${xml(story.title)}</h1><p>${xml(story.author)}</p><p>${xml(story.description)}</p>`));if(cover)files['EPUB/cover.png']=cover;
+ files['EPUB/nav.xhtml']=strToU8(page('Índice',`<nav epub:type="toc" id="toc"><h1>Índice</h1><ol><li><a href="cover.xhtml">${xml(story.title)}</a></li>${chapters.map((c,i)=>`<li><a href="chapter-${i+1}.xhtml">${xml(c.title)}</a></li>`).join('')}</ol></nav>`));
+ for(const [i,c]of chapters.entries())files[`EPUB/chapter-${i+1}.xhtml`]=strToU8(page(c.title,`<h1>${xml(c.title)}</h1>${xhtml(c.content)}`));
+ files['EPUB/package.opf']=strToU8(`<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="book-id">${xml(id)}</dc:identifier><dc:title>${xml(story.title)}</dc:title><dc:creator>${xml(story.author)}</dc:creator><dc:language>${language}</dc:language><meta property="dcterms:modified">${new Date().toISOString().replace(/\.\d{3}Z$/,'Z')}</meta></metadata><manifest><item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="style" href="style.css" media-type="text/css"/>${cover?'<item id="image" href="cover.png" media-type="image/png" properties="cover-image"/>':''}${chapters.map((c,i)=>`<item id="ch${i}" href="chapter-${i+1}.xhtml" media-type="application/xhtml+xml"/>`).join('')}</manifest><spine><itemref idref="cover"/>${chapters.map((c,i)=>`<itemref idref="ch${i}"/>`).join('')}</spine></package>`);
+ return zipSync(files,{level:6});
+}
+export async function exportCover(story){
+ const value=story.cover||story.cover_url;if(!value)return null;
+ const allowed=new Set([location.origin,new URL(import.meta.env.VITE_API_URL||'http://localhost:4000/api',location.origin).origin]);if(import.meta.env.VITE_SUPABASE_URL)allowed.add(new URL(import.meta.env.VITE_SUPABASE_URL).origin);
+ try{const url=new URL(value,location.origin);if(!allowed.has(url.origin))return null;const res=await fetch(url,{signal:AbortSignal.timeout(10000)});if(!res.ok)return null;const blob=await res.blob();if(!blob.type.startsWith('image/')||blob.size>5*1024*1024)return null;const bitmap=await createImageBitmap(blob);const canvas=document.createElement('canvas');canvas.width=Math.min(bitmap.width,1200);canvas.height=Math.round(bitmap.height*canvas.width/bitmap.width);if(canvas.height>3000){bitmap.close();return null;}canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const png=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));return png?new Uint8Array(await png.arrayBuffer()):null;}catch{return null;}
+}
+export function downloadEpub(data,cover){downloadFile(createEpub(data,cover),(data.story.slug||'historia')+'.epub','application/epub+zip');}
+export function printBook(data,cover){
+ const iframe=document.createElement('iframe');iframe.title='Exportación PDF';iframe.style.cssText='position:fixed;left:-10000px;width:800px;height:1000px';document.body.append(iframe);
+ let html=createOfflineDocument({...data.story,chapters:data.chapters});html=html.replace("default-src 'none'; style-src 'unsafe-inline';","default-src 'none'; img-src data:; style-src 'unsafe-inline';");
+ if(cover){let binary='';for(const byte of cover)binary+=String.fromCharCode(byte);html=html.replace('<header>',`<header><img src="data:image/png;base64,${btoa(binary)}" alt="Portada" style="max-height:420px;max-width:100%;object-fit:contain"/>`);}
+ iframe.onload=async()=>{await iframe.contentDocument.fonts.ready;iframe.contentWindow.focus();iframe.contentWindow.print();setTimeout(()=>iframe.remove(),60000);};iframe.srcdoc=html;
+}

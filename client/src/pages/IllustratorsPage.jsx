@@ -1,3 +1,5 @@
+import {ActivityState} from '../components/common/ActivityState';
+import { ui } from "../i18n/runtime.js";
 // Directorio publico de ilustradores.
 // Agrupa autores a partir de las ilustraciones publicadas y permite buscarlos por nombre.
 import { useEffect, useMemo, useState } from "react";
@@ -8,25 +10,26 @@ import styles from "../styles/DirectoryPage.module.css";
 
 export function IllustratorsPage({ auth, navFilters, onNavigate }) {
   const [illustrations, setIllustrations] = useState([]);
-  const [query, setQuery] = useState("");
 
+  const [status,setStatus]=useState('loading'),[retry,setRetry]=useState(0);
   useEffect(() => {
+    setStatus('loading');
     let active = true;
 
     async function loadIllustrations() {
       try {
         const data = await fetchIllustrations();
         if (active) {
-          setIllustrations(data.illustrations || []);
+          setIllustrations(data.illustrations || []);setStatus('ready');
         }
-      } catch {}
+      } catch {if(active)setStatus('error');}
     }
 
     loadIllustrations();
     return () => {
       active = false;
     };
-  }, []);
+  }, [retry]);
 
   const illustrators = useMemo(() => {
     // Se colapsan varias ilustraciones del mismo perfil en una sola tarjeta de directorio.
@@ -79,11 +82,8 @@ export function IllustratorsPage({ auth, navFilters, onNavigate }) {
       .sort(
         (left, right) =>
           right.illustrations - left.illustrations || right.views - left.views
-      )
-      .filter((illustrator) =>
-        illustrator.name.toLowerCase().includes(query.trim().toLowerCase())
       );
-  }, [illustrations, query]);
+  }, [illustrations]);
 
   return (
     <AppShell auth={auth} currentView="illustrators" onNavigate={onNavigate}>
@@ -96,24 +96,14 @@ export function IllustratorsPage({ auth, navFilters, onNavigate }) {
         />
 
         <section className={styles.hero}>
-          <span>Directorio</span>
-          <h1>Ilustradores registrados</h1>
-          <p>
-            Busca ilustradores por nombre y entra a sus perfiles publicos dentro
-            de Valoria.
-          </p>
+          <span>{ui("Directorio")}</span>
+          <h1>{ui("Ilustradores con obras publicadas")}</h1>
+          <p>{ui(" Usa el buscador superior para encontrar ilustradores por nombre y entrar a sus perfiles públicos. ")}</p>
         </section>
 
         <section className={styles.section}>
-          <div className={styles.searchBar}>
-            <input
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar ilustrador por nombre"
-              type="text"
-              value={query}
-            />
-          </div>
 
+          {status==='loading'&&<ActivityState kind="loading"/>}{status==='error'&&<ActivityState kind="error" action="Reintentar" onAction={()=>setRetry(x=>x+1)}/>}{status==='ready'&&!illustrators.length&&<ActivityState title="Todavía no hay contenido" action="Explorar obras" onAction={()=>onNavigate('home')}/>}
           <div className={styles.grid}>
             {illustrators.map((illustrator) => (
               <button
@@ -136,7 +126,7 @@ export function IllustratorsPage({ auth, navFilters, onNavigate }) {
                   )}
                 </div>
                 <strong>{illustrator.name}</strong>
-                <span>{illustrator.illustrations} ilustraciones publicadas</span>
+                <span>{illustrator.illustrations}{ui(" ilustraciones publicadas")}</span>
               </button>
             ))}
           </div>

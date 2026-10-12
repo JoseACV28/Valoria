@@ -1,12 +1,26 @@
+import { moveToTrash } from '../models/contentRecovery.js';
+import { blockedProfileIds, profilesBlocked } from '../middlewares/profileBlocks.js';
 // Controlador HTTP de ilustraciones.
 // Entrega galeria publica y detalle visual.
 import { IllustrationModel } from "../models/illustrationModel.js";
 import { NotificationModel } from "../models/notificationModel.js";
+import { canReadContent, httpError } from "../utils/contentAccess.js";
+
+async function requireReadableIllustration(request) {
+  const illustration = await IllustrationModel.getByIdOrSlug(
+    request.params.identifier, request.authUser?.id || null
+  );
+  if (!canReadContent(illustration, request.authUser)) {
+    throw httpError(404, "Ilustracion no encontrada");
+  }
+  return illustration;
+}
 
 export async function getIllustrations(request, response, next) {
   // Lista las ilustraciones publicas visibles en la plataforma.
   try {
-    const illustrations = await IllustrationModel.getAll(request.authUser?.id || null);
+    const blocked=await blockedProfileIds(request.authUser?.id);
+    const illustrations = (await IllustrationModel.getAll(request.authUser?.id || null)).filter(item=>!blocked.has(item.authorId||item.creatorId||item.creator_id));
     response.json({
       total: illustrations.length,
       illustrations
@@ -24,7 +38,7 @@ export async function getIllustrationById(request, response, next) {
       request.authUser?.id || null
     );
 
-    if (!illustration) {
+    if (!canReadContent(illustration, request.authUser)) {
       return response.status(404).json({
         message: "Ilustracion no encontrada"
       });
@@ -118,7 +132,7 @@ export async function deleteIllustration(request, response, next) {
       });
     }
 
-    await IllustrationModel.delete(illustration.id);
+    await moveToTrash('illustration',illustration.id,request.authUser.id);
     return response.status(204).send();
   } catch (error) {
     return next(error);
@@ -133,7 +147,7 @@ export async function getIllustrationComments(request, response, next) {
       request.authUser?.id || null
     );
 
-    if (!illustration) {
+    if (!canReadContent(illustration, request.authUser)) {
       return response.status(404).json({
         message: "Ilustracion no encontrada"
       });
@@ -144,7 +158,9 @@ export async function getIllustrationComments(request, response, next) {
       request.authUser?.id || null
     );
 
-    return response.json({ comments });
+    const blocked=await blockedProfileIds(request.authUser?.id);
+    const filter=items=>items.filter(item=>!blocked.has(item.authorId)).map(item=>({...item,replies:filter(item.replies||[])}));
+    return response.json({ comments:filter(comments) });
   } catch (error) {
     return next(error);
   }
@@ -166,12 +182,14 @@ export async function createIllustrationComment(request, response, next) {
       request.authUser?.id || null
     );
 
-    if (!illustration) {
+    if (!canReadContent(illustration, request.authUser)) {
       return response.status(404).json({
         message: "Ilustracion no encontrada"
       });
     }
 
+    if(await profilesBlocked(request.authUser.id,illustration.authorId))throw httpError(403,'Esta interacción no está disponible entre estas cuentas.');
+    if(request.body.parentCommentId){const parent=await IllustrationModel.getCommentById(request.body.parentCommentId);if(await profilesBlocked(request.authUser.id,parent?.authorId))throw httpError(403,'Esta interacción no está disponible entre estas cuentas.');}
     const result = await IllustrationModel.createComment(request.params.identifier, {
       authorId: request.authUser.id,
       authorName: request.authUser.displayName || request.authUser.email,
@@ -220,7 +238,7 @@ export async function getIllustrationFanarts(request, response, next) {
       request.authUser?.id || null
     );
 
-    if (!illustration) {
+    if (!canReadContent(illustration, request.authUser)) {
       return response.status(404).json({
         message: "Ilustracion no encontrada"
       });
@@ -236,6 +254,7 @@ export async function getIllustrationFanarts(request, response, next) {
 export async function createIllustrationFanart(request, response, next) {
   // Permite que la comunidad suba un fanart visual asociado a la pieza del creador.
   try {
+    await requireReadableIllustration(request);
     const publicUrl = request.body.publicUrl?.trim() || "";
 
     if (!publicUrl) {
@@ -273,6 +292,7 @@ export async function createIllustrationFanart(request, response, next) {
 export async function likeIllustration(request, response, next) {
   // Alterna el like del usuario autenticado sobre la ilustracion.
   try {
+    await requireReadableIllustration(request);
     const result = await IllustrationModel.toggleLike(
       request.params.identifier,
       request.authUser.id
@@ -305,6 +325,7 @@ export async function likeIllustration(request, response, next) {
 export async function likeIllustrationComment(request, response, next) {
   // Alterna el like del usuario autenticado sobre un comentario de ilustracion.
   try {
+    await requireReadableIllustration(request);
     const result = await IllustrationModel.toggleCommentLike(
       request.params.identifier,
       request.params.commentId,

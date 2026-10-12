@@ -1,3 +1,4 @@
+import { ui } from "../../i18n/runtime.js";
 // Panel reutilizable de autenticacion.
 // Puede funcionar como login desplegable o como layout dedicado de registro.
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ export function AuthPanel({
   footer,
   onSuccessfulAuth
 }) {
+  const localQa = import.meta.env.VITE_QA_ENV === "qa-local";
   const [mode, setMode] = useState(defaultMode);
   const [registerForm, setRegisterForm] = useState(initialRegister);
   const [loginForm, setLoginForm] = useState(initialLogin);
@@ -60,7 +62,7 @@ export function AuthPanel({
     setMessage("");
 
     try {
-      await auth.login(loginForm);
+      await auth.login({...loginForm,email:loginForm.email.trim()});
       setLoginForm(initialLogin);
       setMessage("Sesion iniciada.");
       onSuccessfulAuth?.("login");
@@ -89,17 +91,15 @@ export function AuthPanel({
         className={`${styles.panel} ${variant === "drawer" ? styles.drawerPanel : ""}`}
       >
         <div className={styles.header}>
-          <span>Cuenta</span>
-          <h2>Ya tienes la sesion activa</h2>
+          <span>{ui("Cuenta")}</span>
+          <h2>{ui("Ya tienes la sesion activa")}</h2>
         </div>
         <div className={styles.accountCard}>
           <div>
             <strong>{auth.user?.displayName}</strong>
             <p>{auth.user?.email}</p>
           </div>
-          <button onClick={auth.logout} type="button">
-            Cerrar sesion
-          </button>
+          <button onClick={auth.logout} type="button">{ui(" Cerrar sesion ")}</button>
         </div>
       </section>
     );
@@ -123,39 +123,41 @@ export function AuthPanel({
             className={mode === "login" ? styles.active : ""}
             onClick={() => setMode("login")}
             type="button"
-          >
-            Login
-          </button>
+          >{ui(" Login ")}</button>
           <button
             className={mode === "register" ? styles.active : ""}
             onClick={() => setMode("register")}
             type="button"
-          >
-            Registro
-          </button>
+          >{ui(" Registro ")}</button>
         </div>
       ) : null}
 
+      {message ? <p className={styles.message} role="alert">{ui(message)}</p> : null}
+      {localQa && <div className={styles.qaAccess}><p>{ui("Esta copia usa cuentas ficticias. Google no está disponible.")}</p>{mode === "login" && <button type="button" disabled={loading} onClick={()=>setLoginForm({email:"demo@histopad.app",password:"demo1234"})}>{ui("Usar cuenta de prueba")}</button>}</div>}
+
       {mode === "login" ? (
         <>
-          <button
+          {!localQa && <button
             className={styles.googleButton}
             disabled={loading}
             onClick={handleGoogleLogin}
             type="button"
           >
-            {loading ? "Abriendo Google..." : googleLabel}
-          </button>
+            {loading ? ui("Abriendo Google...") : googleLabel}
+          </button>}
 
-          <div className={styles.divider}>
-            <span>o entra con correo</span>
-          </div>
+          {!localQa && <div className={styles.divider}>
+            <span>{ui("o entra con correo")}</span>
+          </div>}
 
           <form className={styles.form} onSubmit={handleLogin}>
             <label>
-              <span>Correo</span>
+              <span>{ui("Correo")}</span>
               <input
                 type="email"
+                autoComplete="email"
+                autoCapitalize="none"
+                spellCheck={false}
                 value={loginForm.email}
                 onChange={(event) =>
                   setLoginForm((current) => ({
@@ -167,9 +169,10 @@ export function AuthPanel({
               />
             </label>
             <label>
-              <span>Contrasena</span>
+              <span>{ui("Contrasena")}</span>
               <input
                 type="password"
+                autoComplete="current-password"
                 value={loginForm.password}
                 onChange={(event) =>
                   setLoginForm((current) => ({
@@ -181,28 +184,29 @@ export function AuthPanel({
               />
             </label>
             <button disabled={loading} type="submit">
-              {loading ? "Entrando..." : "Iniciar sesion"}
+              {loading ? ui("Entrando...") : ui("Iniciar sesion")}
             </button>
           </form>
+          <a href="#/forgot-password">{ui('¿Olvidaste tu contraseña?')}</a>
         </>
       ) : (
         <>
-          <button
+          {!localQa && <button
             className={styles.googleButton}
             disabled={loading}
             onClick={handleGoogleLogin}
             type="button"
           >
-            {loading ? "Abriendo Google..." : googleLabel}
-          </button>
+            {loading ? ui("Abriendo Google...") : googleLabel}
+          </button>}
 
-          <div className={styles.divider}>
-            <span>o crea tu cuenta con correo</span>
-          </div>
+          {!localQa && <div className={styles.divider}>
+            <span>{ui("o crea tu cuenta con correo")}</span>
+          </div>}
 
           <form className={styles.form} onSubmit={handleRegister}>
             <label>
-              <span>Nombre visible</span>
+              <span>{ui("Nombre visible")}</span>
               <input
                 value={registerForm.displayName}
                 onChange={(event) =>
@@ -215,9 +219,12 @@ export function AuthPanel({
               />
             </label>
             <label>
-              <span>Correo</span>
+              <span>{ui("Correo")}</span>
               <input
                 type="email"
+                autoComplete="email"
+                autoCapitalize="none"
+                spellCheck={false}
                 value={registerForm.email}
                 onChange={(event) =>
                   setRegisterForm((current) => ({
@@ -229,10 +236,13 @@ export function AuthPanel({
               />
             </label>
             <label>
-              <span>Contrasena</span>
+              <span>{ui("Contrasena")}</span>
               <input
                 type="password"
-                minLength="6"
+                minLength="15"
+                maxLength="128"
+                placeholder={ui("Al menos 15 caracteres")}
+                autoComplete="new-password"
                 value={registerForm.password}
                 onChange={(event) =>
                   setRegisterForm((current) => ({
@@ -244,13 +254,12 @@ export function AuthPanel({
               />
             </label>
             <button disabled={loading} type="submit">
-              {loading ? "Creando..." : "Crear cuenta"}
+              {loading ? ui("Creando...") : ui("Crear cuenta")}
             </button>
           </form>
         </>
       )}
 
-      {message ? <p className={styles.message}>{message}</p> : null}
       {footer ? <div className={styles.footer}>{footer}</div> : null}
     </section>
   );

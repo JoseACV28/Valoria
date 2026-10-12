@@ -1,0 +1,101 @@
+/* Home biblioteca: estilos nuevos aislados. El diseño previo permanece en HomePage.module.css. */
+.shell { width:min(1540px,calc(100% - 64px)); grid-template-columns:210px minmax(0,1fr); gap:38px; padding:24px 0 40px; }
+.shell > aside { border:0; border-right:1px solid var(--line-soft); border-radius:0; box-shadow:none; background:transparent; backdrop-filter:none; padding:14px 22px 20px 0; }
+.shell > aside nav { margin-top:24px; gap:8px; }
+.shell > aside nav button { border-radius:6px; min-height:48px; padding:10px 12px; font-weight:400; }
+.shell > aside nav button[aria-current="page"] { background:#3c394c; border:0; color:#d5cdeb; }
+:global(html[data-theme="light"]) .shell > aside nav button[aria-current="page"] { background:#e9e1f0; color:#554168; }
+.shell > aside nav button span:first-child { color:var(--text-accent); }
+.page { min-width:0; position:relative; padding-bottom:30px; }
+.intro { margin:34px 0 28px; }
+.intro p { margin:0 0 4px; color:var(--text-soft); font-size:.9rem; }
+.intro h1 { margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:clamp(2rem,3vw,2.7rem); line-height:1.2; letter-spacing:-.025em; }
+.intro .introNote { margin-top:10px; font-size:.88rem; }
+.flow { display:grid; gap:40px; min-width:0; }
+.shelf,.resume { min-width:0; }
+.sectionHeading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
+.page h2 { margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:1.65rem; line-height:1.3; }
+.sectionLinks { display:flex; align-items:center; flex-wrap:wrap; gap:14px; }
+.genres { display:flex; align-items:center; flex-wrap:wrap; gap:12px; }
+.genres button { padding:4px 0; background:transparent; color:var(--text-soft); font-size:.8rem; border-radius:0; }
+.genres button:hover { color:var(--text-accent); }
+.textLink { display:inline-flex; align-items:center; gap:12px; padding:6px 0; color:var(--text-accent); background:transparent; font-size:.85rem; border-radius:2px; }
+.textLink:hover,.author:hover { text-decoration:underline; text-underline-offset:4px; }
+.books { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:20px; }
+.book { min-width:0; }
+.bookLink { display:block; width:100%; padding:0; text-align:left; background:transparent; border-radius:6px; }
+.cover { display:block; aspect-ratio: .72; overflow:hidden; border-radius:6px; border:1px solid var(--line-soft); background:var(--field-bg); transition:transform 180ms ease; }
+.cover img { width:100%; height:100%; object-fit:cover; display:block; }
+.bookLink:hover .cover { transform:translateY(-3px); }
+.coverPlaceholder { display:grid; place-items:center; height:100%; padding:18px; color:var(--text-accent); text-align:center; font:1.2rem Georgia,serif; }
+.bookLink h3 { margin:10px 0 4px; font-size:.94rem; line-height:1.4; font-weight:600; overflow-wrap:anywhere; }
+.author { display:block; max-width:100%; text-align:left; background:transparent; color:var(--text-soft); font-size:.8rem; line-height:1.4; padding:0; overflow-wrap:anywhere; border-radius:2px; }
+.resume h2 { margin-bottom:16px; }
+.resumeGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.resumeCard { display:grid; grid-template-columns:60px minmax(0,1fr); align-items:center; gap:14px; padding:14px; border:1px solid var(--line-soft); border-radius:8px; background:#252833; text-align:left; }
+.resumeCard:hover { border-color:var(--brand-300); }
+.resumeCard img,.resumePlaceholder { width:60px; height:84px; object-fit:cover; border-radius:4px; }
+.resumePlaceholder { display:grid;place-items:center;background:var(--field-bg);color:var(--text-accent);font-size:2rem; }
+.resumeCard strong,.resumeCard small { display:block; overflow-wrap:anywhere; }
+.resumeCard strong { font-size:.9rem; font-weight:600; }
+.resumeCard small { color:var(--text-soft); font-size:.76rem; margin-top:5px; }
+.resumeCard .resumeAction { margin-top:12px; color:var(--text-accent); }
+:global(html[data-theme="light"]) .resumeCard { background:#fffdfb; }
+.artGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.artCover { width:100%; aspect-ratio:1.4; object-fit:cover; border-radius:6px; display:block; border:1px solid var(--line-soft); }
+.personalized:empty { display:none; }
+.personalized:has(>p:only-child:empty) { display:none; }
+.personalized > section { margin-top:0; margin-bottom:28px; }
+.extras { display:grid; gap:24px; padding-top:24px; border-top:1px solid var(--line-soft); }
+.extras > section { margin:0; border-radius:8px; background:var(--field-bg); box-shadow:none; }
+.community { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:24px 0; border-top:1px solid var(--line-soft); }
+.community p { color:var(--text-soft); max-width:620px; font-size:.9rem; }
+@media(max-width:1120px) { .shell { grid-template-columns:minmax(0,1fr); width:calc(100% - 48px); gap:16px; } .shell > aside { background:var(--field-bg); border:1px solid var(--line-soft); border-radius:12px; padding:20px; } .books { gap:16px; } }
+@media(max-width:720px) { .shell { width:calc(100% - 32px); padding-top:16px; } .intro { margin:26px 0; } .flow { gap:30px; } .page h2 { font-size:1.4rem; } .books { grid-auto-flow:column; grid-template-columns:none; grid-auto-columns:38%; overflow-x:auto; padding:4px 2px 14px; scroll-snap-type:x proximity; scrollbar-width:thin; scrollbar-color:var(--brand-300) transparent; } .book { scroll-snap-align:start; } .resumeGrid { grid-template-columns:1fr; } .artGrid { grid-template-columns:1fr 1fr; } .artGrid > article:last-child { display:none; } .sectionLinks { gap:10px; } .community { align-items:start; flex-direction:column; } }
+
+.shell [data-home-brand] { display:flex; align-items:center; gap:10px; color:var(--text-accent); text-decoration:none; font:1.5rem Georgia,serif; letter-spacing:.13em; }
+.shell [data-home-brand] img { width:38px; height:38px; object-fit:contain; }
+@media(max-width:1120px) { .shell > div:first-of-type { background:transparent; border:0; border-bottom:1px solid var(--line-soft); border-radius:0; box-shadow:none; } .shell > div:first-of-type [data-home-brand] { font-size:1.2rem; } .shell > div:first-of-type [data-home-brand] img { width:30px; height:30px; } }
+.shell [data-home-brand] span { font:inherit; letter-spacing:inherit; color:inherit; }
+@media(max-width:720px) { .artGrid { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:72%; overflow-x:auto; padding:4px 2px 12px; scroll-snap-type:x proximity; scrollbar-width:thin; } .artGrid > article { scroll-snap-align:start; } .artGrid > article:last-child { display:block; } }
+:global(html[data-theme="light"]) .shell > aside { background:#f2edf6; box-shadow:none; }
+
+/* Recomendaciones: misma portada y tipografía que las demás filas; sin cajas ni etiquetas superpuestas. */
+.shelfSubtitle { margin:8px 0 0; color:var(--text-soft); font-size:.88rem; }
+.recommendation { margin-top:10px; padding-top:8px; border-top:1px solid var(--line-soft); }
+.recommendation p { margin:0 0 8px; color:var(--text-soft); font-size:.76rem; line-height:1.5; }
+.hideRecommendation { padding:3px 0; background:transparent; color:var(--text-accent); border-radius:2px; text-align:left; font-size:.76rem; }
+.hideRecommendation:hover { text-decoration:underline; text-underline-offset:3px; }
+.scrollBooks { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:calc((100% - 80px)/5); overflow-x:auto; padding:4px 2px 14px; scroll-snap-type:x proximity; scrollbar-width:thin; scrollbar-color:var(--brand-300) transparent; }
+.scrollBooks .book { scroll-snap-align:start; }
+@media(max-width:1120px) and (min-width:721px) { .scrollBooks { grid-auto-columns:calc((100% - 64px)/5); } }
+@media(max-width:720px) { .scrollBooks { grid-auto-columns:38%; } }
+
+
+/* Lectura y arte comparten el primer plano, con idéntico número y tamaño de portadas. */
+.featureGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; min-width:0; }
+.featureGrid .books { grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.featureGrid > * { min-width:0; }
+.featureGrid .sectionHeading { display:grid; gap:12px; }
+.featureGrid .shelfSubtitle { min-height:2.8em; }
+.featureGrid .sectionLinks { min-height:32px; }
+.workKind { display:flex; align-items:center; gap:6px; color:var(--text-accent); margin-top:10px; font-size:.72rem; line-height:1.5; letter-spacing:.03em; }
+.artKind,.artPath { color:#91cbc5; }
+:global(html[data-theme="light"]) :is(.artKind,.artPath) { color:#357773; }
+.artwork img { object-fit:contain; }
+.homePaths { display:flex; gap:24px; flex-wrap:wrap; margin-top:18px; }
+.homePaths button { padding:6px 0; border-radius:0; background:transparent; color:var(--text-accent); }
+.homePaths .artPath { color:#91cbc5; }
+:global(html[data-theme="light"]) .homePaths .artPath { color:#357773; }
+.exploreKinds { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; padding:20px 0; border-block:1px solid var(--line-soft); }
+.exploreKinds strong { display:block; margin-bottom:10px; color:var(--text-soft); font-size:.8rem; font-weight:500; }
+@media(max-width:840px) { .featureGrid { grid-template-columns:1fr; gap:32px; } }
+@media(max-width:720px) { .featureGrid .books { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:38%; overflow-x:auto; } .featureGrid .shelfSubtitle { min-height:0; } .exploreKinds { grid-template-columns:1fr; gap:20px; } }
+
+/* Más imagen y menos texto: una sección por fila y distintivos dentro de la portada. */
+.featureGrid { grid-template-columns:minmax(0,1fr); gap:40px; }
+.featureGrid .sectionHeading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+.cover { position:relative; }
+.workBadge { position:absolute; top:10px; right:10px; z-index:1; display:inline-flex; align-items:center; justify-content:center; max-width:calc(100% - 20px); padding:6px 11px; border:1px solid rgba(255,255,255,.35); border-radius:999px; background:rgba(24,26,32,.6); color:#fff; font-size:.72rem; font-weight:600; line-height:1.4; letter-spacing:.02em; backdrop-filter:blur(9px); -webkit-backdrop-filter:blur(9px); box-shadow:0 2px 8px rgba(0,0,0,.12); }
+:global(html[data-contrast="high"]) .workBadge { background:#181a20; border-color:#fff; }
+@media(max-width:720px) { .featureGrid .books { grid-auto-columns:66%; } }

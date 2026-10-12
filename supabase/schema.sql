@@ -42,6 +42,10 @@ alter table public.stories
 add column if not exists rating_average numeric(2,1) not null default 0;
 alter table public.stories
 add column if not exists rating_count integer not null default 0;
+alter table public.stories
+add column if not exists characters text[] not null default '{}';
+alter table public.stories
+add column if not exists tags text[] not null default '{}';
 
 create table if not exists public.chapters (
   id uuid primary key default gen_random_uuid(),
@@ -211,7 +215,7 @@ create policy "public can read stories"
 on public.stories
 for select
 to public
-using (true);
+using (status = 'published' or author_id = auth.uid());
 
 drop policy if exists "service role manages stories" on public.stories;
 create policy "service role manages stories"
@@ -226,7 +230,11 @@ create policy "public can read chapters"
 on public.chapters
 for select
 to public
-using (true);
+using (exists (
+  select 1 from public.stories s
+  where s.id = chapters.story_id
+    and ((s.status = 'published' and chapters.status = 'published') or s.author_id = auth.uid())
+));
 
 drop policy if exists "service role manages chapters" on public.chapters;
 create policy "service role manages chapters"
@@ -241,21 +249,24 @@ create policy "public can read chapter images"
 on public.chapter_images
 for select
 to public
-using (true);
+using (exists (select 1 from public.chapters c where c.id = chapter_images.chapter_id));
 
 drop policy if exists "public can read story reviews" on public.story_reviews;
 create policy "public can read story reviews"
 on public.story_reviews
 for select
 to public
-using (true);
+using (
+  exists (select 1 from public.stories s where s.id = story_reviews.story_id)
+  and (chapter_id is null or exists (select 1 from public.chapters c where c.id = story_reviews.chapter_id))
+);
 
 drop policy if exists "public can read story review likes" on public.story_review_likes;
 create policy "public can read story review likes"
 on public.story_review_likes
 for select
 to public
-using (true);
+using (exists (select 1 from public.story_reviews r where r.id = story_review_likes.review_id));
 
 drop policy if exists "service role manages chapter images" on public.chapter_images;
 create policy "service role manages chapter images"

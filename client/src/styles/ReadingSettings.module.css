@@ -1,0 +1,19 @@
+.panel {
+  margin: 16px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-panel);
+  background: rgba(116, 90, 146, 0.12);
+  color: var(--text-main);
+}
+.panel summary { cursor: pointer; font-weight: 700; }
+.panel summary span { margin-left: 12px; font-size: 0.85rem; font-weight: 400; color: var(--text-soft); }
+.panel summary:focus-visible { outline: 2px solid var(--brand-300); outline-offset: 6px; border-radius: 4px; }
+.fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+.fields label { display: grid; gap: 8px; font-size: 0.88rem; color: var(--text-soft); }
+.fields select { width: 100%; min-height: 44px; padding: 10px 12px; color: var(--text-main); }
+.message { display: block; margin-top: 14px; color: var(--text-soft); }
+@media (max-width: 650px) {
+  .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel summary span { display: block; margin: 6px 0 0 18px; }
+}

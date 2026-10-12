@@ -1,3 +1,10 @@
+import {ContentGate} from '../components/common/ContentWarnings';
+import { ui } from "../i18n/runtime.js";
+import {WorkDetailsPublic} from '../components/stories/WorkDetails';
+import {ShareWork} from '../components/common/ShareWork';
+import { ReportDialog } from "../components/common/ReportDialog";
+import { useDialogFocus } from "../hooks/useDialogFocus";
+import { LibraryControls } from "../components/common/LibraryControls";
 // Hoja de detalle para una ilustracion.
 import { useEffect, useState } from "react";
 import {
@@ -21,9 +28,12 @@ export function IllustrationDetailPage({
 }) {
   const commentTargetId = "illustration-comments";
   const fanartTargetId = "illustration-fanarts";
+  const [reportTarget,setReportTarget]=useState(null);
+  const [reportMessage,setReportMessage]=useState("");
   const [detailState, setDetailState] = useState(illustration);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const lightboxRef=useDialogFocus(isLightboxOpen,()=>setIsLightboxOpen(false));
   const [comments, setComments] = useState([]);
   const [fanarts, setFanarts] = useState([]);
   const [commentDraft, setCommentDraft] = useState("");
@@ -116,11 +126,12 @@ export function IllustrationDetailPage({
             onNavigate={onNavigate}
           />
           <section className={styles.emptyState}>
-            <strong>Ilustracion no encontrada</strong>
-            <p>Prueba volver a la galeria o revisar el enlace.</p>
+            <strong>{ui("Ilustracion no encontrada")}</strong>
+            <p>{ui("Prueba volver a la galeria o revisar el enlace.")}</p>
           </section>
         </main>
-      </AppShell>
+        {reportTarget&&<ReportDialog auth={auth} target={reportTarget} onClose={()=>setReportTarget(null)} onSent={setReportMessage}/>}
+    </AppShell>
     );
   }
 
@@ -355,6 +366,7 @@ export function IllustrationDetailPage({
           {...navFilters}
           onNavigate={onNavigate}
         />
+        <ContentGate key={detailState.id} work={detailState} type="illustration" auth={auth} onNavigate={onNavigate}>
 
         <section className={styles.layout}>
           <div className={styles.mediaColumn}>
@@ -374,7 +386,7 @@ export function IllustrationDetailPage({
                   {hasMultipleImages ? (
                     <>
                       <button
-                        aria-label="Ver imagen anterior"
+                        aria-label={ui("Ver imagen anterior")}
                         className={`${styles.mediaArrow} ${styles.mediaArrowLeft}`}
                         onClick={(event) => {
                           event.stopPropagation();
@@ -385,7 +397,7 @@ export function IllustrationDetailPage({
                         ‹
                       </button>
                       <button
-                        aria-label="Ver imagen siguiente"
+                        aria-label={ui("Ver imagen siguiente")}
                         className={`${styles.mediaArrow} ${styles.mediaArrowRight}`}
                         onClick={(event) => {
                           event.stopPropagation();
@@ -424,8 +436,11 @@ export function IllustrationDetailPage({
 
         <section className={styles.infoStack}>
           <article className={`${styles.infoCard} ${styles.infoCardUnified}`}>
-            <span>Ilustracion</span>
+            <span>{ui("Ilustracion")}</span>
             <h1>{detailState.title}</h1>
+            {detailState.collectionName && <p>{ui("Colección: ")}{detailState.collectionName}</p>}
+            {detailState.credits && <p>{ui("Créditos: ")}{detailState.credits}</p>}
+            <p>{ui("Permisos de uso: ")}{detailState.usageRights || ui("Todos los derechos reservados")}</p>
             <button
               className={styles.authorLink}
               onClick={() =>
@@ -438,30 +453,38 @@ export function IllustrationDetailPage({
               {detailState.author}
             </button>
             <p className={styles.description}>
-              {detailState.description || "Esta pieza aun no tiene descripcion visible."}
+              {detailState.description || ui("Esta pieza aun no tiene descripcion visible.")}
             </p>
 
             <div className={styles.metaGrid}>
               <div>
                 <strong>{detailState.likesCount}</strong>
-                <span>Me gusta</span>
+                <span>{ui("Me gusta")}</span>
               </div>
               <div>
                 <strong>{detailState.commentsCount}</strong>
-                <span>Comentarios</span>
+                <span>{ui("Comentarios")}</span>
               </div>
               <div>
                 <strong>{detailState.viewsCount}</strong>
-                <span>Vistas</span>
+                <span>{ui("Vistas")}</span>
               </div>
             </div>
 
+            <div className={styles.publicationTools}>
+            <LibraryControls auth={auth} work={detailState} type="illustration" onNavigate={onNavigate} />
+            <button className={styles.reportButton} type="button" onClick={()=>auth.token?setReportTarget({targetType:'illustration',targetId:illustration.id}):onNavigate('login')}>
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M5 21V4m0 0c5-4 9 4 14 0v10c-5 4-9-4-14 0" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              {ui("Denunciar publicación")}
+            </button>
+            </div>
+            {reportMessage && <p className={styles.reportMessage} role="status">{ui(reportMessage)}</p>}
             <div className={styles.actionBar}>
               <button
                 aria-label={
                   detailState.likedByCurrentUser
-                    ? "Quitar me gusta de la ilustracion"
-                    : "Dar me gusta a la ilustracion"
+                    ? ui("Quitar me gusta de la ilustracion")
+                    : ui("Dar me gusta a la ilustracion")
                 }
                 className={`${styles.actionIconButton} ${
                   detailState.likedByCurrentUser ? styles.actionIconButtonActive : ""
@@ -470,8 +493,8 @@ export function IllustrationDetailPage({
                 onClick={handleIllustrationLike}
                 title={
                   detailState.likedByCurrentUser
-                    ? "Quitar me gusta"
-                    : "Dar me gusta"
+                    ? ui("Quitar me gusta")
+                    : ui("Dar me gusta")
                 }
                 type="button"
               >
@@ -481,10 +504,10 @@ export function IllustrationDetailPage({
               </button>
 
               <button
-                aria-label="Ir a los comentarios"
+                aria-label={ui("Ir a los comentarios")}
                 className={styles.actionIconButton}
                 onClick={() => scrollToSection(commentTargetId)}
-                title="Comentarios"
+                title={ui("Comentarios")}
                 type="button"
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -493,10 +516,10 @@ export function IllustrationDetailPage({
               </button>
 
               <button
-                aria-label="Ir a fanarts de comunidad"
+                aria-label={ui("Ir a fanarts de comunidad")}
                 className={styles.actionIconButton}
                 onClick={() => scrollToSection(fanartTargetId)}
-                title="Fanarts"
+                title={ui("Fanarts")}
                 type="button"
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -507,7 +530,7 @@ export function IllustrationDetailPage({
 
             <div className={styles.tagBlock}>
               {(detailState.categories || []).map((category) => (
-                <span key={`${detailState.id}-${category}`}>{category}</span>
+                <span key={`${detailState.id}-${category}`}>{ui(category)}</span>
               ))}
               {(detailState.tags || []).map((tag) => (
                 <span key={`${detailState.id}-tag-${tag}`}>#{tag}</span>
@@ -519,9 +542,7 @@ export function IllustrationDetailPage({
                 className={styles.backButton}
                 onClick={() => onNavigate("illustrations")}
                 type="button"
-              >
-                Volver a ilustraciones
-              </button>
+              >{ui(" Volver a ilustraciones ")}</button>
             </div>
           </article>
         </section>
@@ -529,8 +550,8 @@ export function IllustrationDetailPage({
         <section className={styles.communityGallerySection} id={fanartTargetId}>
           <div className={styles.communityGalleryHeader}>
             <div>
-              <span>Fanarts de comunidad</span>
-              <h2>Ilustraciones inspiradas por esta obra</h2>
+              <span>{ui("Fanarts de comunidad")}</span>
+              <h2>{ui("Ilustraciones inspiradas por esta obra")}</h2>
             </div>
           </div>
 
@@ -560,8 +581,8 @@ export function IllustrationDetailPage({
             </div>
           ) : (
             <article className={styles.emptyComments}>
-              <strong>Aun no hay fanarts de comunidad.</strong>
-              <p>Se la primera persona en aportar una pieza inspirada por esta ilustracion.</p>
+              <strong>{ui("Aun no hay fanarts de comunidad.")}</strong>
+              <p>{ui("Se la primera persona en aportar una pieza inspirada por esta ilustracion.")}</p>
             </article>
           )}
 
@@ -569,22 +590,22 @@ export function IllustrationDetailPage({
             <form className={styles.fanartForm} onSubmit={handleFanartSubmit}>
               <div className={styles.fanartFormHeader}>
                 <div>
-                  <strong>Comparte tu fanart</strong>
-                  <p>Sube una pieza visual inspirada en esta ilustracion del creador.</p>
+                  <strong>{ui("Comparte tu fanart")}</strong>
+                  <p>{ui("Sube una pieza visual inspirada en esta ilustracion del creador.")}</p>
                 </div>
               </div>
               <div className={styles.fanartFormGrid}>
                 <div className={styles.fanartUploadPane}>
                   {fanartPreview?.objectUrl ? (
                     <img
-                      alt={fanartTitle || "Vista previa del fanart"}
+                      alt={fanartTitle || ui("Vista previa del fanart")}
                       className={styles.fanartPreview}
                       src={fanartPreview.objectUrl}
                     />
                   ) : (
                     <div className={styles.fanartPlaceholder}>
-                      <strong>Tu fanart aparecera aqui</strong>
-                      <span>Elige una imagen vertical, cuadrada o horizontal.</span>
+                      <strong>{ui("Tu fanart aparecera aqui")}</strong>
+                      <span>{ui("Elige una imagen vertical, cuadrada o horizontal.")}</span>
                     </div>
                   )}
                   <label className={styles.fanartFileButton}>
@@ -593,23 +614,21 @@ export function IllustrationDetailPage({
                       className={styles.fanartFileInput}
                       onChange={handleFanartFile}
                       type="file"
-                    />
-                    Elegir imagen
-                  </label>
+                    />{ui(" Elegir imagen ")}</label>
                 </div>
 
                 <div className={styles.fanartFields}>
                   <label className={styles.fanartField}>
-                    <span>Titulo del fanart</span>
+                    <span>{ui("Titulo del fanart")}</span>
                     <input
                       onChange={(event) => setFanartTitle(event.target.value)}
-                      placeholder="Nombre de tu aporte visual"
+                      placeholder={ui("Nombre de tu aporte visual")}
                       value={fanartTitle}
                     />
                   </label>
 
                   <button disabled={isSubmittingFanart} type="submit">
-                    {isSubmittingFanart ? "Publicando..." : "Publicar fanart"}
+                    {isSubmittingFanart ? ui("Publicando...") : ui("Publicar fanart")}
                   </button>
 
                   {fanartMessage ? (
@@ -620,10 +639,8 @@ export function IllustrationDetailPage({
             </form>
           ) : (
             <div className={styles.loginHint}>
-              <strong>Debes iniciar sesion para subir fanarts de comunidad.</strong>
-              <button onClick={() => onNavigate("login")} type="button">
-                Iniciar sesion
-              </button>
+              <strong>{ui("Debes iniciar sesion para subir fanarts de comunidad.")}</strong>
+              <button onClick={() => onNavigate("login")} type="button">{ui(" Iniciar sesion ")}</button>
             </div>
           )}
         </section>
@@ -631,8 +648,10 @@ export function IllustrationDetailPage({
         <section className={styles.commentsSection} id={commentTargetId}>
           <div className={styles.commentsHeader}>
             <div>
-              <span>Comunidad visual</span>
-              <h2>Comentarios sobre esta ilustracion</h2>
+              <span>{ui("Comunidad visual")}</span>
+              <WorkDetailsPublic key={detailState.id} work={detailState} type="illustration" auth={auth} onNavigate={onNavigate}/>
+              <ShareWork work={detailState} type="illustration"/>
+              <h2>{ui("Comentarios sobre esta ilustracion")}</h2>
             </div>
           </div>
 
@@ -650,7 +669,7 @@ export function IllustrationDetailPage({
                         {comment.authorAvatarUrl ? (
                         <img alt={comment.authorName} src={comment.authorAvatarUrl} />
                       ) : (
-                          comment.authorName?.slice(0, 1).toUpperCase() || "V"
+                          comment.authorName?.slice(0, 1).toUpperCase() || ui("V")
                         )}
                       </span>
                       <div>
@@ -676,15 +695,15 @@ export function IllustrationDetailPage({
                     onClick={() => handleCommentLike(comment.id)}
                     type="button"
                   >
-                    {comment.likedByCurrentUser ? "Te gusta" : "Me gusta"} ·{" "}
+                    {comment.likedByCurrentUser ? ui("Te gusta") : ui("Me gusta")} ·{" "}
                     {comment.likesCount || 0}
                   </button>
                 </article>
               ))
             ) : (
               <article className={styles.emptyComments}>
-                <strong>Aun no hay comentarios.</strong>
-                <p>Se la primera persona en reaccionar a esta ilustracion.</p>
+                <strong>{ui("Aun no hay comentarios.")}</strong>
+                <p>{ui("Se la primera persona en reaccionar a esta ilustracion.")}</p>
               </article>
             )}
           </div>
@@ -692,50 +711,46 @@ export function IllustrationDetailPage({
           {auth.isAuthenticated ? (
             <form className={styles.commentForm} onSubmit={handleCommentSubmit}>
               <label>
-                <span>Deja tu comentario</span>
+                <span>{ui("Deja tu comentario")}</span>
                 <textarea
                   onChange={(event) => setCommentDraft(event.target.value)}
-                  placeholder="Comparte tu impresion sobre esta ilustracion"
+                  placeholder={ui("Comparte tu impresion sobre esta ilustracion")}
                   rows="4"
                   value={commentDraft}
                 />
               </label>
               <button disabled={isSubmittingComment} type="submit">
-                {isSubmittingComment ? "Publicando..." : "Publicar comentario"}
+                {isSubmittingComment ? ui("Publicando...") : ui("Publicar comentario")}
               </button>
             </form>
           ) : (
             <div className={styles.loginHint}>
-              <strong>Debes iniciar sesion para comentar o dar me gusta.</strong>
-              <button onClick={() => onNavigate("login")} type="button">
-                Iniciar sesion
-              </button>
+              <strong>{ui("Debes iniciar sesion para comentar o dar me gusta.")}</strong>
+              <button onClick={() => onNavigate("login")} type="button">{ui(" Iniciar sesion ")}</button>
             </div>
           )}
         </section>
 
         {isLightboxOpen ? (
           <div
+            ref={lightboxRef} role="dialog" aria-modal="true" aria-label={ui("Vista ampliada de la ilustración")}
             className={styles.lightbox}
             onClick={() => setIsLightboxOpen(false)}
-            role="presentation"
+
           >
             <div
               className={styles.lightboxFrame}
               onClick={(event) => event.stopPropagation()}
-              role="presentation"
             >
               <button
                 className={styles.lightboxClose}
                 onClick={() => setIsLightboxOpen(false)}
                 type="button"
-              >
-                Cerrar
-              </button>
+              >{ui(" Cerrar ")}</button>
               {hasMultipleImages ? (
                 <>
                   <button
-                    aria-label="Ver imagen anterior"
+                    aria-label={ui("Ver imagen anterior")}
                     className={`${styles.lightboxArrow} ${styles.lightboxArrowLeft}`}
                     onClick={showPreviousImage}
                     type="button"
@@ -743,7 +758,7 @@ export function IllustrationDetailPage({
                     ‹
                   </button>
                   <button
-                    aria-label="Ver imagen siguiente"
+                    aria-label={ui("Ver imagen siguiente")}
                     className={`${styles.lightboxArrow} ${styles.lightboxArrowRight}`}
                     onClick={showNextImage}
                     type="button"
@@ -760,7 +775,9 @@ export function IllustrationDetailPage({
             </div>
           </div>
         ) : null}
+      </ContentGate>
       </main>
+      {reportTarget&&<ReportDialog auth={auth} target={reportTarget} onClose={()=>setReportTarget(null)} onSent={setReportMessage}/>}
     </AppShell>
   );
 }

@@ -6,15 +6,14 @@
 .hero {
   margin-top: 18px;
   padding: 24px;
-  border-radius: 24px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
   background:
-    radial-gradient(circle at top left, rgba(168, 125, 215, 0.16), transparent 44%),
-    rgba(255, 255, 255, 0.04);
+    var(--bg-surface);
 }
 
 .hero span {
-  color: var(--brand-200);
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.76rem;
@@ -40,20 +39,18 @@
 */
 
 .visualToolbar {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   gap: 18px;
-  align-items: end;
   margin-top: 18px;
   padding: 18px 20px;
-  border-radius: 20px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--bg-surface);
 }
 
-.visualToolbar span {
+.toolbarHeading > div > span {
   display: block;
-  color: var(--brand-200);
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.76rem;
@@ -64,6 +61,13 @@
   margin: 6px 0 0;
 }
 
+.toolbarHeading { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.toolbarHeading > div { display: grid; gap: 4px; flex: 0 0 auto; }
+.toolbarFilters { display: flex; align-items: end; gap: 16px; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid var(--line-soft); }
+.collectionFilter { display: grid; gap: 9px; width: min(360px, 100%); min-width: 0; color: var(--text-soft); font-size: .9rem; }
+.collectionFilter select { width: 100%; min-height: 44px; padding: 10px 14px; }
+.clearFilter { padding: 11px 16px; border: 1px solid var(--line-soft); border-radius: var(--radius-control); background: var(--brand-900); color: var(--text-accent); }
+
 .visualToolbar p {
   max-width: 50ch;
   color: var(--text-soft);
@@ -71,8 +75,10 @@
 }
 
 .visualGrid {
-  column-count: 4;
-  column-gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
   margin-top: 22px;
 }
 
@@ -85,19 +91,18 @@
 
 .card,
 .visualCard {
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
   overflow: hidden;
 }
 
 .visualCard {
   break-inside: avoid;
-  margin-bottom: 18px;
+  min-width: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-    rgba(255, 255, 255, 0.02);
-  box-shadow: 0 18px 34px rgba(14, 8, 16, 0.14);
+    var(--bg-surface);
+  box-shadow: var(--shadow-soft);
 }
 
 .cardButton,
@@ -122,31 +127,40 @@
 
 .visualImageWrap {
   position: relative;
-  min-height: 260px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
 }
+
+.visualImageWrap .imageButton { display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.visualMeta .titleButton { padding: 0; border: 0; background: transparent; text-align: left; font-weight: 700; color: var(--text-main); overflow-wrap: anywhere; }
+.visualMeta .titleButton:hover { color: var(--text-accent); }
+.collectionName { color: var(--text-accent); overflow-wrap: anywhere; }
 
 .visualImageWrap img {
   width: 100%;
+  height: 100%;
   display: block;
   object-fit: cover;
   aspect-ratio: auto;
 }
 
 .visualOverlay {
+  pointer-events: none;
   position: absolute;
   inset: auto 0 0 0;
   display: flex;
   align-items: end;
   padding: 16px;
-  background: linear-gradient(180deg, transparent, rgba(22, 14, 31, 0.48) 60%, rgba(22, 14, 31, 0.72));
+  background: linear-gradient(180deg, transparent, rgba(var(--panel-rgb), 0.48) 60%, rgba(var(--panel-rgb), 0.72));
 }
 
 .visualAuthor {
+  pointer-events: auto;
   width: fit-content;
   padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff7ff;
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  color: var(--text-main);
   font-size: 0.74rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -189,19 +203,21 @@
 
 .tagRow span {
   padding: 5px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff7ff;
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  color: var(--text-main);
   font-size: 0.72rem;
 }
 
 .emptyCard {
   display: block;
+  column-span: all;
+  grid-column: 1 / -1;
   break-inside: avoid;
   padding: 26px 24px;
-  border-radius: 22px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-surface);
 }
 
 .emptyCard strong,
@@ -217,12 +233,12 @@
 
 @media (max-width: 1180px) {
   .visualGrid {
-    column-count: 3;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 860px) {
-  .visualToolbar {
+  .toolbarHeading {
     flex-direction: column;
     align-items: start;
   }
@@ -232,12 +248,18 @@
   }
 
   .visualGrid {
-    column-count: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 620px) {
   .visualGrid {
-    column-count: 1;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Galería abierta: imagen y pie sin una segunda caja decorativa. */
+.visualCard { background:transparent; border:0; border-radius:0; box-shadow:none; }
+.visualImageWrap { border-radius:6px; border:1px solid var(--line-soft); }
+.visualMeta { padding:12px 0 0; }
+.hero { background:transparent; border:0; border-bottom:1px solid var(--line-soft); border-radius:0; padding:24px 0; }

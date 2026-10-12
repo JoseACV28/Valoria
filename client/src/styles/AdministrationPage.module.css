@@ -1,0 +1,32 @@
+.page { display: grid; gap: 20px; min-width: 0; }
+.header,.card,.ownerNotice { padding: 24px; border: 1px solid var(--line-soft); border-radius: var(--radius-panel); background: var(--bg-surface); min-width: 0; }
+.header { background: var(--bg-surface); }
+.header > span { color: var(--text-accent); font-size: .8rem; letter-spacing: .12em; }
+.header h1 { margin: 12px 0; }
+.header p,.card p,.ownerNotice p { color: var(--text-soft); line-height: 1.6; }
+.tabs,.actions,.pagination { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.tabs button,.card button { padding: 11px 16px; border-radius: var(--radius-control); border: 1px solid var(--line-soft); background: rgba(116,90,146,.16); color: var(--text-main); }
+.card button[type="submit"] { background: var(--brand-400); color: var(--accent-ink); font-weight: 700; }
+.tabs button:hover,.card button:hover { border-color: var(--brand-300); }
+.card button:disabled { opacity: .5; cursor: default; }
+.tabs button[aria-pressed="true"] { background: var(--active-bg); color: var(--text-main); }
+.card,.editor { display: grid; gap: 16px; }
+.card label,.editor label { display: grid; gap: 8px; }
+.card :is(input:not([type="checkbox"]),textarea) { width: 100%; padding: 12px 14px; }
+.card > button { justify-self: start; }
+.search { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+.search label { flex: 1 1 240px; }
+.users { display: grid; gap: 12px; }
+.user { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 18px; border: 1px solid var(--line-soft); border-radius: var(--radius-panel); background: rgba(116,90,146,.1); }
+.user > div:first-child { display: grid; gap: 6px; min-width: 0; }
+.card small { color: var(--text-soft); overflow-wrap: anywhere; }
+.editor { padding: 20px; border: 1px solid var(--brand-400); border-radius: var(--radius-panel); }
+.user > .editor { flex: 0 0 100%; min-width: 0; scroll-margin-top: 20px; }
+.user button[aria-expanded="true"] { background: var(--brand-400); color: var(--accent-ink); }
+.permissionList { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--line-soft); border-radius: var(--radius-panel); }
+.permissionList label { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.permissionList input { width: 18px; height: 18px; accent-color: var(--brand-400); }
+.pagination { justify-content: space-between; font-size: .85rem; color: var(--text-soft); }
+.message { padding: 16px 20px; border-radius: var(--radius-panel); background: var(--brand-900); overflow-wrap: anywhere; }
+.ownerNotice { background: rgba(116,90,146,.12); }
+@media(max-width:600px) { .header,.card,.ownerNotice { padding: 18px; } .editor { padding: 14px; } .actions button { flex: 1 1 auto; } }

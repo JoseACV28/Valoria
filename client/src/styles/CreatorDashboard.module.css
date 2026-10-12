@@ -10,13 +10,14 @@
 .emptyState {
   margin-top: 28px;
   padding: 30px;
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 248, 240, 0.05);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .workspaceCard {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
 }
 
@@ -25,16 +26,16 @@
   gap: 10px;
   width: fit-content;
   padding: 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
 }
 
 .modeButton {
   padding: 10px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-control);
   background: transparent;
-  color: #e9d8ff;
+  color: var(--text-main);
   font-weight: 700;
   transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
 }
@@ -45,7 +46,7 @@
 
 .modeButtonActive {
   background: rgba(175, 141, 215, 0.2);
-  color: #fff8ff;
+  color: var(--text-main);
 }
 
 .hero,
@@ -65,7 +66,7 @@
   margin-top: 0;
   padding: 0 0 24px;
   border: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--line-soft);
   border-radius: 0;
   background: transparent;
 }
@@ -88,9 +89,9 @@
   gap: 4px;
   width: fit-content;
   padding: 12px 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
 }
 
 .heroSelectedStory strong,
@@ -99,7 +100,7 @@
 }
 
 .heroSelectedStory small {
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .heroDetailStrip {
@@ -109,14 +110,14 @@
   align-items: center;
   margin-top: 18px;
   padding: 20px 24px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 248, 240, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .heroDetailStrip span {
   display: block;
-  color: #ffcfb3;
+  color: var(--warm-text);
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -128,7 +129,7 @@
 }
 
 .heroDetailStrip p {
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .primaryAction,
@@ -136,7 +137,7 @@
 .dangerAction,
 .publishAction {
   padding: 11px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-panel);
   font-weight: 700;
   transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease,
     background 0.16s ease;
@@ -144,15 +145,15 @@
 
 .primaryAction {
   margin-top: 18px;
-  background: linear-gradient(135deg, rgba(255, 179, 139, 0.24), rgba(255, 138, 87, 0.34));
+  background: var(--bg-surface);
   border: 1px solid rgba(255, 179, 139, 0.2);
-  color: #fff5ee;
+  color: var(--text-main);
 }
 
 .secondaryAction {
   background: rgba(175, 141, 215, 0.14);
   border: 1px solid rgba(175, 141, 215, 0.18);
-  color: #f1e5ff;
+  color: var(--text-main);
 }
 
 .primaryAction:hover,
@@ -160,14 +161,14 @@
 .dangerAction:hover,
 .publishAction:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(18, 10, 25, 0.14);
+  box-shadow: var(--shadow-soft);
 }
 
 .hero span,
 .libraryHeader span,
 .panelHeader span,
 .emptyState span {
-  color: #ffb38b;
+  color: var(--text-main);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.8rem;
@@ -198,10 +199,10 @@
 
 .libraryCount {
   padding: 10px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-panel);
   background: rgba(255, 179, 139, 0.12);
   border: 1px solid rgba(255, 179, 139, 0.18);
-  color: #fff0e4 !important;
+  color: var(--text-main) !important;
   font-size: 0.82rem;
   white-space: nowrap;
 }
@@ -227,13 +228,14 @@
 .storyCard,
 .chapterItem,
 .emptyCard {
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .storyCard {
   display: grid;
+  min-width: 0;
   padding: 0;
   overflow: hidden;
   color: inherit;
@@ -244,13 +246,39 @@
 .storyCard:hover {
   transform: translateY(-2px);
   border-color: rgba(255, 179, 139, 0.18);
-  box-shadow: 0 16px 34px rgba(17, 10, 25, 0.12);
+  box-shadow: var(--shadow-soft);
+}
+
+.storyPublicationButton {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.storyEditButton {
+  margin: 0 14px 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
+  color: inherit;
+}
+
+.storyPublicationButton:focus-visible,
+.storyEditButton:focus-visible {
+  outline: 2px solid #ff8a57;
+  outline-offset: -3px;
 }
 
 .activeStory {
   outline: 2px solid #ff8a57;
   transform: translateY(-1px);
-  box-shadow: 0 18px 32px rgba(17, 10, 25, 0.16);
+  box-shadow: var(--shadow-soft);
 }
 
 .storyCard img {
@@ -299,7 +327,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   background: rgba(175, 141, 215, 0.18);
-  color: #f3deff !important;
+  color: var(--text-main) !important;
   font-family: "Georgia", "Times New Roman", serif;
   font-size: 0.76rem !important;
   font-style: italic;
@@ -312,7 +340,7 @@
 .storyCard small,
 .chapterItem p,
 .emptyCard p {
-  color: #dccfc3;
+  color: var(--text-main);
 }
 
 .storySynopsis {
@@ -337,7 +365,7 @@
   overflow: hidden;
   border-radius: 999px;
   background: rgba(175, 141, 215, 0.22);
-  color: #fff;
+  color: var(--text-main);
   font-size: 0.72rem;
   font-weight: 800;
 }
@@ -375,7 +403,7 @@
 }
 
 .storyMetaRow small {
-  color: #cdbddf;
+  color: var(--text-main);
   white-space: nowrap;
 }
 
@@ -390,7 +418,7 @@
   display: inline-flex;
   align-items: center;
   padding: 8px 11px;
-  border-radius: 999px;
+  border-radius: var(--radius-panel);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -399,13 +427,13 @@
 .storyStatusPublished {
   background: rgba(174, 226, 188, 0.14);
   border: 1px solid rgba(174, 226, 188, 0.18);
-  color: #dcf7e2;
+  color: var(--text-main);
 }
 
 .storyStatusDraft {
   background: rgba(255, 226, 173, 0.14);
   border: 1px solid rgba(255, 226, 173, 0.18);
-  color: #fff0cf;
+  color: var(--text-main);
 }
 
 .inlineChapterHeader {
@@ -424,7 +452,7 @@
 }
 
 .inlineChapterHeader span {
-  color: #ffcfb3;
+  color: var(--warm-text);
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -432,15 +460,15 @@
 
 .inlineChapterHeader small,
 .inlineChapterEmpty {
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .chapterSummary {
   padding: 9px 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-control);
   background: rgba(175, 141, 215, 0.12);
   border: 1px solid rgba(175, 141, 215, 0.18);
-  color: #efe2ff !important;
+  color: var(--text-main) !important;
   font-size: 0.78rem !important;
   line-height: 1.2 !important;
   white-space: nowrap;
@@ -448,10 +476,10 @@
 
 .chapterSummaryMuted {
   padding: 9px 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-control);
   background: rgba(255, 226, 173, 0.1);
   border: 1px solid rgba(255, 226, 173, 0.16);
-  color: #fff0cf !important;
+  color: var(--text-main) !important;
   font-size: 0.78rem !important;
   line-height: 1.2 !important;
   white-space: nowrap;
@@ -470,9 +498,9 @@
 
 .chapterGroup {
   padding: 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .chapterGroupHeader {
@@ -483,7 +511,7 @@
 }
 
 .chapterGroupHeader span {
-  color: #ffcfb3;
+  color: var(--warm-text);
   font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -491,9 +519,9 @@
 
 .chapterGroupHeader small {
   padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #e8daff;
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  color: var(--text-main);
 }
 
 .chapterNumberRow {
@@ -506,23 +534,23 @@
 .chapterNumberPill {
   min-width: 72px;
   padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f7eadf;
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
+  color: var(--text-main);
   font-weight: 700;
 }
 
 .activeChapterPill {
   background: rgba(255, 138, 87, 0.2);
   border-color: rgba(255, 179, 139, 0.32);
-  color: #fff6ef;
+  color: var(--text-main);
 }
 
 .draftChapterPill {
   background: rgba(255, 226, 173, 0.08);
   border-color: rgba(255, 226, 173, 0.16);
-  color: #fff2d5;
+  color: var(--text-main);
 }
 
 .inlineChapterEmpty {
@@ -536,14 +564,14 @@
   align-items: center;
   margin-top: 16px;
   padding: 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line-soft);
+  background: var(--bg-surface);
 }
 
 .chapterInspector span {
   display: block;
-  color: #ffcfb3;
+  color: var(--warm-text);
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -556,7 +584,7 @@
 
 .chapterInspector p,
 .chapterActionMessage {
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .chapterInspectorActions {
@@ -569,10 +597,10 @@
 
 .dangerAction {
   padding: 11px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-panel);
   background: rgba(255, 132, 132, 0.14);
   border: 1px solid rgba(255, 132, 132, 0.2);
-  color: #ffd9d9;
+  color: var(--text-main);
   font-weight: 700;
 }
 
@@ -584,7 +612,7 @@
 .publishAction {
   background: rgba(174, 226, 188, 0.16);
   border: 1px solid rgba(174, 226, 188, 0.22);
-  color: #e6ffea;
+  color: var(--text-main);
 }
 
 .publishAction:hover {
@@ -594,7 +622,7 @@
 
 .chapterActionMessage {
   margin: 14px 0 0;
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .deletePrompt {
@@ -604,14 +632,14 @@
   align-items: center;
   margin-top: 14px;
   padding: 18px;
-  border-radius: 20px;
+  border-radius: var(--radius-panel);
   border: 1px solid rgba(255, 132, 132, 0.18);
   background: rgba(255, 132, 132, 0.08);
 }
 
 .deletePrompt span {
   display: block;
-  color: #ffd9d9;
+  color: var(--text-main);
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -623,7 +651,7 @@
 }
 
 .deletePrompt p {
-  color: #f2d7d7;
+  color: var(--text-main);
 }
 
 .deletePromptActions {
@@ -654,16 +682,16 @@
 .emptyState button {
   margin-top: 18px;
   padding: 12px 18px;
-  border-radius: 999px;
-  background: #fff2e8;
-  color: #23140f;
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
 @media (max-width: 1024px) {
   .storyGrid,
   .editorGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .activeStory {
@@ -672,6 +700,23 @@
 }
 
 @media (max-width: 840px) {
+  .chapterActions {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .chapterSummary,
+  .chapterSummaryMuted {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .storyMetaRow,
+  .storyCardTopline {
+    flex-wrap: wrap;
+  }
+
   .hero,
   .libraryHeader,
   .panelHeader,

@@ -1,0 +1,21 @@
+import { ui } from "../../i18n/runtime.js";
+import { useState } from 'react';
+import { workspaceRequest } from '../../api/workspaceApi';
+import { contentToHtml } from '../../utils/richContent';
+import styles from '../../styles/ProductTools.module.css';
+export function EditorialCollaboration({invite,auth,onUpdated}) {
+  const isAuthor=invite.sender_id===auth.user?.id;
+  const [access,setAccess]=useState(invite.editorial_access||'none'),[data,setData]=useState(null),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
+  const [form,setForm]=useState({chapterId:'',quote:'',note:''});
+  const request=(path,method,body)=>workspaceRequest(`collaborations/${invite.id}/${path}`,auth.token,method,body);
+  async function load(){const next=await request('manuscript');setData(next);setForm(current=>({...current,chapterId:current.chapterId||next.chapters[0]?.id||''}));}
+  async function act(operation){setBusy(true);try{await operation();}catch(e){setMessage(e.message);}finally{setBusy(false);}}
+  return <section className={styles.panel}>
+    <h3>{ui("Manuscrito compartido")}</h3>
+    {isAuthor&&<><label>{ui("Acceso de esta colaboración")}<select value={access} onChange={event=>setAccess(event.target.value)}><option value="none">{ui("Sin acceso al manuscrito")}</option><option value="read">{ui("Solo lectura")}</option><option value="suggest">{ui("Lectura y sugerencias")}</option></select></label><button type="button" disabled={busy} onClick={()=>act(async()=>{const result=await request('access','PUT',{access});setMessage(result.message);setData(null);await onUpdated();})}>{ui("Guardar acceso")}</button></>}
+    <p>{ui("El acceso se limita a esta historia y sus capítulos activos. Las sugerencias no cambian el texto; solo el autor puede editar o publicar.")}</p>
+    {isAuthor||['read','suggest'].includes(invite.editorial_access)?<button type="button" disabled={busy} aria-expanded={Boolean(data)} onClick={()=>data?setData(null):act(load)}>{data?ui("Cerrar manuscrito"):ui("Abrir manuscrito")}</button>:<p>{ui("El autor todavía no ha autorizado el acceso al manuscrito.")}</p>}
+    {data&&<div className={styles.stack}><h3>{data.story.title}</h3>{data.chapters.map(chapter=><details key={chapter.id} className={styles.panel}><summary>{chapter.title} · {chapter.status==='draft'?ui("borrador"):ui("publicado")}</summary><div className={styles.manuscript} dangerouslySetInnerHTML={{__html:contentToHtml(chapter.content)}}/></details>)}{data.canSuggest&&<form className={styles.stack} onSubmit={event=>{event.preventDefault();act(async()=>{const result=await request('suggestions','POST',form);setMessage(result.message);setForm({...form,quote:'',note:''});await load();});}}><h4>{ui("Enviar una sugerencia")}</h4><label>{ui("Capítulo")}<select required value={form.chapterId} onChange={event=>setForm({...form,chapterId:event.target.value})}>{data.chapters.map(c=><option key={c.id} value={c.id}>{c.title}</option>)}</select></label><label>{ui("Fragmento que quieres comentar")}<textarea maxLength={3000} value={form.quote} onChange={event=>setForm({...form,quote:event.target.value})}/></label><label>{ui("Corrección o comentario")}<textarea required minLength={3} maxLength={4000} value={form.note} onChange={event=>setForm({...form,note:event.target.value})}/></label><button disabled={busy||!form.chapterId} type="submit">{ui("Enviar sugerencia")}</button></form>}<h4>{ui("Sugerencias")}</h4>{!data.suggestions.length&&<p>{ui("No hay sugerencias todavía.")}</p>}{data.suggestions.map(note=><article className={styles.panel} key={note.id}><strong>{data.chapters.find(x=>x.id===note.chapter_id)?.title||ui("Capítulo")} · {({pending:'Pendiente',reviewed:'Revisada',dismissed:'Descartada'})[note.status]}</strong>{note.quote&&<blockquote>{note.quote}</blockquote>}<p style={{whiteSpace:'pre-wrap'}}>{note.note}</p>{data.isAuthor&&note.status==='pending'&&<div className={styles.actions}>{['reviewed','dismissed'].map(status=><button key={status} type="button" disabled={busy} onClick={()=>act(async()=>{await request(`suggestions/${note.id}`,'PATCH',{status});await load();})}>{status==='reviewed'?ui("Marcar revisada"):ui("Descartar")}</button>)}</div>}</article>)}</div>}
+    {message&&<p role="status">{ui(message)}</p>}
+  </section>;
+}

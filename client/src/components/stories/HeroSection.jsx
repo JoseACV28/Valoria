@@ -1,3 +1,4 @@
+import { ui } from "../../i18n/runtime.js";
 // Hero principal del home.
 // Mezcla historias e ilustraciones destacadas dentro de una misma vitrina.
 import { useEffect, useMemo, useState } from "react";
@@ -100,13 +101,13 @@ export function HeroSection({
     <section className={styles.hero}>
       <div className={styles.copy}>
         <div className={styles.topline}>
-          <span className={styles.badge}>Valoria</span>
+          <span className={styles.badge}>{ui("Valoria")}</span>
         </div>
         {activeItem ? (
           <>
             <div className={styles.carousel}>
               <button
-                aria-label="Elemento anterior"
+                aria-label={ui("Elemento anterior")}
                 className={styles.arrow}
                 onClick={goToPreviousItem}
                 type="button"
@@ -116,19 +117,19 @@ export function HeroSection({
 
               <div className={styles.storyCopy}>
                 <span className={styles.storyMeta}>
-                  {activeItem.category} · {activeItem.metric}
+                  {ui(activeItem.category)} · {ui(activeItem.metric)}
                 </span>
                 <h1>{activeItem.title}</h1>
                 <p>{activeItem.description}</p>
                 {activeItem.type === "story" ? (
                   <div className={styles.heroRating}>
                     <StarRating value={activeRating} icon="heart" />
-                    <span>{activeItem.ratingCount || 0} reseñas</span>
+                    <span>{activeItem.ratingCount || 0}{ui(" reseñas")}</span>
                   </div>
                 ) : (
                   <div className={styles.heroRating}>
-                    <span>{activeItem.likesCount || 0} me gusta</span>
-                    <span>{activeItem.commentsCount || 0} comentarios</span>
+                    <span>{activeItem.likesCount || 0}{ui(" me gusta")}</span>
+                    <span>{activeItem.commentsCount || 0}{ui(" comentarios")}</span>
                   </div>
                 )}
 
@@ -137,12 +138,12 @@ export function HeroSection({
                     <strong>{activeItem.author}</strong>
                     <small>
                       {activeItem.type === "story"
-                        ? "Historia destacada"
-                        : "Ilustracion destacada"}
+                        ? ui("Historia destacada")
+                        : ui("Ilustracion destacada")}
                     </small>
                   </div>
                   <button onClick={handleOpenActiveItem} type="button">
-                    {activeItem.type === "story" ? "Leer ahora" : "Ver ahora"}
+                    {activeItem.type === "story" ? ui("Leer ahora") : ui("Ver ahora")}
                   </button>
                 </div>
               </div>
@@ -155,7 +156,7 @@ export function HeroSection({
                       : styles.coverTypeIllustration
                   }`}
                 >
-                  {activeItem.type === "story" ? "Historia" : "Ilustracion"}
+                  {activeItem.type === "story" ? ui("Historia") : ui("Ilustracion")}
                 </span>
                 <div className={styles.coverFrame}>
                   <img
@@ -166,7 +167,7 @@ export function HeroSection({
                           ? styles.coverSquare
                           : styles.coverPortrait
                     }`}
-                    src={activeItem.cover}
+                    src={activeItem.cover || "/default-cover.svg"} onError={(event) => { if (!event.currentTarget.src.endsWith("/default-cover.svg")) event.currentTarget.src = "/default-cover.svg"; }}
                     alt={activeItem.title}
                     onLoad={(event) => {
                       const image = event.currentTarget;
@@ -189,7 +190,7 @@ export function HeroSection({
               </div>
 
               <button
-                aria-label="Siguiente elemento"
+                aria-label={ui("Siguiente elemento")}
                 className={styles.arrow}
                 onClick={goToNextItem}
                 type="button"
@@ -200,11 +201,8 @@ export function HeroSection({
           </>
         ) : (
           <>
-            <h1>Historias e ilustraciones para descubrir a tu ritmo.</h1>
-            <p>
-              Una portada viva para descubrir ficcion serial, arte visual,
-              guardar favoritas y volver cada noche a explorar.
-            </p>
+            <h1>{ui("Historias e ilustraciones para descubrir a tu ritmo.")}</h1>
+            <p>{ui(" Una portada viva para descubrir ficcion serial, arte visual, guardar favoritas y volver cada noche a explorar. ")}</p>
           </>
         )}
 

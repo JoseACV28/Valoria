@@ -1,51 +1,18 @@
-// Punto de entrada del servidor Express.
-// Monta middlewares, expone rutas API y sirve uploads locales de respaldo.
-import cors from "cors";
-import express from "express";
-import path from "node:path";
+import { backupStatus, runScheduledBackup, initializeDailyBackup } from './utils/siteBackup.js';
+import { supabaseAdmin } from './config/supabase.js';
+import { publishDueChapters } from "./utils/publicationSchedule.js";
+import {publicationStatus} from './utils/publicationSchedule.js';
+import {checkOperations} from './utils/operationalAlerts.js';
+import app from "./app.js";
 import { env } from "./config/env.js";
-import { isSupabaseEnabled } from "./config/supabase.js";
-import illustrationRoutes from "./routes/illustrationRoutes.js";
-import { attachAuthUser } from "./middlewares/authMiddleware.js";
-import authRoutes from "./routes/authRoutes.js";
-import notificationRoutes from "./routes/notificationRoutes.js";
-import profileRoutes from "./routes/profileRoutes.js";
-import storyRoutes from "./routes/storyRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(attachAuthUser);
-app.use(
-  `/${env.uploadFallbackDir}`,
-  express.static(path.resolve("server", env.uploadFallbackDir))
-);
-
-app.get("/api/health", (request, response) => {
-  response.json({
-    status: "ok",
-    service: "histopad-server",
-    storage: isSupabaseEnabled() ? "supabase" : "local-fallback"
-  });
-});
-
-app.use("/api/stories", storyRoutes);
-app.use("/api/illustrations", illustrationRoutes);
-app.use("/api/profiles", profileRoutes);
-app.use("/api/notifications", notificationRoutes);
-app.use("/api/uploads", uploadRoutes);
-app.use("/api/auth", authRoutes);
-
-app.use((error, request, response, next) => {
-  console.error(error);
-
-  response.status(500).json({
-    message: error.message || "Error interno del servidor"
-  });
-});
-
-app.listen(env.port, () => {
+app.listen(env.port, process.env.HOST||(process.env.NODE_ENV==='production'?'0.0.0.0':'127.0.0.1'), () => {
   console.log(`HistoPad server listening on http://localhost:${env.port}`);
 });
+
+setInterval(()=>publishDueChapters().catch(()=>{}),60000).unref();
+publishDueChapters().catch(()=>{});
+setInterval(()=>checkOperations({backup:backupStatus,publication:publicationStatus}).catch(()=>{}),60000).unref();
+
+backupStatus.enabled=process.env.SITE_BACKUP_ENABLED==='true';
+if(backupStatus.enabled){initializeDailyBackup(supabaseAdmin,env.supabaseUrl);setInterval(()=>runScheduledBackup(supabaseAdmin,env.supabaseUrl),3600000).unref();}

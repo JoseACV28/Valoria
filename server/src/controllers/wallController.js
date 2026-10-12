@@ -1,3 +1,4 @@
+import { blockedProfileIds } from '../middlewares/profileBlocks.js';
 // Controlador HTTP del muro de creador.
 // Expone publicaciones, comentarios, respuestas y likes del perfil.
 import { WallModel } from "../models/wallModel.js";
@@ -7,7 +8,8 @@ export async function getCommunityFeed(request, response, next) {
   // Devuelve una seleccion corta de actividad para la seccion Comunidad del home.
   try {
     const limit = Number(request.query.limit || 6);
-    const posts = await WallModel.getCommunityFeed(limit);
+    const blocked=await blockedProfileIds(request.authUser?.id);
+    const posts = (await WallModel.getCommunityFeed(limit)).filter(item=>!blocked.has(item.authorId||item.creatorId||item.creator_id));
     return response.json({ posts });
   } catch (error) {
     return next(error);
@@ -126,6 +128,7 @@ export async function createWallComment(request, response, next) {
     }
 
     await NotificationModel.create({
+      threadId: request.params.postId,
       recipientId: notificationRecipientId,
       actorId: request.authUser.id,
       actorName: request.authUser.displayName,
@@ -190,6 +193,7 @@ export async function likeWallComment(request, response, next) {
 
     if (comment.likedByCurrentUser) {
       await NotificationModel.create({
+      threadId: request.params.postId,
         recipientId: comment.authorId,
         actorId: request.authUser.id,
         actorName: request.authUser.displayName,

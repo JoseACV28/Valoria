@@ -1,0 +1,42 @@
+/* Sistema visual común de Valoria. Copia previa: docs/design-backups/antes-estilo-biblioteca-global-20261011.zip */
+:root {
+ --bg-main:#181a20; --bg-surface:#20222b; --bg-surface-strong:#292c38;
+ --text-main:#edeef2; --text-soft:#adb1c0; --text-accent:#c4b8e3;
+ --line-soft:#3e414e; --brand-500:#b3a4cf; --brand-400:#b3a4cf; --brand-300:#ada4cf; --brand-200:#d5cdeb; --brand-900:#252833;
+ --field-bg:#20222b; --field-bg-focus:#292c38; --field-border:#484553; --field-placeholder:#a6a3b4; --field-radius:8px;
+ --panel-rgb:32,34,43; --panel-dark:#20222b; --accent-ink:#24212e; --warm-text:#c4b8e3;
+ --radius-panel:10px; --radius-control:8px; --shadow-soft:none; --action-bg:#b3a4cf; --active-bg:#3c394c;
+ --light-panel:var(--bg-surface); --light-elevation:none;
+ color:var(--text-main); background:var(--bg-main); color-scheme:dark;
+}
+html[data-theme="light"] {
+ --bg-main:#faf8f5; --bg-surface:#fffdfb; --bg-surface-strong:#f0eaf5;
+ --text-main:#2d2a35; --text-soft:#716b7c; --text-accent:#6d5688;
+ --line-soft:#ded9e5; --brand-500:#7b608f; --brand-400:#7b608f; --brand-300:#806398; --brand-200:#695182; --brand-900:#eee9f4;
+ --field-bg:#fffdfb; --field-bg-focus:#fff; --field-border:#cec3da; --field-placeholder:#716b7c;
+ --panel-rgb:255,253,251; --panel-dark:#f4f0f7; --accent-ink:#fff; --warm-text:#6d5688;
+ --action-bg:#7b608f; --active-bg:#e9e1f0; --light-panel:var(--bg-surface); --light-elevation:none;
+ color:var(--text-main); background:var(--bg-main); color-scheme:light;
+}
+html[data-contrast="high"] { --text-main:#fff; --text-soft:#ece7f5; --text-accent:#e0d3fb; --line-soft:#9b8aac; --field-border:#bda2db; --field-placeholder:#e0d3fb; }
+html[data-theme="light"][data-contrast="high"] { --text-main:#24132e; --text-soft:#422b52; --text-accent:#513068; --line-soft:#9677af; --field-border:#795693; --field-placeholder:#513068; }
+:where(h1,h2) { font-family:Georgia,'Times New Roman',serif; font-weight:400; letter-spacing:-.02em; line-height:1.25; }
+h1 { font-size:clamp(1.8rem,3vw,2.7rem); }
+h2 { font-size:clamp(1.4rem,2.2vw,1.8rem); }
+:where(h3,h4) { font-weight:600; }
+button { border-radius:var(--radius-control); }
+button[type="submit"] { background:var(--action-bg); color:var(--accent-ink); }
+#root details > summary { border-radius:var(--radius-control); background:var(--bg-surface); font-weight:500; }
+#root option { background:var(--field-bg); color:var(--text-main); }
+#root input[type="checkbox"],#root input[type="radio"] { accent-color:var(--brand-300); }
+#root :is(input:not([type="checkbox"],[type="radio"],[type="file"],[type="color"],[type="range"],[type="hidden"],[type="button"],[type="submit"],[type="reset"]),textarea,select) { border-radius:var(--field-radius); }
+#root button:focus-visible,#root a:focus-visible,#root summary:focus-visible { outline:2px solid var(--brand-200); outline-offset:3px; }
+#root table { border-collapse:collapse; }
+#root th,#root td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--line-soft); }
+#root th { color:var(--text-soft); font-weight:600; }
+#root progress { accent-color:var(--brand-300); }
+#root [role="status"]:empty { display:none; }
+@media(max-width:600px) { #root th,#root td { padding:10px 8px; } }
+#root :is(h1,h2):not(.ProseMirror *) { font-family:Georgia,'Times New Roman',serif; font-weight:400; letter-spacing:-.02em; }
+
+#root :where(main) { min-width:0; }

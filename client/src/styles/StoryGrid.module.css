@@ -11,7 +11,7 @@
 }
 
 .heading span {
-  color: #ffb38b;
+  color: var(--text-main);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.8rem;
@@ -24,7 +24,7 @@
 
 .heading p {
   max-width: 40ch;
-  color: #d8cbc0;
+  color: var(--text-main);
 }
 
 .grid {
@@ -35,10 +35,12 @@
 
 .card {
   overflow: hidden;
-  border-radius: 28px;
-  background: rgba(255, 248, 240, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  border: 1px solid var(--line-soft);
 }
+
+:global(html[data-theme="light"]) .card { background:var(--light-panel);border-color:var(--line-soft);box-shadow:var(--shadow-soft); }
 
 .card img {
   width: 100%;
@@ -58,7 +60,7 @@
 }
 
 .meta {
-  color: #e7d8cb;
+  color: var(--text-main);
   font-size: 0.88rem;
 }
 
@@ -68,7 +70,7 @@
 }
 
 .content p {
-  color: #d8cbc0;
+  color: var(--text-main);
   min-height: 72px;
 }
 
@@ -79,9 +81,9 @@
 
 .content button {
   padding: 10px 14px;
-  border-radius: 999px;
-  background: #fff2e8;
-  color: #23140f;
+  border-radius: var(--radius-control);
+  background: var(--action-bg);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 

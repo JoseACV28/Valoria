@@ -1,3 +1,4 @@
+import { httpError } from '../utils/contentAccess.js';
 // Modelo de reseñas.
 // Guarda opiniones, recalcula puntuacion media y devuelve reviews por historia.
 import { randomUUID } from "node:crypto";
@@ -259,7 +260,7 @@ export class ReviewModel {
   }
 
   static async like(reviewId, userId) {
-    // Alterna el like de un usuario sobre una reseña o reply.
+    // Registra una sola reacción por usuario en una reseña o respuesta.
     if (!userId) {
       throw new Error("Debes iniciar sesion para reaccionar a una reseña");
     }
@@ -301,67 +302,13 @@ export class ReviewModel {
       };
     }
 
-    const { data: existingLike, error: existingLikeError } = await supabaseAdmin
-      .from("story_review_likes")
-      .select("id")
-      .eq("review_id", reviewId)
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (existingLikeError && !isMissingLikesTableError(existingLikeError.message)) {
-      throw new Error(existingLikeError.message);
+    const {data,error}=await supabaseAdmin.rpc('like_story_review',{p_review_id:reviewId,p_user_id:userId});
+    if(error){
+      if(['PGRST202','PGRST205','42P01','42883'].includes(error.code))throw httpError(503,'Aplica la migración de likes de reseñas en Supabase.');
+      if(error.code==='P0002')throw httpError(404,'Reseña no disponible.');
+      throw error;
     }
-
-    const { data: current, error: currentError } = await supabaseAdmin
-      .from("story_reviews")
-      .select("*")
-      .eq("id", reviewId)
-      .single();
-
-    if (currentError) {
-      throw new Error(currentError.message);
-    }
-
-    if (existingLike) {
-      return {
-        review: mapReview({
-          ...current,
-          liked_by_current_user: true
-        }),
-        alreadyLiked: true
-      };
-    }
-
-    if (!existingLikeError) {
-      const { error: insertLikeError } = await supabaseAdmin
-        .from("story_review_likes")
-        .insert({
-          review_id: reviewId,
-          user_id: userId
-        });
-
-      if (insertLikeError) {
-        throw new Error(insertLikeError.message);
-      }
-    }
-
-    const { data, error } = await supabaseAdmin
-      .from("story_reviews")
-      .update({ likes_count: (current.likes_count || 0) + 1 })
-      .eq("id", reviewId)
-      .select("*")
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return {
-      review: mapReview({
-        ...data,
-        liked_by_current_user: true
-      }),
-      alreadyLiked: false
-    };
+    if(!data?.review)throw new Error('No se pudo confirmar el registro del like.');
+    return {review:mapReview({...data.review,liked_by_current_user:true}),alreadyLiked:data.alreadyLiked===true};
   }
 }

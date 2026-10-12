@@ -1,0 +1,426 @@
+.navbar {
+  position: relative;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: auto;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  overflow: visible;
+  background: transparent;
+  padding: 2px;
+  box-shadow: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  opacity: 1;
+  filter: none;
+}
+
+.logo:focus-visible {
+  outline: 2px solid rgba(175, 141, 215, 0.95);
+  outline-offset: 3px;
+}
+
+.links {
+  display: flex;
+  gap: 12px;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  align-items: center;
+}
+
+.categoriesMenu {
+  position: relative;
+}
+
+.linkButton {
+  padding: 0;
+  background: transparent;
+  color: var(--text-soft);
+}
+
+.categoriesDropdown {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 18px);
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  min-width: 640px;
+  padding: 10px;
+  border-radius: 16px;
+  background: rgba(var(--panel-rgb), 0.96);
+  border: 1px solid var(--line-soft);
+  box-shadow: 0 18px 40px rgba(var(--panel-rgb), 0.22);
+}
+
+.categoriesDropdown button {
+  text-align: left;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-main);
+}
+
+.categoriesDropdown button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.categoryActive {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.searchWrap {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.search {
+  min-width: 0;
+  flex: 1 1 220px;
+  width: min(220px, 100%);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+}
+
+.search:focus {
+  outline: none;
+  border-color: rgba(175, 141, 215, 0.9);
+}
+
+.searchSubmit { padding: 9px 14px; border-radius: 18px; background: var(--brand-500); color: var(--text-main); flex-shrink: 0; }
+.searchSubmit:focus-visible { outline: 2px solid var(--brand-200); outline-offset: 2px; }
+
+.session {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notificationWrap {
+  position: relative;
+  z-index: 140;
+}
+
+.notificationButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-soft);
+  color: var(--text-main);
+}
+
+.notificationIcon {
+  font-size: 1.05rem;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
+  color: var(--text-main);
+  font-size: 0.72rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(80, 33, 117, 0.34);
+}
+
+.notificationDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(380px, 84vw);
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(var(--panel-rgb), 0.98);
+  border: 1px solid var(--line-soft);
+  box-shadow: 0 18px 40px rgba(var(--panel-rgb), 0.22);
+  z-index: 180;
+}
+
+.notificationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 2px 0;
+}
+
+.notificationHeader button {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  font-size: 0.82rem;
+}
+
+.notificationList {
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+}
+
+.notificationItem {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+}
+
+.notificationUnread {
+  background: rgba(175, 141, 215, 0.12);
+  border: 1px solid rgba(175, 141, 215, 0.18);
+}
+
+.notificationAvatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.notificationAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notificationBody {
+  display: grid;
+  gap: 4px;
+}
+
+.notificationBody strong {
+  font-size: 0.92rem;
+}
+
+.notificationBody span {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.notificationBody small {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.notificationEmpty {
+  padding: 12px 8px 6px;
+  color: var(--text-soft);
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid var(--line-soft);
+}
+
+.userBadge {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--brand-400);
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.userBadge img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.18);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  display: grid;
+  gap: 8px;
+  min-width: 220px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(var(--panel-rgb), 0.96);
+  border: 1px solid var(--line-soft);
+  box-shadow: 0 18px 40px rgba(var(--panel-rgb), 0.22);
+  z-index: 170;
+}
+
+.dropdown button {
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+}
+
+.dropdown button:disabled {
+  opacity: 0.5;
+}
+
+.dropdown { width: min(320px, calc(100vw - 56px)); gap: 0; padding: 8px; overflow: hidden; }
+.dropdownScroll { max-height: min(62vh, var(--user-menu-height, 540px)); max-height: min(62dvh, var(--user-menu-height, 540px)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; padding: 0 4px; }
+.dropdownGroup { display: grid; gap: 3px; padding: 6px 0 10px; }
+.dropdownGroup + .dropdownGroup { border-top: 1px solid var(--line-soft); }
+.dropdown .dropdownHeading { margin: 4px 10px 6px; color: var(--text-accent); font-size: .74rem; font-weight: 700; letter-spacing: .08em; }
+.dropdownGroup button { display: flex; align-items: center; gap: 10px; min-height: 42px; width: 100%; background: transparent; line-height: 1.4; }
+.dropdownGroup button:hover, .dropdownGroup button[aria-current="page"] { background: rgba(175,141,215,.16); }
+.dropdownGroup button:focus-visible, .logoutButton:focus-visible { outline: 2px solid var(--brand-300); outline-offset: -2px; }
+.dropdownIcon { flex: 0 0 20px; text-align: center; color: var(--text-accent); }
+.dropdownGroup button span:last-child { min-width: 0; overflow-wrap: normal; word-break: normal; }
+.dropdown .logoutButton { margin-top: 6px; border-top: 1px solid var(--line-soft); min-height: 44px; text-align: center; }
+
+.guestActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ghostCta,
+.cta {
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.ghostCta {
+  border: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+}
+
+.cta {
+    background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
+    color: var(--accent-ink);
+}
+
+
+/* One layout per breakpoint keeps discovery and account controls in stable groups. */
+.navbar { display: grid; grid-template-columns: auto minmax(220px, 1fr) auto; grid-template-areas: "brand search session"; gap: 20px; padding: 14px 18px; }
+.brand { grid-area: brand; }
+.links { grid-area: links; }
+.searchWrap { grid-area: search; align-items: center; gap: 4px; padding: 4px; border: 1px solid var(--line-soft); border-radius: 18px; background: rgba(var(--panel-rgb), .38); }
+.searchWrap:focus-within { border-color: var(--brand-300); box-shadow: 0 0 0 3px rgba(175,141,215,.12); }
+.searchWrap .search { height: 40px; width: 100%; border: 0 !important; background: transparent !important; box-shadow: none; border-radius: 14px; padding: 8px 10px; }
+.searchWrap .search:focus { outline: none; box-shadow: none; }
+.searchSubmit { min-height: 40px; border-radius: 14px; color: var(--accent-ink); font-weight: 700; }
+.session, .guestActions { grid-area: session; justify-self: end; flex-shrink: 0; gap: 10px; }
+.logo { width: 50px; height: 50px; }
+.linkButton { display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 14px; background: rgba(175,141,215,.08); color: var(--text-main); white-space: nowrap; }
+.linkButton:hover, .linkButton[aria-expanded="true"] { background: rgba(175,141,215,.18); }
+.chevron { font-size: 1.1rem; color: var(--text-accent); line-height: 1; transition: transform 160ms ease; }
+.linkButton[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+.notificationDropdown { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.categoriesDropdown button { min-height: 42px; line-height: 1.4; }
+.categoriesMenu { position: static; }
+.categoriesDropdown { top: calc(100% + 8px); left: 18px; min-width: 0; width: min(640px, calc(100% - 36px)); max-height: min(60vh, 480px); overflow-y: auto; }
+.ghostCta, .cta, .userButton { min-height: 46px; padding: 10px 14px; }
+.userButton { max-width: 190px; }
+.userButton > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.userBadge { flex-shrink: 0; }
+.notificationBody small { color: var(--text-soft); }
+.searchIcon { display: none; }
+@media (max-width: 1200px) {
+ .navbar { grid-template-columns: auto minmax(0,1fr); grid-template-areas: "brand session" "search search"; gap: 12px; }
+ .links { justify-self: start; }
+ .searchWrap { width: 100%; }
+}
+@media (max-width: 640px) {
+ .navbar { grid-template-columns: auto minmax(0,1fr); grid-template-areas: "brand session" "search search"; padding: 12px; gap: 10px; border-radius: 20px; }
+ .logo { width: 42px; height: 42px; }
+ .links { width: 100%; }
+ .linkButton { min-height: 40px; padding: 8px 12px; }
+ .categoriesDropdown { left: 12px; width: calc(100% - 24px); grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .session, .guestActions { gap: 8px; max-width: 100%; min-width: 0; flex-wrap: wrap; justify-content: flex-end; }
+ .ghostCta, .cta { padding: 10px; font-size: .82rem; }
+ .userButton { padding: 7px; }
+ .userButton > span:last-child { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+ .notificationButton { width: 44px; height: 44px; }
+ .notificationWrap { position: static; }
+ .notificationDropdown, .dropdown { right: 0; width: min(340px,calc(100vw - 56px)); min-width: 0; }
+}
+@media (min-width: 360px) and (max-width: 640px) {
+ .navbar { grid-template-columns: 42px minmax(0,1fr); grid-template-areas: "brand session" "search search"; gap: 8px; }
+ .searchSubmit { padding: 8px 12px; }
+ .searchLabel { display: none; }
+ .searchIcon { display: inline; }
+}
+
+:global(html[data-theme="light"]) .navbar {
+  background: linear-gradient(115deg, #fffdfa, #faf4ff 70%, #f0e2f8);
+  box-shadow: var(--light-elevation), inset 0 1px 0 #fff;
+}
+:global(html[data-theme="light"]) :is(.cta, .searchSubmit) {
+  background: linear-gradient(135deg, #d2b4e7, #bfa0d9);
+  box-shadow: 0 4px 10px rgba(105,68,141,.15), inset 0 1px 0 rgba(255,255,255,.6);
+}
+:global(html[data-theme="light"]) :is(.ghostCta, .userButton, .notificationButton) {
+  background: #fffafc;
+  box-shadow: 0 2px 5px rgba(105,68,141,.06);
+}

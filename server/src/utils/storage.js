@@ -1,3 +1,5 @@
+import { sanitizeImage } from "./imageValidation.js";
+import { enforceStorageQuota, withUploadLock } from './uploadQuota.js';
 // Utilidades de almacenamiento de archivos.
 // Escribe a Supabase Storage si existe config; si no, usa disco local.
 import { mkdir, writeFile } from "node:fs/promises";
@@ -17,22 +19,31 @@ function buildPublicUploadUrl(request, relativePath) {
 }
 
 export async function storeImageFile({ file, folder, request }) {
+  return withUploadLock(request.authUser.id,()=>storeValidatedImage({file,folder,request}));
+}
+async function storeValidatedImage({ file, folder, request }) {
   // Guarda una imagen en Supabase o en almacenamiento local fallback y devuelve su metadata.
   if (!file) {
     throw new Error("No se recibio ninguna imagen");
   }
 
-  const extension = path.extname(file.originalname || "") || ".jpg";
+  const small=folder==='covers'||folder.startsWith('profiles/')||folder==='illustrations/covers';
+  const format=await sanitizeImage(file.buffer,file.mimetype,small?2*1024*1024:15*1024*1024);
+  const allowedExtensions={'image/png':['.png'],'image/jpeg':['.jpg','.jpeg'],'image/gif':['.gif'],'image/webp':['.webp']};
+  if(!allowedExtensions[format.mime].includes(path.extname(file.originalname||'').toLowerCase()))throw Object.assign(new Error('La extensión del archivo debe corresponder al formato de la imagen.'),{status:400});
+  const extension = format.extension;
   const fileName = `${Date.now()}-${randomUUID()}-${safeFileName(
     path.basename(file.originalname || `image${extension}`, extension)
   )}${extension}`;
-  const storagePath = `${folder}/${fileName}`;
+  const storagePath = `${request.authUser.id}/${folder}/${fileName}`;
 
   if (isSupabaseEnabled()) {
+    await enforceStorageQuota(supabaseAdmin,request.authUser.id,format.buffer.length,[env.supabaseBucket,'story-private-media']);
+    const bucket = folder.startsWith("profiles/") ? env.supabaseBucket : "story-private-media";
     const { error } = await supabaseAdmin.storage
-      .from(env.supabaseBucket)
-      .upload(storagePath, file.buffer, {
-        contentType: file.mimetype,
+      .from(bucket)
+      .upload(storagePath, format.buffer, {
+        contentType: format.mime,
         upsert: false
       });
 
@@ -41,7 +52,7 @@ export async function storeImageFile({ file, folder, request }) {
     }
 
     const { data } = supabaseAdmin.storage
-      .from(env.supabaseBucket)
+      .from(bucket)
       .getPublicUrl(storagePath);
 
     return {
@@ -51,11 +62,11 @@ export async function storeImageFile({ file, folder, request }) {
     };
   }
 
-  const baseDir = path.resolve("server", env.uploadFallbackDir, folder);
+  const baseDir = path.join(env.uploadAbsoluteDir, folder);
   await mkdir(baseDir, { recursive: true });
 
   const absolutePath = path.join(baseDir, fileName);
-  await writeFile(absolutePath, file.buffer);
+  await writeFile(absolutePath, format.buffer);
 
   const relativePath = path.join(env.uploadFallbackDir, folder, fileName);
 

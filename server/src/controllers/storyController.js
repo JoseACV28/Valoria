@@ -1,11 +1,16 @@
+import { moveToTrash } from '../models/contentRecovery.js';
+import { blockedProfileIds } from '../middlewares/profileBlocks.js';
 // Controlador HTTP para listar, crear y recuperar historias.
+import { createEditorial } from "../models/editorialModel.js";
 import { StoryModel } from "../models/storyModel.js";
+import { canReadContent } from "../utils/contentAccess.js";
 
 export async function getStories(request, response, next) {
   // Lista historias publicas, con opcion de filtrar solo destacadas.
   try {
     const featuredOnly = request.query.featured === "true";
-    const stories = await StoryModel.getAll({ featuredOnly });
+    const blocked=await blockedProfileIds(request.authUser?.id);
+    const stories = (await StoryModel.getAll({ featuredOnly })).filter(item=>!blocked.has(item.authorId||item.creatorId||item.creator_id));
 
     response.json({
       total: stories.length,
@@ -21,7 +26,7 @@ export async function getStoryById(request, response, next) {
   try {
     const story = await StoryModel.getByIdOrSlug(request.params.identifier);
 
-    if (!story) {
+    if (!canReadContent(story, request.authUser)) {
       return response.status(404).json({
         message: "Historia no encontrada"
       });
@@ -44,6 +49,11 @@ export async function createStory(request, response, next) {
       });
     }
 
+    if (request.body.storyContent !== undefined) {
+      if(typeof request.body.storyContent !== 'string' || !request.body.storyContent.trim() || !/^[0-9a-f-]{36}$/i.test(request.body.submissionId || '') || !['draft','published'].includes(request.body.status || 'draft')) return response.status(400).json({message:'Contenido, identificador o estado editorial inválido.'});
+      const result = await createEditorial({...request.body,authorId:request.authUser.id,authorName:request.authUser.displayName});
+      return response.status(201).json(result);
+    }
     const story = await StoryModel.create({
       ...request.body,
       authorId: request.authUser.id,
@@ -72,7 +82,7 @@ export async function deleteStory(request, response, next) {
       });
     }
 
-    await StoryModel.delete(story.id);
+    await moveToTrash('story',story.id,request.authUser.id);
     return response.status(204).send();
   } catch (error) {
     return next(error);
@@ -118,13 +128,16 @@ export async function registerStoryRead(request, response, next) {
   try {
     const story = await StoryModel.getByIdOrSlug(request.params.storyId);
 
-    if (!story) {
+    if (!canReadContent(story, request.authUser)) {
       return response.status(404).json({
         message: "Historia no encontrada"
       });
     }
 
-    const updatedStory = await StoryModel.registerRead(story.id);
+    // La vista previa del autor no cuenta como lectura publica de un borrador.
+    const updatedStory = story.status === "published"
+      ? await StoryModel.registerRead(story.id)
+      : story;
     return response.json({ story: updatedStory });
   } catch (error) {
     return next(error);

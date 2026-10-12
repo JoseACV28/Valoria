@@ -1,3 +1,4 @@
+import { ui } from "../../i18n/runtime.js";
 // Bloque editorial rotativo del home.
 // Mantiene una sola linea visual y alterna entre especiales de historias
 // e ilustraciones para equilibrar ambas verticales.
@@ -73,9 +74,9 @@ export function PromoBanner({
   return (
     <section className={styles.banner}>
       <div className={styles.copy}>
-        <span>Especial Valoria</span>
+        <span>{ui("Especial Valoria")}</span>
         <strong className={styles.modeLabel}>
-          {activeSlide.kind === "story" ? "Historias destacadas" : "Ilustraciones destacadas"}
+          {activeSlide.kind === "story" ? ui("Historias destacadas") : ui("Ilustraciones destacadas")}
         </strong>
         <h2>{activeSlide.headline}</h2>
         <p>{activeSlide.description}</p>
@@ -87,7 +88,7 @@ export function PromoBanner({
                 activeSlide.kind === "illustration" ? styles.categoryPillWarm : ""
               }`}
             >
-              {category}
+              {ui(category)}
             </div>
           ))}
         </div>
@@ -108,7 +109,7 @@ export function PromoBanner({
             }}
             type="button"
           >
-            <img
+            <img loading="lazy" decoding="async"
               src={activeSlide.kind === "illustration" ? item.coverUrl : item.cover}
               alt={item.title}
             />
@@ -118,7 +119,7 @@ export function PromoBanner({
                   activeSlide.kind === "illustration" ? styles.typePillWarm : ""
                 }`}
               >
-                {activeSlide.kind === "story" ? "Historia" : "Ilustracion"}
+                {activeSlide.kind === "story" ? ui("Historia") : ui("Ilustracion")}
               </span>
               <strong>{item.title}</strong>
               <span>{item.author}</span>

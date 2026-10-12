@@ -12,15 +12,25 @@ import {
 import { requireAuth } from "../middlewares/authMiddleware.js";
 
 const router = Router();
+let activeUploads=0;
+router.use(requireAuth,(req,res,next)=>{
+  if(activeUploads>=4)return res.status(429).json({message:'Hay varias imágenes procesándose. Reintenta en unos segundos.'});
+  activeUploads++;let released=false;const release=()=>{if(!released){released=true;activeUploads--;}};
+  res.once('finish',release);res.once('close',release);next();
+});
 
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 15 * 1024 * 1024
+    fileSize: 15 * 1024 * 1024,
+    files: 1,
+    fields: 5,
+    fieldSize: 4000,
+    parts: 6
   },
   fileFilter(request, file, callback) {
-    if (!file.mimetype.startsWith("image/")) {
-      callback(new Error("Solo se permiten imagenes"));
+    if (!["image/png","image/jpeg","image/jpg","image/gif","image/webp"].includes(file.mimetype)) {
+      callback(Object.assign(new Error("Solo se permiten PNG, JPG, GIF y WebP"),{status:400}));
       return;
     }
 

@@ -1,0 +1,44 @@
+# Public beta: keep database credentials in Render, never in this file.
+services:
+  - type: web
+    name: valoria-beta
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: off
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: APP_ENV
+        value: beta
+      - key: VITE_API_URL
+        value: /api
+      - key: SUPABASE_URL
+        value: https://cjbwjbmgrpjvinoczluc.supabase.co
+      - key: VITE_SUPABASE_URL
+        value: https://cjbwjbmgrpjvinoczluc.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: VITE_SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SITE_OWNER_ID
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: PUBLIC_SITE_URL
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: story-media
+      - key: SESSION_CHECK_REQUIRED
+        value: "true"
+      - key: ADMIN_MFA_REQUIRED
+        value: "true"
+      # Ephemeral disk is unsuitable for durable backups.
+      - key: SITE_BACKUP_ENABLED
+        value: "false"

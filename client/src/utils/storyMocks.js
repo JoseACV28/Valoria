@@ -28,8 +28,8 @@ export function normalizeStoryForReading(story) {
     ...story,
     category: story.category || "Ficcion",
     reads: story.reads || "0",
-    ratingAverage: Number(story.ratingAverage || story.rating_average || 4.5),
-    ratingCount: Number(story.ratingCount || story.rating_count || 12),
+    ratingAverage: Number(story.ratingAverage ?? story.rating_average ?? 0),
+    ratingCount: Number(story.ratingCount ?? story.rating_count ?? 0),
     description:
       story.description ||
       "Una historia de muestra dentro de Valoria, lista para abrirse en la hoja de lectura."

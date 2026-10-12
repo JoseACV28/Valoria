@@ -1,3 +1,4 @@
+import { ui } from "../i18n/runtime.js";
 // Centro de ayuda publico.
 // Reune preguntas frecuentes simples para orientar a lectores y creadores.
 import { AppShell } from "../components/layout/AppShell";
@@ -40,7 +41,7 @@ const faqs = [
   },
   {
     question: "Como encuentro escritores dentro de la plataforma?",
-    answer: "Desde el pie de pagina puedes entrar a Escritores y buscar por nombre dentro del directorio registrado."
+    answer: "Usa el buscador superior y el filtro Escritores. También puedes abrir un perfil desde sus obras."
   },
   {
     question: "Valoria guarda mis lecturas y valoraciones?",
@@ -55,17 +56,19 @@ export function HelpPage({ auth, navFilters, onNavigate }) {
         <Navbar auth={auth} currentView="help" {...navFilters} onNavigate={onNavigate} />
 
         <section className={styles.hero}>
-          <span>Ayuda</span>
-          <h1>Preguntas frecuentes</h1>
-          <p>Una guia rapida para entender como publicar, leer e interactuar dentro de Valoria.</p>
+          <span>{ui("Ayuda")}</span>
+          <h1>{ui("Preguntas frecuentes")}</h1>
+          <p>{ui("Una guia rapida para entender como publicar, leer e interactuar dentro de Valoria.")}</p>
         </section>
 
         <section className={styles.section}>
+          <button type="button" onClick={()=>onNavigate('support')}>{ui('Centro de soporte')}</button>
+          <button type="button" onClick={()=>onNavigate('usability')}>{ui('Prueba guiada del sitio')}</button>
           <div className={styles.faqList}>
             {faqs.map((faq) => (
               <article key={faq.question} className={styles.faqItem}>
-                <h2>{faq.question}</h2>
-                <p>{faq.answer}</p>
+                <h2>{ui(faq.question)}</h2>
+                <p>{ui(faq.answer)}</p>
               </article>
             ))}
           </div>

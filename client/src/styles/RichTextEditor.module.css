@@ -1,0 +1,42 @@
+.editor { min-width: 0; width: 100%; overflow: hidden; border: 1px solid var(--field-border); border-radius: var(--field-radius); background: var(--field-bg); }
+.toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding: 12px 16px; background: rgba(175,141,215,.07); border-bottom: 1px solid var(--line-soft); }
+.essential, .viewTools { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.editor .toolbar button, .editor .advanced button, .editor .panel button { min-height: 38px; margin: 0; padding: 8px 10px; border: 0; border-radius: 9px; color: var(--text-main); background: transparent; font-size: .85rem; font-weight: 500; }
+.editor .toolbar button:hover, .editor .advanced button:hover, .editor button[aria-pressed="true"] { background: rgba(175,141,215,.2); }
+.editor .toolbar button:disabled { opacity: .35; cursor: default; }
+.editor .viewTools button { border: 1px solid var(--line-soft); }
+.editor .toolbar select, .editor .advanced select { width: auto; max-width: 100%; min-height: 38px; padding: 6px 8px; border-radius: 8px; background: var(--panel-dark); color: var(--text-main); font-size: .85rem; }
+.editor button:focus-visible, .editor select:focus-visible, .editor input:focus-visible { outline: 2px solid var(--brand-200); outline-offset: 2px; }
+.manuscript { min-width: 0; max-height: 650px; overflow-y: auto; }
+.canvas { max-width: 780px; min-height: 360px; margin: 0 auto; padding: 40px 48px 60px; outline: none; font-family: Georgia, serif; font-size: 18px; line-height: 1.85; overflow-wrap: anywhere; color: var(--text-main); }
+.canvas p { margin: 0 0 1.1em; }
+.canvas h2, .canvas h3, .canvas h4 { line-height: 1.35; margin: 1.5em 0 .8em; }
+.canvas p:global(.is-editor-empty):first-child::before { content: attr(data-placeholder); float: left; height: 0; color: var(--text-soft); opacity: .65; pointer-events: none; }
+.canvas blockquote { margin: 1.4em 0; padding-left: 20px; border-left: 3px solid var(--brand-300); font-style: italic; color: var(--text-soft); }
+.canvas blockquote p:last-child { margin-bottom: 0; }
+.canvas hr { width: 100%; border: 0; margin: 2em 0; text-align: center; }
+.canvas hr::after { content: '⁂'; display: block; color: var(--text-soft); letter-spacing: .5em; }
+.canvas ul, .canvas ol { padding-left: 1.6em; }
+.canvas pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 16px; border-radius: 10px; background: var(--panel-dark); font: 14px/1.7 monospace; }
+.canvas a { color: var(--text-accent); text-decoration: underline; }
+.advanced { display: flex; align-items: end; flex-wrap: wrap; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--line-soft); background: var(--panel-dark); }
+.advanced label { display: grid; gap: 5px; font-size: .75rem; color: var(--text-soft); }
+.advanced input[type="color"] { width: 44px; height: 38px; padding: 5px; border: 1px solid var(--line-soft); border-radius: 8px; background: transparent; }
+.panel { display: grid; gap: 10px; padding: 16px; background: var(--panel-dark); border-bottom: 1px solid var(--line-soft); }
+.editor .panel button { justify-self: start; background: rgba(175,141,215,.18); }
+.panel textarea, .panel input { width: 100%; min-width: 0; }
+.emojis { display: flex; flex-wrap: wrap; gap: 4px; }
+.editor .emojis button { font-size: 1.4rem; }
+.footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--line-soft); color: var(--text-soft); font-size: .75rem; }
+.focusMode { position: fixed; inset: 16px; z-index: 1000; width: auto; display: flex; flex-direction: column; box-shadow: 0 0 0 100vmax rgba(var(--panel-rgb), .95); }
+.focusMode .manuscript { flex: 1; min-height: 0; max-height: none; }
+.focusMode .canvas { min-height: 100%; padding-top: 56px; }
+.focusMode .toolbar, .focusMode .footer { flex-shrink: 0; }
+.focusMode .advanced, .focusMode .panel { flex-shrink: 0; max-height: 30dvh; overflow-y: auto; }
+@media (max-width: 600px) {
+  .toolbar { padding: 10px; }
+  .viewTools { width: 100%; justify-content: space-between; }
+  .canvas { padding: 28px 22px 40px; min-height: 320px; font-size: 17px; }
+  .focusMode { inset: 8px; }
+  .focusMode .canvas { padding-top: 30px; }
+}

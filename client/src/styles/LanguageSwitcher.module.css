@@ -1,0 +1,6 @@
+.wrap{position:relative;flex-shrink:0}.trigger{display:flex;align-items:center;gap:7px;border:1px solid var(--line-soft);background:var(--bg-surface);border-radius:var(--radius-panel);min-height:44px;padding:10px 12px;font-size:.82rem}.trigger span:first-child{font-size:1.2rem}.menu{position:absolute;right:0;top:calc(100% + 12px);z-index:150;width:215px;padding:12px;border:1px solid var(--field-border);border-radius:var(--radius-panel);background:var(--panel-dark);box-shadow:var(--shadow-soft);display:grid;gap:5px}.menu strong{font-size:.85rem;padding:6px 10px;color: var(--text-accent)}.menu button{display:flex;gap:10px;align-items:center;text-align:left;background:transparent}.menu button[aria-pressed=true],.menu button:hover{background:rgba(175,141,215,.18)}.menu button span:last-child{margin-left:auto}@media(max-width:640px){.trigger{padding:8px;gap:4px;font-size:.7rem}.menu{width:200px}}
+
+.wrap svg{border-radius:3px;flex-shrink:0;box-shadow:var(--shadow-soft)}
+.menu { width: min(240px, calc(100vw - 48px)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; background: rgba(var(--panel-rgb), .98); border-color: var(--field-border); }
+.menu button { min-height: 44px; padding: 10px 12px; border-radius: var(--radius-control); color: var(--text-main); }
+@media(max-width:640px) { .wrap { position: static; } }

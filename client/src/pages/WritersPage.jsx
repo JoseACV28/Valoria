@@ -1,33 +1,36 @@
+import {ActivityState} from '../components/common/ActivityState';
+import { ui } from "../i18n/runtime.js";
 // Directorio publico de escritores.
 // Recorre las historias disponibles, agrupa autores y permite encontrarlos por nombre.
 import { useEffect, useMemo, useState } from "react";
 import { fetchStories } from "../api/storyApi";
 import { AppShell } from "../components/layout/AppShell";
 import { Navbar } from "../components/layout/Navbar";
-import { fallbackStories } from "../data/fallbackStories";
+
 import styles from "../styles/DirectoryPage.module.css";
 
 export function WritersPage({ auth, navFilters, onNavigate }) {
-  const [stories, setStories] = useState(fallbackStories);
-  const [query, setQuery] = useState("");
+  const [stories, setStories] = useState([]);
 
+  const [status,setStatus]=useState('loading'),[retry,setRetry]=useState(0);
   useEffect(() => {
+    setStatus('loading');
     let active = true;
 
     async function loadStories() {
       try {
         const data = await fetchStories();
         if (active) {
-          setStories(data.stories || fallbackStories);
+          setStories(data.stories || []);setStatus('ready');
         }
-      } catch {}
+      } catch {if(active)setStatus('error');}
     }
 
     loadStories();
     return () => {
       active = false;
     };
-  }, []);
+  }, [retry]);
 
   const writers = useMemo(() => {
     // Cada escritor se sintetiza en una sola tarjeta con conteo de historias y lecturas acumuladas.
@@ -64,11 +67,8 @@ export function WritersPage({ auth, navFilters, onNavigate }) {
     }
 
     return Array.from(map.values())
-      .sort((left, right) => right.stories - left.stories || right.reads - left.reads)
-      .filter((writer) =>
-        writer.name.toLowerCase().includes(query.trim().toLowerCase())
-      );
-  }, [query, stories]);
+      .sort((left, right) => right.stories - left.stories || right.reads - left.reads);
+  }, [stories]);
 
   return (
     <AppShell auth={auth} currentView="writers" onNavigate={onNavigate}>
@@ -76,21 +76,14 @@ export function WritersPage({ auth, navFilters, onNavigate }) {
         <Navbar auth={auth} currentView="writers" {...navFilters} onNavigate={onNavigate} />
 
         <section className={styles.hero}>
-          <span>Directorio</span>
-          <h1>Escritores registrados</h1>
-          <p>Busca creadores por nombre y entra a sus perfiles publicos dentro de Valoria.</p>
+          <span>{ui("Directorio")}</span>
+          <h1>{ui("Escritores con obras publicadas")}</h1>
+          <p>{ui("Usa el buscador superior para encontrar escritores por nombre y entrar a sus perfiles públicos.")}</p>
         </section>
 
         <section className={styles.section}>
-          <div className={styles.searchBar}>
-            <input
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar escritor por nombre"
-              type="text"
-              value={query}
-            />
-          </div>
 
+          {status==='loading'&&<ActivityState kind="loading"/>}{status==='error'&&<ActivityState kind="error" action="Reintentar" onAction={()=>setRetry(x=>x+1)}/>}{status==='ready'&&!writers.length&&<ActivityState title="Todavía no hay contenido" action="Explorar obras" onAction={()=>onNavigate('home')}/>}
           <div className={styles.grid}>
             {writers.map((writer) => (
               <button
@@ -111,7 +104,7 @@ export function WritersPage({ auth, navFilters, onNavigate }) {
                   )}
                 </div>
                 <strong>{writer.name}</strong>
-                <span>{writer.stories} historias publicadas</span>
+                <span>{writer.stories}{ui(" historias publicadas")}</span>
               </button>
             ))}
           </div>

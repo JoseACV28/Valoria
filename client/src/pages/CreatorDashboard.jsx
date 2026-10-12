@@ -1,3 +1,11 @@
+import {ActivityState} from '../components/common/ActivityState';
+import {PublicationPreview} from '../components/common/PublicationPreview';
+import { ui } from "../i18n/runtime.js";
+import {ChapterVersions} from '../components/stories/ChapterVersions';
+import {WorkDetailsEditor} from '../components/stories/WorkDetails';
+import { CreatorStats } from "../components/stories/CreatorStats";
+import { ExportStory } from '../components/stories/ExportStory';
+import { StoryMetadataEditor } from "../components/stories/StoryMetadataEditor";
 // Vista dedicada para autores.
 // Lista historias propias, capitulos y herramientas de publicacion.
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -21,13 +29,15 @@ import { clampRating } from "../utils/ratings";
 import styles from "../styles/CreatorDashboard.module.css";
 
 export function CreatorDashboard({ auth, navFilters, onNavigate }) {
+  const [suggestedChapterNumber,setSuggestedChapterNumber]=useState(1);
+  const [pendingPublication,setPendingPublication]=useState(null);
   const [creatorMode, setCreatorMode] = useState("stories");
   const [stories, setStories] = useState([]);
   const [selectedStoryId, setSelectedStoryId] = useState("");
   const [chapters, setChapters] = useState([]);
   const [illustrations, setIllustrations] = useState([]);
   const [selectedIllustrationId, setSelectedIllustrationId] = useState("");
-  const [status, setStatus] = useState("loading");
+  const [status, setStatus] = useState("loading"),[retry,setRetry]=useState(0);
   const [showStoryComposer, setShowStoryComposer] = useState(false);
   const [showChapterComposer, setShowChapterComposer] = useState(false);
   const [showIllustrationComposer, setShowIllustrationComposer] = useState(false);
@@ -99,6 +109,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
     }
 
     async function loadStories() {
+      setStatus("loading");
       try {
         const data = await fetchMyStories(auth.token);
         setStories(data.stories);
@@ -110,7 +121,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
     }
 
     loadStories();
-  }, [auth.isAuthenticated, auth.token]);
+  }, [auth.isAuthenticated, auth.token,retry]);
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -145,8 +156,9 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
 
     async function loadChapters() {
       try {
-        const data = await fetchStoryChapters(selectedStoryId);
+        const data = await fetchStoryChapters(selectedStoryId, auth.token);
         setChapters(data.chapters);
+        setSuggestedChapterNumber(data.nextChapterNumber||1);
         setSelectedChapterId((current) =>
           data.chapters.some((chapter) => chapter.id === current)
             ? current
@@ -159,10 +171,10 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
     }
 
     loadChapters();
-  }, [selectedStoryId]);
+  }, [selectedStoryId, auth.token]);
 
   useEffect(() => {
-    if (!showChapterComposer) {
+    if (!showChapterComposer || showStoryComposer) {
       return;
     }
 
@@ -172,13 +184,14 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
       return;
     }
 
-    window.requestAnimationFrame(() => {
+    const frame = window.requestAnimationFrame(() => {
       scrollTarget.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
     });
-  }, [showChapterComposer, editingChapterId]);
+    return () => window.cancelAnimationFrame(frame);
+  }, [showChapterComposer, editingChapterId, showStoryComposer]);
 
   useEffect(() => {
     if (!showIllustrationComposer) {
@@ -234,9 +247,9 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
       setSelectedChapterId(result.chapter.id);
       setEditingChapterId("");
       setShowChapterComposer(false);
-      setChapterActionMessage("Capitulo publicado.");
+      setChapterActionMessage("Capitulo publicado.");setPendingPublication(null);
     } catch (error) {
-      setChapterActionMessage(error.message);
+      setChapterActionMessage(error.message);return false;
     }
   }
 
@@ -244,17 +257,13 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
     return (
       <AppShell auth={auth} currentView="creator" onNavigate={onNavigate}>
         <main className={styles.page}>
+          {pendingPublication&&<PublicationPreview title={selectedStory?.title} description={selectedStory?.description} cover={selectedStory?.cover} chapterTitle={pendingPublication.title} content={pendingPublication.content} onClose={()=>setPendingPublication(null)} onConfirm={()=>handlePublishChapter(pendingPublication)}/>}
           <Navbar auth={auth} currentView="creator" {...navFilters} onNavigate={onNavigate} />
         <section className={styles.emptyState}>
-          <span>Area de creador</span>
-          <h1>Inicia sesion para administrar tus historias</h1>
-          <p>
-            El home sigue centrado en lectura. Tu panel de creador vive aparte,
-            con herramientas para publicar y editar.
-          </p>
-          <button onClick={() => onNavigate("home")} type="button">
-            Volver al inicio
-          </button>
+          <span>{ui("Area de creador")}</span>
+          <h1>{ui("Inicia sesion para administrar tus historias")}</h1>
+          <p>{ui(" El home sigue centrado en lectura. Tu panel de creador vive aparte, con herramientas para publicar y editar. ")}</p>
+          <button onClick={() => onNavigate("home")} type="button">{ui(" Volver al inicio ")}</button>
         </section>
         </main>
       </AppShell>
@@ -279,9 +288,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                 setShowIllustrationComposer(false);
               }}
               type="button"
-            >
-              Historias
-            </button>
+            >{ui(" Historias ")}</button>
             <button
               className={`${styles.modeButton} ${
                 creatorMode === "illustrations" ? styles.modeButtonActive : ""
@@ -294,24 +301,20 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                 setShowStoryComposer(false);
               }}
               type="button"
-            >
-              Ilustraciones
-            </button>
+            >{ui(" Ilustraciones ")}</button>
           </div>
 
           {creatorMode === "stories" ? (
             <>
               <section className={styles.hero}>
                 <div className={styles.heroContent}>
-                  <span>Panel de creador</span>
-                  <h1>Administra tus historias y sigue publicando capitulos.</h1>
+                  <span>{ui("Panel de creador")}</span>
+                  <h1>{ui("Administra tus historias y sigue publicando capitulos.")}</h1>
                   {selectedStory ? (
                     <div className={styles.heroSelectedStory}>
                       <strong>{selectedStory.title}</strong>
                       <small>
-                        {publishedChapters.length} publicados y {draftChapters.length} en
-                        borrador
-                      </small>
+                        {publishedChapters.length}{ui(" publicados y ")}{draftChapters.length}{ui(" en borrador ")}</small>
                     </div>
                   ) : null}
                 </div>
@@ -320,12 +323,13 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                     className={styles.primaryAction}
                     onClick={() => {
                       setShowStoryComposer((current) => !current);
+                      setShowChapterComposer(false);
                       setChapterActionMessage("");
                       setPendingDeleteChapterId("");
                     }}
                     type="button"
                   >
-                    {showStoryComposer ? "Ocultar creador" : "Crear historia"}
+                    {showStoryComposer ? ui("Ocultar creador") : ui("Crear historia")}
                   </button>
                 </div>
               </section>
@@ -350,7 +354,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                       setChapters([]);
                       setSelectedChapterId("");
                       setShowStoryComposer(false);
-                      setShowChapterComposer(true);
+                      setShowChapterComposer(false);
                     }}
                   />
                 </section>
@@ -359,21 +363,18 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
               <section className={styles.library}>
                 <div className={styles.libraryHeader}>
                   <div>
-                    <span>Tu biblioteca</span>
-                    <h2>Historias creadas</h2>
+                    <span>{ui("Tu biblioteca")}</span>
+                    <h2>{ui("Historias creadas")}</h2>
                   </div>
                   <p className={styles.libraryCount}>
                     {status === "ready"
-                      ? `${stories.length} historias en tu cuenta`
-                      : "Cargando historias del creador"}
+                      ? ui("{0} historias en tu cuenta",[stories.length])
+                      : ui("Cargando historias del creador")}
                   </p>
                 </div>
 
-                {stories.length === 0 ? (
-                  <div className={styles.emptyCard}>
-                    <strong>Aun no has publicado historias</strong>
-                    <p>Crea tu primera historia y luego podras agregar capitulos.</p>
-                  </div>
+                {status==='loading'?<ActivityState kind="loading"/>:status==='error'?<ActivityState kind="error" action="Reintentar" onAction={()=>setRetry(x=>x+1)}/>:stories.length === 0 ? (
+                  <ActivityState title="Aun no has publicado historias" message="Crea tu primera historia y luego podras agregar capitulos." action="Crear historia" onAction={()=>setShowStoryComposer(true)}/>
                 ) : (
                   <div className={styles.storyGrid}>
                     {stories.map((story) => {
@@ -381,61 +382,75 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                       const isSelected = selectedStoryId === story.id;
 
                       return (
-                        <button
+                        <article
                           key={story.id}
                           className={`${styles.storyCard} ${
                             isSelected ? styles.activeStory : ""
                           }`}
-                          onClick={() => setSelectedStoryId(story.id)}
-                          type="button"
                         >
-                          <img
-                            className={styles.storyCoverImage}
-                            src={story.cover}
-                            alt={story.title}
-                          />
-                          <div className={styles.storyCardBody}>
-                            <div className={styles.storyCardTopline}>
-                              <strong>{story.title}</strong>
-                              <span className={styles.categoryBadge}>{story.category}</span>
-                            </div>
-                            <p className={styles.storySynopsis}>
-                              "{story.description || "Sin sinopsis todavia."}"
-                            </p>
-                            <div className={styles.storyAuthorRow}>
-                              <span className={styles.storyAvatar}>
-                                {story.authorAvatarUrl ? (
-                                  <img
-                                    alt={story.author || "Autor"}
-                                    className={styles.storyAvatarImage}
-                                    src={story.authorAvatarUrl}
-                                  />
-                                ) : (
-                                  (story.author || "A").slice(0, 1).toUpperCase()
-                                )}
-                              </span>
-                              <small>{story.author || "Autor de Valoria"}</small>
-                            </div>
-                            <div className={styles.storyMetaRow}>
-                              <div className={styles.storyRating}>
-                                <StarRating value={ratingValue} size="sm" icon="heart" />
-                                <small>{story.ratingCount || 0} reseñas</small>
+                          <button
+                            className={styles.storyPublicationButton}
+                            onClick={() => onNavigate("reading", {
+                              storyIdentifier: story.slug || story.id
+                            })}
+                            title={ui("Abrir {0}",[story.title])}
+                            type="button"
+                          >
+                            <img
+                              className={styles.storyCoverImage}
+                              src={story.cover || "/default-cover.svg"} onError={(event) => { if (!event.currentTarget.src.endsWith("/default-cover.svg")) event.currentTarget.src = "/default-cover.svg"; }}
+                              alt={story.title}
+                            />
+                            <div className={styles.storyCardBody}>
+                              <div className={styles.storyCardTopline}>
+                                <strong>{story.title}</strong>
+                                <span className={styles.categoryBadge}>{ui(story.category)}</span>
                               </div>
-                              <small>{story.reads || 0} lecturas</small>
+                              <p className={styles.storySynopsis}>
+                                "{story.description || ui("Sin sinopsis todavia.")}"
+                              </p>
+                              <div className={styles.storyAuthorRow}>
+                                <span className={styles.storyAvatar}>
+                                  {story.authorAvatarUrl ? (
+                                    <img
+                                      alt={story.author || ui("Autor")}
+                                      className={styles.storyAvatarImage}
+                                      src={story.authorAvatarUrl}
+                                    />
+                                  ) : (
+                                    (story.author || "A").slice(0, 1).toUpperCase()
+                                  )}
+                                </span>
+                                <small>{story.author || ui("Autor de Valoria")}</small>
+                              </div>
+                              <div className={styles.storyMetaRow}>
+                                <div className={styles.storyRating}>
+                                  <StarRating value={ratingValue} size="sm" icon="heart" />
+                                  <small>{story.ratingCount || 0}{ui(" reseñas")}</small>
+                                </div>
+                                <small>{story.reads || 0}{ui(" lecturas")}</small>
+                              </div>
+                              <div className={styles.storyFooter}>
+                                <span
+                                  className={`${styles.storyStatus} ${
+                                    story.status === "published"
+                                      ? styles.storyStatusPublished
+                                      : styles.storyStatusDraft
+                                  }`}
+                                >
+                                  {story.status === "published" ? ui("Publicado") : ui("Borrador")}
+                                </span>
+                              </div>
                             </div>
-                            <div className={styles.storyFooter}>
-                              <span
-                                className={`${styles.storyStatus} ${
-                                  story.status === "published"
-                                    ? styles.storyStatusPublished
-                                    : styles.storyStatusDraft
-                                }`}
-                              >
-                                {story.status === "published" ? "Publicado" : "Borrador"}
-                              </span>
-                            </div>
-                          </div>
-                        </button>
+                            </button>
+                          <button
+                            aria-label={ui("Editar capitulos de {0}",[story.title])}
+                            aria-pressed={isSelected}
+                            className={styles.storyEditButton}
+                            onClick={() => setSelectedStoryId(story.id)}
+                            type="button"
+                          >{ui(" Editar capitulos ")}</button>
+                        </article>
                       );
                     })}
                   </div>
@@ -444,14 +459,13 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                 {selectedStory ? (
                   <div className={styles.chapterNumbersWrap}>
                     <div className={styles.inlineChapterHeader}>
-                      <span>Capitulos</span>
+                      <span>{ui("Capitulos")}</span>
                       <div className={styles.chapterActions}>
                         <small className={styles.chapterSummary}>
-                          {publishedChapters.length} publicados en {selectedStory.title}
+                          {publishedChapters.length}{ui(" publicados en ")}{selectedStory.title}
                         </small>
                         <small className={styles.chapterSummaryMuted}>
-                          {draftChapters.length} en borrador
-                        </small>
+                          {draftChapters.length}{ui(" en borrador ")}</small>
                       </div>
                     </div>
 
@@ -459,7 +473,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                       <div className={styles.chapterColumns}>
                         <div className={styles.chapterGroup}>
                           <div className={styles.chapterGroupHeader}>
-                            <span>Publicados</span>
+                            <span>{ui("Publicados")}</span>
                             <small>{publishedChapters.length}</small>
                           </div>
                           {publishedChapters.length > 0 ? (
@@ -479,21 +493,18 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                                     setPendingDeleteChapterId("");
                                   }}
                                   type="button"
-                                >
-                                  Cap {chapter.chapter_number || index + 1}
+                                >{ui(" Cap ")}{chapter.chapter_number || index + 1}
                                 </button>
                               ))}
                             </div>
                           ) : (
-                            <p className={styles.inlineChapterEmpty}>
-                              Aun no hay capitulos publicados.
-                            </p>
+                            <p className={styles.inlineChapterEmpty}>{ui(" Aun no hay capitulos publicados. ")}</p>
                           )}
                         </div>
 
                         <div className={styles.chapterGroup}>
                           <div className={styles.chapterGroupHeader}>
-                            <span>Borradores</span>
+                            <span>{ui("Borradores")}</span>
                             <small>{draftChapters.length}</small>
                           </div>
                           {draftChapters.length > 0 ? (
@@ -513,31 +524,26 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                                     setPendingDeleteChapterId("");
                                   }}
                                   type="button"
-                                >
-                                  Cap {chapter.chapter_number || index + 1}
+                                >{ui(" Cap ")}{chapter.chapter_number || index + 1}
                                 </button>
                               ))}
                             </div>
                           ) : (
-                            <p className={styles.inlineChapterEmpty}>
-                              No tienes borradores abiertos.
-                            </p>
+                            <p className={styles.inlineChapterEmpty}>{ui(" No tienes borradores abiertos. ")}</p>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <p className={styles.inlineChapterEmpty}>
-                        Esta historia aun no tiene capitulos publicados.
-                      </p>
+                      <p className={styles.inlineChapterEmpty}>{ui(" Esta historia aun no tiene capitulos publicados. ")}</p>
                     )}
 
                     {selectedChapter ? (
                       <div className={styles.heroDetailStrip}>
                         <div>
-                          <span>Capitulo activo</span>
+                          <span>{ui("Capitulo activo")}</span>
                           <strong>{selectedChapter.title}</strong>
                           <p>
-                            {selectedChapter.excerpt || "Este capitulo aun no tiene resumen."}
+                            {selectedChapter.excerpt || ui("Este capitulo aun no tiene resumen.")}
                           </p>
                         </div>
                         <div className={styles.chapterInspectorActions}>
@@ -549,8 +555,8 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                             }`}
                           >
                             {selectedChapter.status === "published"
-                              ? "Publicado"
-                              : "Borrador"}
+                              ? ui("Publicado")
+                              : ui("Borrador")}
                           </span>
                           <button
                             className={styles.secondaryAction}
@@ -563,8 +569,8 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                             type="button"
                           >
                             {showChapterComposer && !editingChapterId
-                              ? "Ocultar capitulo"
-                              : "Agregar capitulo"}
+                              ? ui("Ocultar capitulo")
+                              : ui("Agregar capitulo")}
                           </button>
                           <button
                             className={styles.secondaryAction}
@@ -575,17 +581,13 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                               setPendingDeleteChapterId("");
                             }}
                             type="button"
-                          >
-                            Modificar capitulo
-                          </button>
+                          >{ui(" Modificar capitulo ")}</button>
                           {selectedChapter.status !== "published" ? (
                             <button
                               className={styles.publishAction}
-                              onClick={() => handlePublishChapter(selectedChapter)}
+                              onClick={() => setPendingPublication(selectedChapter)}
                               type="button"
-                            >
-                              Publicar capitulo
-                            </button>
+                            >{ui(" Publicar capitulo ")}</button>
                           ) : null}
                           <button
                             className={styles.dangerAction}
@@ -594,20 +596,15 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                               setChapterActionMessage("");
                             }}
                             type="button"
-                          >
-                            Eliminar capitulo
-                          </button>
+                          >{ui(" Enviar capítulo a la papelera ")}</button>
                         </div>
                       </div>
                     ) : chapters.length === 0 ? (
                       <div className={styles.heroDetailStrip}>
                         <div>
-                          <span>Capitulo activo</span>
-                          <strong>Tu historia aun no tiene capitulos</strong>
-                          <p>
-                            Abre el formulario para crear el primer capitulo o deja uno
-                            guardado como borrador.
-                          </p>
+                          <span>{ui("Capitulo activo")}</span>
+                          <strong>{ui("Tu historia aun no tiene capitulos")}</strong>
+                          <p>{ui(" Abre el formulario para crear el primer capitulo o deja uno guardado como borrador. ")}</p>
                         </div>
                       </div>
                     ) : null}
@@ -615,16 +612,16 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                     {pendingDeleteChapter ? (
                       <div className={styles.deletePrompt}>
                         <div>
-                          <span>Confirmar eliminacion</span>
+                          <span>{ui("Confirmar eliminacion")}</span>
                           <strong>
                             {chapters.length > 1
-                              ? `Vas a borrar Cap ${pendingDeleteChapter.chapter_number}: ${pendingDeleteChapter.title}`
-                              : `Vas a borrar el unico capitulo: ${pendingDeleteChapter.title}`}
+                              ? ui("Vas a enviar a la papelera Cap {0}: {1}",[pendingDeleteChapter.chapter_number,pendingDeleteChapter.title])
+                              : ui("Vas a enviar a la papelera el único capítulo: {0}",[pendingDeleteChapter.title])}
                           </strong>
                           <p>
                             {chapters.length > 1
-                              ? "Si en realidad quieres eliminar toda la historia, puedes hacerlo desde aqui mismo."
-                              : "Como esta historia solo tiene un capitulo, tambien puedes optar por eliminar la historia completa."}
+                              ? ui("Si en realidad quieres eliminar toda la historia, puedes hacerlo desde aqui mismo.")
+                              : ui("Como esta historia solo tiene un capitulo, tambien puedes optar por eliminar la historia completa.")}
                           </p>
                         </div>
                         <div className={styles.deletePromptActions}>
@@ -651,9 +648,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                               }
                             }}
                             type="button"
-                          >
-                            Eliminar este capitulo
-                          </button>
+                          >{ui(" Enviar capítulo a la papelera ")}</button>
                           <button
                             className={styles.publishAction}
                             onClick={async () => {
@@ -675,22 +670,18 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                               }
                             }}
                             type="button"
-                          >
-                            Eliminar historia
-                          </button>
+                          >{ui(" Enviar historia a la papelera ")}</button>
                           <button
                             className={styles.secondaryAction}
                             onClick={() => setPendingDeleteChapterId("")}
                             type="button"
-                          >
-                            Cancelar
-                          </button>
+                          >{ui(" Cancelar ")}</button>
                         </div>
                       </div>
                     ) : null}
 
                     {chapterActionMessage ? (
-                      <p className={styles.chapterActionMessage}>{chapterActionMessage}</p>
+                      <p className={styles.chapterActionMessage}>{ui(chapterActionMessage)}</p>
                     ) : null}
                   </div>
                 ) : null}
@@ -700,15 +691,13 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
             <>
               <section className={styles.hero}>
                 <div className={styles.heroContent}>
-                  <span>Panel de ilustrador</span>
-                  <h1>Organiza tus piezas visuales y construye tu galeria publica.</h1>
+                  <span>{ui("Panel de ilustrador")}</span>
+                  <h1>{ui("Organiza tus piezas visuales y construye tu galeria publica.")}</h1>
                   {selectedIllustration ? (
                     <div className={styles.heroSelectedStory}>
                       <strong>{selectedIllustration.title}</strong>
                       <small>
-                        {publishedIllustrations.length} publicadas y {draftIllustrations.length} en
-                        borrador
-                      </small>
+                        {publishedIllustrations.length}{ui(" publicadas y ")}{draftIllustrations.length}{ui(" en borrador ")}</small>
                     </div>
                   ) : null}
                 </div>
@@ -723,7 +712,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                     }}
                     type="button"
                   >
-                    {showIllustrationComposer ? "Ocultar atelier" : "Crear ilustracion"}
+                    {showIllustrationComposer ? ui("Ocultar atelier") : ui("Crear ilustracion")}
                   </button>
                 </div>
               </section>
@@ -731,18 +720,17 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
               <section className={styles.library}>
                 <div className={styles.libraryHeader}>
                   <div>
-                    <span>Tu galeria</span>
-                    <h2>Ilustraciones creadas</h2>
+                    <span>{ui("Tu galeria")}</span>
+                    <h2>{ui("Ilustraciones creadas")}</h2>
                   </div>
                   <p className={styles.libraryCount}>
-                    {illustrations.length} piezas en tu portafolio
-                  </p>
+                    {illustrations.length}{ui(" piezas en tu portafolio ")}</p>
                 </div>
 
                 {illustrations.length === 0 ? (
                   <div className={styles.emptyCard}>
-                    <strong>Aun no has publicado ilustraciones</strong>
-                    <p>Crea tu primera pieza para empezar a poblar la galeria visual.</p>
+                    <strong>{ui("Aun no has publicado ilustraciones")}</strong>
+                    <p>{ui("Crea tu primera pieza para empezar a poblar la galeria visual.")}</p>
                   </div>
                 ) : (
                   <div className={styles.storyGrid}>
@@ -777,19 +765,19 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                                     key={`${illustration.id}-${category}`}
                                     className={styles.categoryBadge}
                                   >
-                                    {category}
+                                    {ui(category)}
                                   </span>
                                 ))}
                               </div>
                             </div>
                             <p className={styles.storySynopsis}>
-                              "{illustration.description || "Sin descripcion todavia."}"
+                              "{illustration.description || ui("Sin descripcion todavia.")}"
                             </p>
                             <div className={styles.storyAuthorRow}>
                               <span className={styles.storyAvatar}>
                                 {illustration.authorAvatarUrl ? (
                                   <img
-                                    alt={illustration.author || "Ilustrador"}
+                                    alt={illustration.author || ui("Ilustrador")}
                                     className={styles.storyAvatarImage}
                                     src={illustration.authorAvatarUrl}
                                   />
@@ -797,12 +785,12 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                                   (illustration.author || "I").slice(0, 1).toUpperCase()
                                 )}
                               </span>
-                              <small>{illustration.author || "Ilustrador de Valoria"}</small>
+                              <small>{illustration.author || ui("Ilustrador de Valoria")}</small>
                             </div>
                             <div className={styles.storyMetaRow}>
-                              <small>{illustration.likesCount || 0} me gusta</small>
-                              <small>{illustration.commentsCount || 0} comentarios</small>
-                              <small>{illustration.viewsCount || 0} vistas</small>
+                              <small>{illustration.likesCount || 0}{ui(" me gusta")}</small>
+                              <small>{illustration.commentsCount || 0}{ui(" comentarios")}</small>
+                              <small>{illustration.viewsCount || 0}{ui(" vistas")}</small>
                             </div>
                             <div className={styles.storyFooter}>
                               <span
@@ -812,7 +800,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                                     : styles.storyStatusDraft
                                 }`}
                               >
-                                {illustration.status === "published" ? "Publicado" : "Borrador"}
+                                {illustration.status === "published" ? ui("Publicado") : ui("Borrador")}
                               </span>
                             </div>
                           </div>
@@ -825,11 +813,11 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                 {selectedIllustration ? (
                   <div className={styles.heroDetailStrip}>
                     <div>
-                      <span>Ilustracion activa</span>
+                      <span>{ui("Ilustracion activa")}</span>
                       <strong>{selectedIllustration.title}</strong>
                       <p>
                         {selectedIllustration.description ||
-                          "Esta pieza aun no tiene descripcion visible."}
+                          ui("Esta pieza aun no tiene descripcion visible.")}
                       </p>
                     </div>
                     <div className={styles.chapterInspectorActions}>
@@ -840,7 +828,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                             : styles.storyStatusDraft
                         }`}
                       >
-                        {selectedIllustration.status === "published" ? "Publicado" : "Borrador"}
+                        {selectedIllustration.status === "published" ? ui("Publicado") : ui("Borrador")}
                       </span>
                       <button
                         className={styles.secondaryAction}
@@ -851,9 +839,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                           })
                         }
                         type="button"
-                      >
-                        Abrir ilustracion
-                      </button>
+                      >{ui(" Abrir ilustracion ")}</button>
                       <button
                         className={styles.secondaryAction}
                         onClick={() => {
@@ -863,9 +849,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                           setPendingDeleteIllustrationId("");
                         }}
                         type="button"
-                      >
-                        Modificar ilustracion
-                      </button>
+                      >{ui(" Modificar ilustracion ")}</button>
                       <button
                         className={styles.dangerAction}
                         onClick={() => {
@@ -873,9 +857,7 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                           setIllustrationActionMessage("");
                         }}
                         type="button"
-                      >
-                        Eliminar ilustracion
-                      </button>
+                      >{ui(" Enviar ilustración a la papelera ")}</button>
                     </div>
                   </div>
                 ) : null}
@@ -883,9 +865,9 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                 {pendingDeleteIllustration ? (
                   <div className={styles.deletePrompt}>
                     <div>
-                      <span>Confirmar eliminacion</span>
-                      <strong>Vas a borrar la ilustracion {pendingDeleteIllustration.title}</strong>
-                      <p>La pieza dejara de aparecer en tu galeria y en la vista publica.</p>
+                      <span>{ui("Confirmar eliminacion")}</span>
+                      <strong>{ui("Vas a enviar a la papelera la ilustración ")}{pendingDeleteIllustration.title}</strong>
+                      <p>{ui("La pieza dejara de aparecer en tu galeria y en la vista publica.")}</p>
                     </div>
                     <div className={styles.deletePromptActions}>
                       <button
@@ -908,33 +890,35 @@ export function CreatorDashboard({ auth, navFilters, onNavigate }) {
                           }
                         }}
                         type="button"
-                      >
-                        Eliminar ilustracion
-                      </button>
+                      >{ui(" Enviar ilustración a la papelera ")}</button>
                       <button
                         className={styles.secondaryAction}
                         onClick={() => setPendingDeleteIllustrationId("")}
                         type="button"
-                      >
-                        Cancelar
-                      </button>
+                      >{ui(" Cancelar ")}</button>
                     </div>
                   </div>
                 ) : null}
 
                 {illustrationActionMessage ? (
-                  <p className={styles.chapterActionMessage}>{illustrationActionMessage}</p>
+                  <p className={styles.chapterActionMessage}>{ui(illustrationActionMessage)}</p>
                 ) : null}
               </section>
             </>
           )}
         </section>
 
+        {creatorMode === "stories" && selectedStory && <><ExportStory story={selectedStory} auth={auth}/><CreatorStats story={selectedStory} auth={auth}/></>}
+        {creatorMode === "stories" && selectedStory && <StoryMetadataEditor key={selectedStory.id} story={selectedStory} auth={auth} onUpdated={updated=>setStories(current=>current.map(item=>item.id===updated.id?updated:item))} />}
+        {creatorMode==='stories'&&selectedStory&&<WorkDetailsEditor key={`saga:${selectedStory.id}`} work={selectedStory} type="story" auth={auth}/>}
+        {creatorMode==='stories'&&selectedStory&&selectedChapter&&<ChapterVersions key={selectedChapter.id} story={selectedStory} chapter={selectedChapter} auth={auth} onRestored={chapter=>{setChapters(current=>current.map(x=>x.id===chapter.id?{...x,...chapter}:x));setEditingChapterId('');setShowChapterComposer(false);}}/>}
+        {creatorMode==='illustrations'&&selectedIllustration&&<WorkDetailsEditor key={`portfolio:${selectedIllustration.id}`} work={selectedIllustration} type="illustration" auth={auth}/>}
         {creatorMode === "stories" && showChapterComposer && selectedStory ? (
           <section className={styles.editorGrid} ref={chapterComposerRef}>
             <CreatorStudio
               auth={auth}
               existingChapters={chapters}
+              suggestedChapterNumber={suggestedChapterNumber}
               stories={stories}
               selectedStoryId={selectedStoryId}
               chapterDraft={editingChapter}

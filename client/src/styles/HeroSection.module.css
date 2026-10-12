@@ -5,7 +5,7 @@
 .copy {
   padding: 24px;
   border-radius: 22px;
-  min-height: 470px;
+  min-height: 360px;
 }
 
 .copy {
@@ -14,6 +14,15 @@
     rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line-soft);
 }
+
+:global(html[data-theme="light"]) .copy {
+  background:
+    radial-gradient(ellipse at 88% 10%, rgba(255,255,255,.85), transparent 55%),
+    linear-gradient(120deg, #e5d3f2 0%, #f2e5f5 55%, #faeadc 100%);
+  border-color: #cfb7dd;
+  box-shadow: 0 16px 38px rgba(91,57,119,.12), inset 0 1px 0 rgba(255,255,255,.8);
+}
+:global(html[data-theme="light"]) .arrow { background: #fffafc; border-color: #cdb5dd; box-shadow: 0 3px 8px rgba(91,57,119,.08); }
 
 .topline {
   display: flex;
@@ -27,7 +36,7 @@
   padding: 8px 12px;
   border-radius: 999px;
   background: rgba(216, 195, 241, 0.14);
-  color: var(--brand-200);
+  color: var(--text-accent);
   font-size: 0.84rem;
 }
 
@@ -49,7 +58,7 @@
   gap: 18px;
   align-items: center;
   margin-top: 14px;
-  min-height: 372px;
+  min-height: 280px;
 }
 
 .arrow {
@@ -71,11 +80,11 @@
   display: grid;
   align-content: start;
   gap: 12px;
-  min-height: 320px;
+  min-height: 240px;
 }
 
 .storyMeta {
-  color: var(--brand-200);
+  color: var(--text-accent);
   font-size: 0.82rem;
 }
 
@@ -109,7 +118,7 @@
   padding: 12px 16px;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--brand-300), var(--brand-400));
-  color: white;
+  color: var(--text-main);
   font-weight: 700;
 }
 
@@ -124,7 +133,7 @@
   overflow: hidden;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 18px 36px rgba(18, 8, 31, 0.26);
+  box-shadow: 0 18px 36px rgba(var(--panel-rgb), 0.26);
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -140,9 +149,9 @@
   height: 36px;
   padding: 0 14px;
   border-radius: 999px;
-  box-shadow: 0 10px 20px rgba(8, 5, 12, 0.22);
+  box-shadow: 0 10px 20px rgba(var(--panel-rgb), 0.22);
   backdrop-filter: blur(10px);
-  color: #fff8ff;
+  color: var(--text-main);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.08em;

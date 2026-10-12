@@ -2,18 +2,23 @@
 // Valida payloads y delega en el modelo de auth.
 import { AuthModel } from "../models/authModel.js";
 
+function validCredentials(email, password) {
+  return typeof email === 'string' && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+    typeof password === 'string' && password.length > 0 && password.length <= 128;
+}
+
 export async function register(request, response, next) {
   // Valida el payload de registro y delega la creacion del usuario al modelo.
   try {
     const { email, password, displayName } = request.body;
 
-    if (!email || !password || !displayName) {
+    if (!validCredentials(email, password) || [...password].length < 15 || typeof displayName !== 'string' || !displayName.trim() || displayName.length > 80) {
       return response.status(400).json({
-        message: "email, password y displayName son obligatorios"
+        message: "Indica un correo válido, una contraseña de 15 a 128 caracteres y un nombre de hasta 80 caracteres."
       });
     }
 
-    const auth = await AuthModel.register({ email, password, displayName });
+    const auth = await AuthModel.register({ email: email.trim().toLowerCase(), password, displayName: displayName.trim() });
     return response.status(201).json(auth);
   } catch (error) {
     return next(error);
@@ -25,13 +30,13 @@ export async function login(request, response, next) {
   try {
     const { email, password } = request.body;
 
-    if (!email || !password) {
+    if (!validCredentials(email, password)) {
       return response.status(400).json({
         message: "email y password son obligatorios"
       });
     }
 
-    const auth = await AuthModel.login({ email, password });
+    const auth = await AuthModel.login({ email: email.trim().toLowerCase(), password });
     return response.json(auth);
   } catch (error) {
     return next(error);

@@ -1,3 +1,10 @@
+.route-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: var(--text-soft);
+}
+
 :root {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #f6f1fb;
@@ -12,6 +19,16 @@
   --brand-300: #af8dd7;
   --brand-200: #d8c3f1;
   --brand-900: #271934;
+  --field-bg: #201729;
+  --field-bg-focus: #271c33;
+  --field-border: rgba(175, 141, 215, 0.3);
+  --field-radius: 18px;
+  --field-placeholder: #b5a3c6;
+  --panel-rgb:28,19,39;
+  --panel-dark:#271934;
+  --text-accent:#d8c3f1;
+  --accent-ink:#271934;
+  --warm-text:#ffcfb3;
   background:
     radial-gradient(circle at top, rgba(127, 93, 168, 0.34), transparent 24%),
     radial-gradient(circle at 80% 18%, rgba(175, 141, 215, 0.12), transparent 20%),
@@ -31,9 +48,48 @@ html {
   scroll-behavior: smooth;
 }
 
+.skip-content{position:fixed;top:12px;left:12px;z-index:10000;transform:translateY(-180%);background:var(--brand-900);border:2px solid var(--brand-200)}
+.skip-content:focus{transform:none}
+:is(button,a,summary,[tabindex]):focus-visible{outline:3px solid var(--brand-200);outline-offset:4px}
+html[data-contrast="high"]{--text-main:#fff;--text-soft:#f1e8ff;--line-soft:#9b83b7;--field-border:#bda2db;--field-placeholder:#dfd0ee;--bg-surface:#21152d;--brand-400:#765298}
+html[data-theme="light"] {
+  color-scheme: light;
+  color: #33233f;
+  --bg-main: #faf7f3;
+  --bg-surface: #fffdfb;
+  --bg-surface-strong: #ede2f5;
+  --line-soft: rgba(105, 68, 141, .2);
+  --text-main: #33233f;
+  --text-soft: #655070;
+  --text-accent: #69448d;
+  --brand-500: #d9bfea;
+  --brand-400: #cfafe4;
+  --brand-300: #b393cf;
+  --brand-200: #69448d;
+  --brand-900: #eee3f7;
+  --field-bg: #fffdfb;
+  --field-bg-focus: #fff;
+  --field-border: #bda6cf;
+  --field-placeholder: #75617f;
+  --panel-rgb: 255,250,255;
+  --panel-dark: #f0e8f7;
+  --light-elevation: 0 12px 32px rgba(79, 45, 108, .08), 0 2px 5px rgba(79, 45, 108, .04);
+  --light-panel: linear-gradient(145deg, #fffefd 0%, #fcf8ff 65%, #f0e6f8 100%);
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(196, 163, 225, .36), transparent 38%),
+    radial-gradient(ellipse at 95% 28%, rgba(244, 209, 188, .3), transparent 35%),
+    linear-gradient(180deg, #faf7f3 0%, #f3edf9 48%, #fff8ef 100%);
+}
+html[data-theme="light"][data-contrast="high"]{--text-main:#24132e;--text-soft:#422b52;--field-border:#795693;--line-soft:#9677af;--field-placeholder:#4e365e;--bg-surface:#fff}
+html[data-theme="light"] #root :is(input,select,textarea){color-scheme:light}
+html[data-theme="light"] option{background:#fffafd;color:#33233f}
+html[data-theme="light"]{--warm-text:#86502c}
+html[data-motion="reduced"] *,html[data-motion="reduced"] *::before,html[data-motion="reduced"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   color: var(--text-main);
 }
 
@@ -45,11 +101,71 @@ a {
 button {
   cursor: pointer;
   border: none;
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: var(--brand-900);
+  color: var(--text-main);
 }
+button:disabled { cursor: not-allowed; opacity: .55; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--brand-200); outline-offset: 3px; }
 
 select {
   color-scheme: dark;
 }
+
+/* Shared dropdown affordances: readable labels and a consistent disclosure arrow. */
+#root select {
+  appearance: none;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 10px 38px 10px 14px;
+  line-height: 1.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a989cc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+}
+
+#root details > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 14px 16px;
+  border: 1px solid var(--field-border);
+  border-radius: 16px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  line-height: 1.5;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+#root details > summary::-webkit-details-marker { display: none; }
+#root details > summary::after {
+  content: '';
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-accent);
+  border-bottom: 2px solid var(--text-accent);
+  margin-left: auto;
+  margin-right: 4px;
+  color: var(--text-accent);
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+}
+#root details[open] > summary::after { transform: rotate(225deg); }
+#root details > summary:hover, #root details[open] > summary { background: var(--field-bg-focus); }
+#root details > summary:focus-visible { outline: 2px solid var(--brand-300); outline-offset: 3px; }
+#root details > summary > span { min-width: 0; }
+#root details > summary + * { margin-top: 16px; }
+#root details + details { margin-top: 16px; }
+#root label > select { margin-top: 6px; }
+html[data-theme="light"] #root option { background: var(--field-bg); color: var(--text-main); }
 
 option {
   background: #24182f;
@@ -64,4 +180,39 @@ a {
 img {
   display: block;
   max-width: 100%;
+}
+
+/* One theme for text controls, including forms loaded by lazy routes.
+   Keep each component's sizing; exclude controls that do not accept text. */
+#root :is(input:not([type="checkbox"], [type="radio"], [type="file"], [type="color"], [type="range"], [type="hidden"], [type="button"], [type="submit"], [type="reset"]), textarea, select) {
+  border: 1px solid var(--field-border);
+  border-radius: var(--field-radius);
+  background-color: var(--field-bg);
+  color: var(--text-main);
+  font-family: inherit;
+  color-scheme: dark;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+#root :is(input, textarea)::placeholder {
+  color: var(--field-placeholder);
+  opacity: 1;
+}
+
+#root :is(input:not([type="checkbox"], [type="radio"], [type="file"], [type="color"], [type="range"], [type="hidden"], [type="button"], [type="submit"], [type="reset"]), textarea, select):focus {
+  background-color: var(--field-bg-focus);
+  border-color: var(--brand-300);
+  outline: 2px solid var(--brand-200);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(175, 141, 215, 0.12);
+}
+
+#root :is(input, textarea):autofill {
+  -webkit-text-fill-color: var(--text-main);
+  caret-color: var(--text-main);
+  box-shadow: inset 0 0 0 1000px var(--field-bg);
+}
+
+#root :is(input, textarea):autofill:focus {
+  box-shadow: inset 0 0 0 1000px var(--field-bg-focus), 0 0 0 4px rgba(175, 141, 215, 0.12);
 }

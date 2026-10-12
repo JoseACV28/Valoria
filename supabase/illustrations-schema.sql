@@ -212,14 +212,14 @@ create policy "public can read illustration posts"
 on public.illustration_posts
 for select
 to public
-using (true);
+using ((status = 'published' and visibility in ('public', 'unlisted')) or author_id = auth.uid());
 
 drop policy if exists "public can read illustration images" on public.illustration_images;
 create policy "public can read illustration images"
 on public.illustration_images
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_posts p where p.id = illustration_images.illustration_post_id));
 
 drop policy if exists "public can read illustration categories" on public.illustration_categories;
 create policy "public can read illustration categories"
@@ -233,7 +233,7 @@ create policy "public can read illustration post categories"
 on public.illustration_post_categories
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_posts p where p.id = illustration_post_categories.illustration_post_id));
 
 drop policy if exists "public can read illustration tags" on public.illustration_tags;
 create policy "public can read illustration tags"
@@ -247,42 +247,42 @@ create policy "public can read illustration post tags"
 on public.illustration_post_tags
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_posts p where p.id = illustration_post_tags.illustration_post_id));
 
 drop policy if exists "public can read illustration comments" on public.illustration_comments;
 create policy "public can read illustration comments"
 on public.illustration_comments
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_posts p where p.id = illustration_comments.illustration_post_id));
 
 drop policy if exists "public can read illustration comment likes" on public.illustration_comment_likes;
 create policy "public can read illustration comment likes"
 on public.illustration_comment_likes
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_comments c where c.id = illustration_comment_likes.comment_id));
 
 drop policy if exists "public can read illustration post likes" on public.illustration_post_likes;
 create policy "public can read illustration post likes"
 on public.illustration_post_likes
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_posts p where p.id = illustration_post_likes.illustration_post_id));
 
 drop policy if exists "public can read illustration saves" on public.illustration_saves;
 create policy "public can read illustration saves"
 on public.illustration_saves
 for select
 to public
-using (true);
+using (user_id = auth.uid());
 
 drop policy if exists "public can read illustration fanarts" on public.illustration_fanarts;
 create policy "public can read illustration fanarts"
 on public.illustration_fanarts
 for select
 to public
-using (true);
+using (exists (select 1 from public.illustration_posts p where p.id = illustration_fanarts.illustration_post_id));
 
 -- Escritura segura por backend con service role.
 drop policy if exists "service role manages profile roles" on public.profile_roles;

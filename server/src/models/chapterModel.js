@@ -1,6 +1,7 @@
 // Modelo de capitulos.
 // Administra consulta y persistencia de capitulos asociados a una historia.
 import { randomUUID } from "node:crypto";
+import {captureLocalVersion} from './experienceModel.js';
 import {
   demoChapterImages,
   demoChapters,
@@ -10,6 +11,7 @@ import {
 } from "../data/demoStore.js";
 import { isSupabaseEnabled, supabaseAdmin } from "../config/supabase.js";
 import { slugify } from "../utils/slugify.js";
+import { httpError } from "../utils/contentAccess.js";
 
 function mapChapter(chapter, chapterImages = []) {
   // Normaliza un capitulo con su galeria asociada para la UI de lectura o edicion.
@@ -71,19 +73,27 @@ async function recalculateSupabaseStoryRating(storyId) {
 }
 
 export class ChapterModel {
-  static async getByStoryId(storyId) {
+  static async getByStoryId(storyId, { publishedOnly = false, includeDeleted = false } = {}) {
     // Lista capitulos de una historia, ordenados para lectura y panel.
     if (!isSupabaseEnabled()) {
       return demoChapters
-        .filter((chapter) => chapter.story_id === storyId)
-        .sort((a, b) => a.chapter_number - b.chapter_number);
+        .filter((chapter) => chapter.story_id === storyId && (includeDeleted || !chapter.deleted_at) &&
+          (!publishedOnly || chapter.status === "published"))
+        .sort((a, b) => a.chapter_number - b.chapter_number)
+        .map((chapter) => mapChapter(chapter, demoChapterImages
+          .filter((image) => image.chapter_id === chapter.id)
+          .sort((a, b) => a.sort_order - b.sort_order)));
     }
 
-    const { data, error } = await supabaseAdmin
+    let query = supabaseAdmin
       .from("chapters")
       .select("*, chapter_images(*)")
       .eq("story_id", storyId)
       .order("chapter_number", { ascending: true });
+
+    if (!includeDeleted) query=query.is("deleted_at",null);
+    if (publishedOnly) query = query.eq("status", "published");
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(error.message);
@@ -107,6 +117,10 @@ export class ChapterModel {
     };
 
     if (!isSupabaseEnabled()) {
+      if (demoChapters.some((chapter) => chapter.story_id === storyId &&
+          (chapter.chapter_number === payload.chapter_number || chapter.slug === payload.slug))) {
+        throw httpError(409, "Ese número o título está reservado, incluso en la papelera. Restaura el capítulo o elige otro.");
+      }
       const chapter = {
         id: randomUUID(),
         created_at: new Date().toISOString(),
@@ -143,7 +157,7 @@ export class ChapterModel {
       .single();
 
     if (chapterError) {
-      throw new Error(chapterError.message);
+      throw httpError(chapterError.code === "23505" ? 409 : 500, chapterError.message);
     }
 
     let chapterImages = [];
@@ -189,6 +203,9 @@ export class ChapterModel {
     };
 
     if (!isSupabaseEnabled()) {
+      if (!demoChapters.some((chapter) => chapter.id === chapterId && chapter.story_id === storyId)) {
+        throw httpError(404, "Capitulo no encontrado");
+      }
       const image = {
         id: randomUUID(),
         created_at: new Date().toISOString(),
@@ -210,7 +227,7 @@ export class ChapterModel {
     }
 
     if (!chapterLookup.data) {
-      throw new Error("Capitulo no encontrado");
+      throw httpError(404, "Capitulo no encontrado");
     }
 
     const { data, error } = await supabaseAdmin
@@ -247,9 +264,15 @@ export class ChapterModel {
       );
 
       if (!chapter) {
-        throw new Error("Capitulo no encontrado");
+        throw httpError(404, "Capitulo no encontrado");
       }
 
+      if (demoChapters.some((current) => current.story_id === storyId && current.id !== chapterId &&
+          (current.chapter_number === payload.chapter_number || current.slug === payload.slug))) {
+        throw httpError(409, "Ese número o título está reservado, incluso en la papelera. Restaura el capítulo o elige otro.");
+      }
+
+      if(chapter.title!==payload.title||chapter.content!==payload.content||chapter.excerpt!==payload.excerpt)captureLocalVersion(chapter);
       Object.assign(chapter, payload);
 
       if (Array.isArray(input.images) && input.images.length > 0) {
@@ -285,7 +308,7 @@ export class ChapterModel {
       .single();
 
     if (chapterError) {
-      throw new Error(chapterError.message);
+      throw httpError(chapterError.code === "23505" ? 409 : chapterError.code === "PGRST116" ? 404 : 500, chapterError.message);
     }
 
     if (Array.isArray(input.images) && input.images.length > 0) {
@@ -340,7 +363,7 @@ export class ChapterModel {
       );
 
       if (chapterIndex === -1) {
-        throw new Error("Capitulo no encontrado");
+        throw httpError(404, "Capitulo no encontrado");
       }
 
       demoChapters.splice(chapterIndex, 1);

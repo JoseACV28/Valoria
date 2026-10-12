@@ -1,0 +1,39 @@
+.page { display: grid; gap: 24px; min-width: 0; }
+.header, .section, .notice { padding: 24px; border: 1px solid var(--line-soft); border-radius: var(--radius-panel); background: var(--bg-surface); min-width: 0; }
+.header h1 { overflow-wrap: anywhere; margin: 12px 0 20px; }
+.header > span { color: var(--text-accent); }
+.header { scroll-margin-top: 20px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button, .header p button, .notice button { padding: 10px 14px; border-radius: var(--radius-control); background: var(--brand-900); color: var(--text-main); border: 1px solid var(--field-border); }
+.filters button[aria-pressed="true"] { background: var(--active-bg); }
+.header p { color: var(--text-soft); overflow-wrap: anywhere; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 16px; }
+.card { min-width: 0; overflow: hidden; border-radius: var(--radius-panel); border: 1px solid var(--line-soft); background: var(--bg-surface); padding-bottom: 16px; }
+.open { display: flex; flex-direction: column; gap: 12px; width: 100%; background: transparent; color: var(--text-main); text-align: left; padding: 16px; overflow-wrap: anywhere; }
+.open strong { font-size: 1.05rem; }
+.cover { width: 100%; height: 220px; object-fit: cover; border-radius: var(--radius-panel); }
+.avatar, .initial { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.initial { display: grid; place-items: center; background: var(--brand-900); font-size: 24px; }
+.author { margin: 0 16px 12px; padding: 0; background: transparent; color: var(--text-accent); text-align: left; }
+.terms { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px; }
+.terms a { background: var(--brand-900); border-radius: var(--radius-panel); padding: 5px 9px; color: var(--text-accent); overflow-wrap: anywhere; }
+.page button:focus-visible, .terms a:focus-visible { outline: 2px solid var(--brand-200); outline-offset: 2px; }
+.open:hover, .terms a:hover { background: rgba(175,141,215,.12); }
+@media (max-width: 600px) { .header, .section, .notice { padding: 16px; } .header h1 { font-size: 1.5rem; } }
+
+.header label,.card label{display:block;margin:12px 0;color:var(--text-soft);}
+.card label{margin:12px 16px;}
+.header label input:not([type="checkbox"]),.header label select,.header label textarea,.card label input,.card label select,.card label textarea{display:block;width:100%;min-width:0;padding:12px 14px;min-height:44px;margin-top:6px;}
+.header label textarea,.card label textarea{min-height:110px;resize:vertical;}
+.filters label{flex:1 1 160px;}
+.card > button:not(.open):not(.author){padding:10px 14px;margin:8px 16px;border-radius:var(--radius-control);background:var(--brand-900);color:var(--text-main);}
+
+/* Obras como portadas, perfiles de personas como tarjetas discretas. */
+.grid { grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr)); gap:24px 20px; }
+.card { background:transparent; border:0; border-radius:0; padding-bottom:0; }
+.open { padding:0; }
+.cover { height:auto; aspect-ratio:.72; border-radius:6px; border:1px solid var(--line-soft); }
+.author { margin:8px 0; color:var(--text-soft); font-size:.85rem; }
+.terms { padding:0; }
+.card:has(.avatar),.card:has(.initial) { padding:18px; border:1px solid var(--line-soft); border-radius:var(--radius-panel); background:var(--bg-surface); }
+.open:hover { background:transparent; }

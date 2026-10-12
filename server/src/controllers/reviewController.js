@@ -1,25 +1,59 @@
+import { profilesBlocked, blockedProfileIds } from '../middlewares/profileBlocks.js';
 // Controlador HTTP de reseñas de lectores y puntuaciones.
 import { ReviewModel } from "../models/reviewModel.js";
 import { StoryModel } from "../models/storyModel.js";
 import { NotificationModel } from "../models/notificationModel.js";
+import { ChapterModel } from "../models/chapterModel.js";
+import { canReadContent, httpError } from "../utils/contentAccess.js";
+
+async function readableChapter(story, chapterId, user) {
+  if (!chapterId) return;
+  const chapters = await ChapterModel.getByStoryId(story.id, {
+    publishedOnly: story.authorId !== user?.id
+  });
+  if (!chapters.some((chapter) => chapter.id === chapterId)) {
+    throw httpError(404, "Capitulo no encontrado");
+  }
+}
+
+async function readableReview(story, reviewId, user) {
+  const review = await ReviewModel.getById(reviewId);
+  if (!review || review.story_id !== story.id) {
+    throw httpError(404, "Reseña no encontrada");
+  }
+  if(await profilesBlocked(user?.id,review.reviewer_id))throw httpError(403,'Esta interacción no está disponible entre estas cuentas.');
+  await readableChapter(story, review.chapter_id, user);
+  return review;
+}
 
 export async function getStoryReviews(request, response, next) {
   // Devuelve las reseñas del capitulo activo con replies y estado de like.
   try {
     const story = await StoryModel.getByIdOrSlug(request.params.storyId);
 
-    if (!story) {
+    if (!canReadContent(story, request.authUser)) {
       return response.status(404).json({
         message: "Historia no encontrada"
       });
     }
 
-    const reviews = await ReviewModel.getByStoryId(
+    await readableChapter(story, request.query.chapterId, request.authUser);
+    let reviews = await ReviewModel.getByStoryId(
       story.id,
       request.authUser?.id || null,
       request.query.chapterId || null
     );
-    return response.json({ reviews });
+    if (story.authorId !== request.authUser?.id && !request.query.chapterId) {
+      const publishedChapters = await ChapterModel.getByStoryId(story.id, { publishedOnly: true });
+      const publishedIds = new Set(publishedChapters.map((chapter) => chapter.id));
+      const filterVisible = (items) => items
+        .filter((review) => !review.chapter_id || publishedIds.has(review.chapter_id))
+        .map((review) => ({ ...review, replies: filterVisible(review.replies || []) }));
+      reviews = filterVisible(reviews);
+    }
+    const blocked=await blockedProfileIds(request.authUser?.id);
+    const filterBlocked=items=>items.filter(item=>!blocked.has(item.reviewer_id||item.reviewerId)).map(item=>({...item,replies:filterBlocked(item.replies||[])}));
+    return response.json({ reviews:filterBlocked(reviews) });
   } catch (error) {
     return next(error);
   }
@@ -30,12 +64,13 @@ export async function createStoryReview(request, response, next) {
   try {
     const story = await StoryModel.getByIdOrSlug(request.params.storyId);
 
-    if (!story) {
+    if (!canReadContent(story, request.authUser)) {
       return response.status(404).json({
         message: "Historia no encontrada"
       });
     }
 
+    if(await profilesBlocked(request.authUser?.id,story.authorId))throw httpError(403,'Esta interacción no está disponible entre estas cuentas.');
     const { rating, reviewText } = request.body;
 
     if (!rating || !reviewText) {
@@ -44,12 +79,13 @@ export async function createStoryReview(request, response, next) {
       });
     }
 
-    if (Number(rating) < 1 || Number(rating) > 5) {
+    if (!Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5) {
       return response.status(400).json({
         message: "La puntuacion debe estar entre 1 y 5"
       });
     }
 
+    await readableChapter(story, request.body.chapterId, request.authUser);
     const review = await ReviewModel.create(story.id, {
       ...request.body,
       reviewerId: request.authUser?.id || null,
@@ -78,12 +114,13 @@ export async function createStoryReviewReply(request, response, next) {
   try {
     const story = await StoryModel.getByIdOrSlug(request.params.storyId);
 
-    if (!story) {
+    if (!canReadContent(story, request.authUser)) {
       return response.status(404).json({
         message: "Historia no encontrada"
       });
     }
 
+    if(await profilesBlocked(request.authUser?.id,story.authorId))throw httpError(403,'Esta interacción no está disponible entre estas cuentas.');
     const { reviewText } = request.body;
 
     if (!reviewText) {
@@ -92,13 +129,14 @@ export async function createStoryReviewReply(request, response, next) {
       });
     }
 
-    const parentReview = await ReviewModel.getById(request.params.reviewId);
+    const parentReview = await readableReview(story, request.params.reviewId, request.authUser);
 
     const review = await ReviewModel.createReply(
       story.id,
       request.params.reviewId,
       {
         ...request.body,
+        chapterId: parentReview.chapter_id,
         reviewerId: request.authUser?.id || null,
         reviewerName: request.authUser?.displayName || request.body.reviewerName
       }
@@ -122,16 +160,17 @@ export async function createStoryReviewReply(request, response, next) {
 }
 
 export async function likeStoryReview(request, response, next) {
-  // Alterna el like de una reseña o respuesta para el usuario actual.
+  // Registra el like de una reseña o respuesta para el usuario actual.
   try {
     const story = await StoryModel.getByIdOrSlug(request.params.storyId);
 
-    if (!story) {
+    if (!canReadContent(story, request.authUser)) {
       return response.status(404).json({
         message: "Historia no encontrada"
       });
     }
 
+    await readableReview(story, request.params.reviewId, request.authUser);
     const result = await ReviewModel.like(
       request.params.reviewId,
       request.authUser?.id || null

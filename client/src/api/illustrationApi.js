@@ -6,7 +6,9 @@ async function handleJson(response) {
   const payload = await response.json();
 
   if (!response.ok) {
-    throw new Error(payload.message || "Ocurrio un error al cargar ilustraciones");
+    throw Object.assign(new Error(payload.message || "Ocurrio un error al cargar ilustraciones"), {
+      status: response.status
+    });
   }
 
   return payload;
@@ -21,15 +23,17 @@ function buildAuthHeaders(token) {
     : {};
 }
 
-export async function fetchIllustrations() {
+export async function fetchIllustrations(token="") {
   // Devuelve la lista publica de ilustraciones para home, directorios y exploracion.
-  const response = await fetch(`${API_URL}/illustrations`);
+  const response = await fetch(`${API_URL}/illustrations`,{headers:buildAuthHeaders(token)});
   return handleJson(response);
 }
 
-export async function fetchIllustration(identifier) {
+export async function fetchIllustration(identifier, token = "") {
   // Recupera una ilustracion puntual por UUID o slug publico.
-  const response = await fetch(`${API_URL}/illustrations/${identifier}`);
+  const response = await fetch(`${API_URL}/illustrations/${identifier}`, {
+    headers: buildAuthHeaders(token)
+  });
   return handleJson(response);
 }
 

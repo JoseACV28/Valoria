@@ -1,6 +1,9 @@
+import {ActivityState} from './components/common/ActivityState';
+import { ui } from "./i18n/runtime.js";
+import { canonicalHashUrl } from './utils/navigationUrl';
 // Punto de orquestacion principal del cliente.
 // Mantiene la navegacion por hash para que el refresh preserve la vista actual.
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { fetchIllustration } from "./api/illustrationApi";
 import {
   fetchNotifications,
@@ -8,28 +11,56 @@ import {
   markNotificationRead
 } from "./api/notificationApi";
 import { fetchStory } from "./api/storyApi";
-import { fallbackStories } from "./data/fallbackStories";
+
 import { useAuth } from "./hooks/useAuth";
-import { CreatorDashboard } from "./pages/CreatorDashboard";
-import { CreatorProfilePage } from "./pages/CreatorProfilePage";
 import { HomePage } from "./pages/HomePage";
-import { HelpPage } from "./pages/HelpPage";
-import { IllustrationDetailPage } from "./pages/IllustrationDetailPage";
-import { IllustrationExplorePage } from "./pages/IllustrationExplorePage";
-import { IllustratorsPage } from "./pages/IllustratorsPage";
-import { LanguagesPage } from "./pages/LanguagesPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { ReadingPage } from "./pages/ReadingPage";
-import { UserProfilePage } from "./pages/UserProfilePage";
-import { WritersPage } from "./pages/WritersPage";
+
+const UsabilityPage=lazy(()=>import('./pages/UsabilityPage').then(x=>({default:x.UsabilityPage})));
+const ChallengesPage=lazy(()=>import('./pages/ChallengesPage').then(x=>({default:x.ChallengesPage})));
+const CollaborationPage = lazy(() => import("./pages/CollaborationPage").then(page => ({default:page.CollaborationPage})));
+const AccountPage=lazy(()=>import('./pages/AccountPage').then(page=>({default:page.AccountPage})));
+const InformationPage=lazy(()=>import('./pages/InformationPage').then(page=>({default:page.InformationPage})));
+const SupportPage=lazy(()=>import('./pages/SupportPage').then(page=>({default:page.SupportPage})));
+const PasswordRecoveryPage=lazy(()=>import('./pages/PasswordRecoveryPage').then(page=>({default:page.PasswordRecoveryPage})));
+const AdministrationPage = lazy(() => import("./pages/AdministrationPage").then(page => ({default:page.AdministrationPage})));
+const TrashPage = lazy(() => import('./pages/TrashPage').then(page=>({default:page.TrashPage})));
+const OfflineReadingPage = lazy(() => import('./pages/OfflineReadingPage').then(page=>({default:page.OfflineReadingPage})));
+const LibraryPage = lazy(() => import("./pages/LibraryPage").then(page => ({default:page.LibraryPage})));
+const CreatorDashboard = lazy(() => import("./pages/CreatorDashboard").then((page) => ({ default: page.CreatorDashboard })));
+const CreatorProfilePage = lazy(() => import("./pages/CreatorProfilePage").then((page) => ({ default: page.CreatorProfilePage })));
+const HelpPage = lazy(() => import("./pages/HelpPage").then((page) => ({ default: page.HelpPage })));
+const IllustrationDetailPage = lazy(() => import("./pages/IllustrationDetailPage").then((page) => ({ default: page.IllustrationDetailPage })));
+const IllustrationExplorePage = lazy(() => import("./pages/IllustrationExplorePage").then((page) => ({ default: page.IllustrationExplorePage })));
+const IllustratorsPage = lazy(() => import("./pages/IllustratorsPage").then((page) => ({ default: page.IllustratorsPage })));
+const LanguagesPage = lazy(() => import("./pages/LanguagesPage").then((page) => ({ default: page.LanguagesPage })));
+const RegisterPage = lazy(() => import("./pages/RegisterPage").then((page) => ({ default: page.RegisterPage })));
+const ReadingPage = lazy(() => import("./pages/ReadingPage").then((page) => ({ default: page.ReadingPage })));
+const UserProfilePage = lazy(() => import("./pages/UserProfilePage").then((page) => ({ default: page.UserProfilePage })));
+const WritersPage = lazy(() => import("./pages/WritersPage").then((page) => ({ default: page.WritersPage })));
+const SearchPage = lazy(() => import("./pages/SearchPage").then((page) => ({ default: page.SearchPage })));
 
 const STORY_CACHE_KEY = "valoria-last-story";
 const ILLUSTRATION_CACHE_KEY = "valoria-last-illustration";
 
 function parseHashRoute() {
   // Interpreta la URL hash actual y la traduce a una vista interna de la SPA.
-  const hash = window.location.hash.replace(/^#/, "") || "/";
+  const hash = window.location.hash.replace(/^#/, "") || window.location.pathname || "/";
+  if(hash.startsWith('/info/'))return {view:'information',documentKey:hash.slice(6),storyIdentifier:'',profileId:''};
+  if(hash==='/usability')return {view:'usability',storyIdentifier:'',profileId:''};
+  if(hash==='/challenges')return {view:'challenges',storyIdentifier:'',profileId:''};
+  if(hash==='/support')return {view:'support',storyIdentifier:'',profileId:''};
+  if(hash==='/account')return {view:'account',storyIdentifier:'',profileId:''};
+  if(hash==='/forgot-password'||hash==='/reset-password')return {view:hash==='/forgot-password'?'forgot-password':'reset-password',storyIdentifier:'',profileId:''};
+  if (hash === "/search" || hash.startsWith("/search?")) {
+    const params = new URLSearchParams(hash.split("?")[1] || "");
+    return { view: "search", query: params.get("q") || "", scope: params.get("type") || "all", field: params.get("field") || "", options:Object.fromEntries(["category","sort","language","completed","page"].map(key=>[key,params.get(key)||""])), storyIdentifier: "", profileId: "", illustrationIdentifier: "" };
+  }
 
+  if (hash === "/collaborations") return {view:"collaborations",storyIdentifier:"",profileId:""};
+  if (hash === "/administration") return {view:"administration",storyIdentifier:"",profileId:""};
+  if (hash === '/trash') return {view:'trash',storyIdentifier:'',profileId:''};
+  if (hash === '/offline' || hash.startsWith('/offline/')) return {view:'offline',storyIdentifier:decodeURIComponent(hash.slice('/offline/'.length))||'',profileId:''};
+  if (hash === "/library") return {view:"library",storyIdentifier:"",profileId:""};
   if (hash === "/creator") {
     return { view: "creator", storyIdentifier: "" };
   }
@@ -98,7 +129,18 @@ function parseHashRoute() {
 }
 
 function writeHashRoute(view, storyIdentifier = "", profileId = "", illustrationIdentifier = "") {
+  if(view==='information'){window.location.hash='/info/privacy';return;}
+  if(view==='support'){window.location.hash='/support';return;}
+  if(view==='account'){window.location.hash='/account';return;}
   // Sincroniza la navegacion interna con el hash para soportar refresh y enlaces directos.
+  if(view==="search"){window.location.hash="/search";return;}
+  if (view === "collaborations") {window.location.hash="/collaborations";return;}
+  if (view === "administration") {window.location.hash="/administration";return;}
+  if (view === 'trash') {window.location.hash='/trash';return;}
+  if (view === 'offline') {window.location.hash=storyIdentifier?`/offline/${encodeURIComponent(storyIdentifier)}`:'/offline';return;}
+  if (view === "library") {window.location.hash="/library";return;}
+  if(view==='usability'){window.location.hash='/usability';return;}
+  if(view==='challenges'){window.location.hash='/challenges';return;}
   if (view === "creator") {
     window.location.hash = "/creator";
     return;
@@ -150,12 +192,14 @@ function writeHashRoute(view, storyIdentifier = "", profileId = "", illustration
   }
 
   if (view === "reading" && storyIdentifier) {
-    window.location.hash = `/story/${encodeURIComponent(storyIdentifier)}`;
+    window.history.pushState({},'',`/story/${encodeURIComponent(storyIdentifier)}`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
     return;
   }
 
   if (view === "illustration-detail" && illustrationIdentifier) {
-    window.location.hash = `/illustration/${encodeURIComponent(illustrationIdentifier)}`;
+    window.history.pushState({},'',`/illustration/${encodeURIComponent(illustrationIdentifier)}`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
     return;
   }
 
@@ -193,9 +237,11 @@ function persistIllustration(illustration) {
 }
 
 export default function App() {
+  const [routeError,setRouteError]=useState(null),[routeRetry,setRouteRetry]=useState(0);
   // Orquesta rutas, filtros globales y paso de contexto entre las vistas principales.
   const auth = useAuth();
   const [view, setView] = useState(() => parseHashRoute().view);
+  const [informationKey,setInformationKey]=useState(()=>parseHashRoute().documentKey||'privacy');
   const [storyIdentifier, setStoryIdentifier] = useState(
     () => parseHashRoute().storyIdentifier
   );
@@ -210,15 +256,24 @@ export default function App() {
   const [selectedIllustration, setSelectedIllustration] = useState(() =>
     readCachedIllustration()
   );
+  useEffect(()=>{document.title=view==='reading'&&selectedStory?`${selectedStory.title} · Valoria`:view==='illustration-detail'&&selectedIllustration?`${selectedIllustration.title} · Valoria`:'Valoria';},[view,selectedStory,selectedIllustration]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [storySearchQuery, setStorySearchQuery] = useState("");
-  const [writerSearchQuery, setWriterSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => parseHashRoute().query || "");
+  const [searchRoute, setSearchRoute] = useState(() => parseHashRoute());
   const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {
     function handleHashChange() {
+      const canonicalUrl = canonicalHashUrl(window.location);
+      if (canonicalUrl) window.history.replaceState(window.history.state, '', canonicalUrl);
       const route = parseHashRoute();
+      setInformationKey(route.documentKey||'privacy');
+      if (route.view === "search") {
+        setSearchRoute(route);
+        setSearchQuery(route.query);
+        setSelectedCategory(route.options?.category||"");
+      }
       setView(route.view);
       setStoryIdentifier(route.storyIdentifier);
       setProfileId(route.profileId);
@@ -226,53 +281,26 @@ export default function App() {
     }
 
     window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener('popstate',handleHashChange);
     handleHashChange();
 
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener('popstate',handleHashChange);
     };
   }, []);
 
   useEffect(() => {
-    if (view !== "reading" || !storyIdentifier) {
+    if (view !== "reading" || !storyIdentifier || auth.status === "loading") {
       return;
     }
 
     let active = true;
 
     async function loadStoryFromRoute() {
-      try {
-        const data = await fetchStory(storyIdentifier);
-
-        if (active) {
-          setSelectedStory(data.story);
-          persistStory(data.story);
-        }
-        return;
-      } catch (error) {}
-
-      const cachedStory = readCachedStory();
-      const fallbackStory =
-        fallbackStories.find(
-          (story) =>
-            story.id === storyIdentifier || story.slug === storyIdentifier
-        ) || null;
-
-      const nextStory =
-        cachedStory &&
-        (cachedStory.id === storyIdentifier || cachedStory.slug === storyIdentifier)
-          ? cachedStory
-          : fallbackStory;
-
-      if (active) {
-        if (nextStory) {
-          setSelectedStory(nextStory);
-          return;
-        }
-
-        setView("home");
-        writeHashRoute("home");
-      }
+      setRouteError(null);
+      try {const data=await fetchStory(storyIdentifier,auth.token);if(active){setSelectedStory(data.story);persistStory(data.story);}}
+      catch {if(active){setSelectedStory(null);setRouteError({type:'reading',identifier:storyIdentifier});}}
     }
 
     loadStoryFromRoute();
@@ -280,40 +308,19 @@ export default function App() {
     return () => {
       active = false;
     };
-  }, [storyIdentifier, view]);
+  }, [storyIdentifier, view, auth.token, auth.status,routeRetry]);
 
   useEffect(() => {
-    if (view !== "illustration-detail" || !illustrationIdentifier) {
+    if (view !== "illustration-detail" || !illustrationIdentifier || auth.status === "loading") {
       return;
     }
 
     let active = true;
 
     async function loadIllustrationFromRoute() {
-      try {
-        const data = await fetchIllustration(illustrationIdentifier);
-        if (active) {
-          setSelectedIllustration(data.illustration);
-          persistIllustration(data.illustration);
-        }
-        return;
-      } catch {}
-
-      const cached = readCachedIllustration();
-
-      if (
-        active &&
-        cached &&
-        (cached.id === illustrationIdentifier || cached.slug === illustrationIdentifier)
-      ) {
-        setSelectedIllustration(cached);
-        return;
-      }
-
-      if (active) {
-        setView("illustrations");
-        writeHashRoute("illustrations");
-      }
+      setRouteError(null);
+      try {const data=await fetchIllustration(illustrationIdentifier,auth.token);if(active){setSelectedIllustration(data.illustration);persistIllustration(data.illustration);}}
+      catch {if(active){setSelectedIllustration(null);setRouteError({type:'illustration-detail',identifier:illustrationIdentifier});}}
     }
 
     loadIllustrationFromRoute();
@@ -321,7 +328,7 @@ export default function App() {
     return () => {
       active = false;
     };
-  }, [illustrationIdentifier, view]);
+  }, [illustrationIdentifier, view, auth.token, auth.status,routeRetry]);
 
   useEffect(() => {
     let intervalId = 0;
@@ -412,15 +419,6 @@ export default function App() {
     writeHashRoute("home");
   }
 
-  function navigateToHomeResults() {
-    // Redirige al home si una busqueda global se dispara desde otra vista.
-    if (view !== "home") {
-      setView("home");
-      setHomeSection("");
-      writeHashRoute("home");
-    }
-  }
-
   async function handleOpenNotification(notification) {
     if (!notification) {
       return;
@@ -453,6 +451,9 @@ export default function App() {
       return;
     }
 
+    if(notification.routeView==='collaborations'){
+      handleNavigate('collaborations');return;
+    }
     if (notification.routeView === "profile") {
       handleNavigate("profile", { profileTab: notification.routeTab || "info" });
       return;
@@ -489,26 +490,43 @@ export default function App() {
   }
 
   const navbarFilters = {
+    searchQuery,
+    searchScope: searchRoute.scope || "all",
+    onSearchChange: setSearchQuery,
+    onClearSearchCategory: () => {setSelectedCategory("");const params=new URLSearchParams(window.location.hash.split("?")[1]||"");params.delete("category");window.location.hash=`/search?${params}`;},
+    onSearchSubmit: (query = searchQuery, scope = "all", field = "", extra = view === 'search' ? (searchRoute.options || {}) : {}) => {
+      const params = new URLSearchParams({ q: query.trim(), type: scope, ...extra });
+      if (field) params.set("field", field);
+      window.location.hash = `/search?${params}`;
+    },
     selectedCategory,
-    storySearchQuery,
-    writerSearchQuery,
+    storySearchQuery: "",
+    writerSearchQuery: "",
     onSelectCategory: (category) => {
       setSelectedCategory(category);
-      navigateToFilteredHome();
-    },
-    onStorySearchChange: (query) => {
-      setStorySearchQuery(query);
-      navigateToHomeResults();
-    },
-    onWriterSearchChange: (query) => {
-      setWriterSearchQuery(query);
-      navigateToHomeResults();
+      const params=new URLSearchParams(window.location.hash.split("?")[1]||"");params.set("category",category);params.set("type","stories");params.delete("page");window.location.hash=`/search?${params}`;
     },
     notifications,
     unreadNotifications,
     onOpenNotification: handleOpenNotification,
     onMarkAllNotificationsRead: handleMarkAllNotificationsRead
   };
+
+  if(routeError?.type===view&&routeError.identifier===(view==='reading'?storyIdentifier:illustrationIdentifier))return <main style={{maxWidth:800,margin:'10vh auto',padding:24}}><ActivityState kind="error" message="La obra no está disponible o no tienes acceso. Puedes volver a intentarlo." action="Reintentar" onAction={()=>setRouteRetry(x=>x+1)}/><button type="button" onClick={()=>handleNavigate('home')}>{ui('Ir al inicio')}</button></main>;
+  if(view==='usability')return <UsabilityPage key={auth.user?.id||'guest'} auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate}/>;
+  if(view==='challenges')return <ChallengesPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate}/>;
+  if(view==='account')return <AccountPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate}/>;
+  if(view==='support')return <SupportPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate}/>;
+  if(view==='information')return <InformationPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} documentKey={informationKey}/>;
+  if (view === "collaborations") return <CollaborationPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} />;
+  if(view==='forgot-password'||view==='reset-password')return <PasswordRecoveryPage key={view} auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} reset={view==='reset-password'}/>;
+  if (view === "administration") return <AdministrationPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} />;
+  if (view === 'trash') return <TrashPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate}/>;
+  if (view === 'offline') return <OfflineReadingPage key={auth.user?.id||"guest"} auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} identifier={storyIdentifier}/>;
+  if (view === "library") return <LibraryPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} />;
+  if (view === "search") {
+    return <SearchPage auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} onOpenStory={handleOpenStory} onOpenIllustration={handleOpenIllustration} query={searchRoute.query || ""} scope={searchRoute.scope || "all"} field={searchRoute.field || ""} options={searchRoute.options || {}} />;
+  }
 
   if (view === "creator") {
     return <CreatorDashboard auth={auth} navFilters={navbarFilters} onNavigate={handleNavigate} />;
@@ -573,9 +591,12 @@ export default function App() {
     );
   }
 
-  if (view === "reading" && selectedStory) {
+  if (view === "reading" && selectedStory &&
+      (String(selectedStory.id) === String(storyIdentifier) || selectedStory.slug === storyIdentifier) &&
+      (selectedStory.status !== "draft" || selectedStory.authorId === auth.user?.id)) {
     return (
       <ReadingPage
+        key={`${selectedStory.id}:${auth.user?.id || "guest"}`}
         auth={auth}
         navFilters={navbarFilters}
         onNavigate={handleNavigate}
@@ -584,7 +605,10 @@ export default function App() {
     );
   }
 
-  if (view === "illustration-detail" && selectedIllustration) {
+  if (view === "illustration-detail" && selectedIllustration &&
+      (selectedIllustration.id === illustrationIdentifier || selectedIllustration.slug === illustrationIdentifier) &&
+      ((selectedIllustration.status === "published" && selectedIllustration.visibility !== "private") ||
+        selectedIllustration.authorId === auth.user?.id)) {
     return (
       <IllustrationDetailPage
         auth={auth}
@@ -593,6 +617,10 @@ export default function App() {
         onNavigate={handleNavigate}
       />
     );
+  }
+
+  if (view === "reading" || view === "illustration-detail") {
+    return <ActivityState kind="loading" title="Cargando Valoria..."/>;
   }
 
   return (

@@ -1,0 +1,33 @@
+.panel {
+  padding: 24px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-panel);
+  background: var(--panel-dark);
+  margin: 20px 0;
+  min-width: 0;
+}
+.panel h2 { margin: 0 0 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 14px; }
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 14px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid rgba(175, 141, 215, .35);
+  border-radius: var(--radius-panel);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  text-align: left;
+  min-width: 0;
+  box-shadow: var(--shadow-soft);
+}
+.card strong, .card small { grid-column: 1; overflow-wrap: anywhere; line-height: 1.5; }
+.card small { color: var(--text-soft); }
+.arrow { grid-column: 2; grid-row: 1 / span 2; color: var(--text-accent); font-size: 1.2rem; }
+.card:hover { background: rgba(175, 141, 215, .24); border-color: var(--brand-300); }
+.card:focus-visible { outline: 2px solid var(--brand-300); outline-offset: 3px; }
+:global(html[data-theme="light"]) .panel { background: var(--light-panel); box-shadow: var(--shadow-soft); }
+:global(html[data-theme="light"]) .card { background: var(--bg-surface); border-color: var(--field-border); box-shadow: var(--shadow-soft); }
+:global(html[data-theme="light"]) .card:hover { background: var(--field-bg-focus); }
+@media (max-width: 600px) { .panel { padding: 18px; } }

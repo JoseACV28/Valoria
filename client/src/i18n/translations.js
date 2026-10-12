@@ -1,0 +1,10 @@
+import {readerCatalog} from './readerCatalog.js';
+import {catalog} from './catalog.js';
+import {extraCatalog,aliases} from './extraCatalog.js';
+import {passwordCatalog} from './passwordCatalog.js';
+import {experienceCatalog} from './experienceCatalog.js';
+import {launchCatalog} from './launchCatalog.js';
+import {polishCatalog} from './polishCatalog.js';
+import moreCatalog from './moreCatalog.json' with {type:'json'};
+export const dictionaries={...catalog,...extraCatalog,...moreCatalog,...passwordCatalog,...experienceCatalog,...launchCatalog,...polishCatalog,...readerCatalog};
+export {aliases};
