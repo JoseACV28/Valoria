@@ -10,7 +10,7 @@ export const backupDirectory=fileURLToPath(new URL('../../backups/',import.meta.
 BACKUP_TABLES.push(...EXPERIENCE_TABLES);
 BACKUP_TABLES.push(...LAUNCH_TABLES);
 const hash=data=>createHash('sha256').update(data).digest('hex');
-export async function createSiteBackup(db,projectUrl,root=backupDirectory,{encryptionKey=process.env.BACKUP_ENCRYPTION_KEY}={}){
+export async function createSiteBackup(db,projectUrl,root=backupDirectory,{encryptionKey=process.env.BACKUP_ENCRYPTION_KEY,excludedBuckets=['valoria-backups']}={}){
   if(!db)throw new Error('El respaldo requiere Supabase.');
   const folder=path.join(root,new Date().toISOString().replace(/[:.]/g,'-'));
   await mkdir(folder,{recursive:true});
@@ -25,6 +25,7 @@ export async function createSiteBackup(db,projectUrl,root=backupDirectory,{encry
   }
   const {data:buckets,error}=await db.storage.listBuckets();if(error)throw new Error('No se pudieron consultar los depósitos de imágenes.');
   for(const bucket of buckets){
+    if(excludedBuckets.includes(bucket.id))continue;
     async function visit(prefix=''){
       for(let offset=0;;offset+=1000){const {data,error}=await db.storage.from(bucket.id).list(prefix,{limit:1000,offset,sortBy:{column:'name',order:'asc'}});if(error)throw new Error(`No se pudo listar ${bucket.id}.`);
         for(const item of data){const name=prefix?`${prefix}/${item.name}`:item.name;if(!item.id){await visit(name);continue;}const download=await db.storage.from(bucket.id).download(name);if(download.error)throw new Error(`No se pudo descargar una imagen de ${bucket.id}.`);const binary=Buffer.from(await download.data.arrayBuffer());const file=`media/${bucket.id}/${hash(Buffer.from(name))}.bin`;manifest.files.push({bucket:bucket.id,name,contentType:download.data.type||'application/octet-stream',...await save(file,binary)});}

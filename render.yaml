@@ -39,6 +39,10 @@ services:
         value: "true"
       - key: ADMIN_MFA_REQUIRED
         value: "true"
-      # Ephemeral disk is unsuitable for durable backups.
+      # Enable after provisioning the private bucket and setting encryption key.
       - key: SITE_BACKUP_ENABLED
         value: "false"
+      - key: SITE_BACKUP_STORAGE
+        value: supabase
+      - key: BACKUP_ENCRYPTION_KEY
+        sync: false

@@ -1,4 +1,5 @@
 import { backupStatus, runScheduledBackup, initializeDailyBackup } from './utils/siteBackup.js';
+import {initializeRemoteBackup, runRemoteBackup} from './utils/remoteBackup.js';
 import { supabaseAdmin } from './config/supabase.js';
 import { publishDueChapters } from "./utils/publicationSchedule.js";
 import {publicationStatus} from './utils/publicationSchedule.js';
@@ -15,4 +16,4 @@ publishDueChapters().catch(()=>{});
 setInterval(()=>checkOperations({backup:backupStatus,publication:publicationStatus}).catch(()=>{}),60000).unref();
 
 backupStatus.enabled=process.env.SITE_BACKUP_ENABLED==='true';
-if(backupStatus.enabled){initializeDailyBackup(supabaseAdmin,env.supabaseUrl);setInterval(()=>runScheduledBackup(supabaseAdmin,env.supabaseUrl),3600000).unref();}
+if(backupStatus.enabled){const remote=process.env.SITE_BACKUP_STORAGE==='supabase';(remote?initializeRemoteBackup:initializeDailyBackup)(supabaseAdmin,env.supabaseUrl).then(()=>console.log(JSON.stringify({event:'backup.ready',storage:remote?'supabase':'local',lastSuccess:backupStatus.lastSuccess,error:backupStatus.lastError}))).catch(()=>{backupStatus.lastError='No se pudo inicializar el respaldo.';});setInterval(()=>(remote?runRemoteBackup:runScheduledBackup)(supabaseAdmin,env.supabaseUrl).catch(()=>{backupStatus.lastError='No se pudo ejecutar el respaldo.';}),3600000).unref();}

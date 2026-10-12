@@ -8,7 +8,6 @@ import experienceRoutes from './routes/experienceRoutes.js';
 import launchRoutes from './routes/launchRoutes.js';
 import publicPages from './routes/publicPages.js';
 import {fileURLToPath} from 'node:url';
-import {betaProxyProbe} from './utils/betaProxyProbe.js';
 import {operationalAlert} from './utils/operationalAlerts.js';
 import collaborationRoutes from "./routes/collaborationRoutes.js";
 import cors from "cors";
@@ -59,8 +58,7 @@ app.get("/api/health", (request, response) => {
     status: "ok",
     service: "histopad-server",
     storage: isSupabaseEnabled() ? "supabase" : "local-fallback",
-    environment: process.env.APP_ENV||'development',
-    ...betaProxyProbe(request)
+    environment: process.env.APP_ENV||'development'
   });
 });
 
